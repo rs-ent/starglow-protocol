@@ -20,20 +20,14 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: 'Starglow Protocol',
-  description: `"Glow and Grow Together with Your Star" 
-RWA the Entertainment Industry 
-Curation daily music and artist 
-Engage to Earn TG Mini-App`,
+  description: `Glow and Grow Together with Your Star!`,
   icons: {
     icon: '/favicon.ico',
   },
   
   openGraph: {
     title: 'Starglow Protocol',
-    description: `"Glow and Grow Together with Your Star" 
-RWA the Entertainment Industry 
-Curation daily music and artist 
-Engage to Earn TG Mini-App`,
+    description: `Glow and Grow Together with Your Star!`,
     images: [
       {
         url: '/images/link_image.webp',
@@ -47,10 +41,7 @@ Engage to Earn TG Mini-App`,
   twitter: {
     card: 'summary_large_image',
     title: 'Starglow Protocol',
-    description: `"Glow and Grow Together with Your Star" 
-RWA the Entertainment Industry 
-Curation daily music and artist 
-Engage to Earn TG Mini-App`,
+    description: `Glow and Grow Together with Your Star!`,
     images: ['/images/link_image.webp'],
   },
 };
