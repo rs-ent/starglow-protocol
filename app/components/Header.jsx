@@ -12,17 +12,19 @@ export default function Header() {
             left: 0,
             width: '100%',
             zIndex: 999,
+            overflowY: 'hidden',
         }}
         >
             <div className="Desktop" style={{
                 overflowX: 'hidden',
+                overflowY: 'hidden', 
             }}>
                 <Image
-                    src="/images/header_2x.png"
+                    src="/images/header.png"
                     alt="Header Image"
                     width={1920}
                     height={80}
-                    style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', display: 'block' }}
+                    style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', overflowY: 'hidden', display: 'block' }}
                 />
                     {/* Main */}
                     <a

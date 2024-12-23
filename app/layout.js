@@ -22,7 +22,7 @@ export const metadata = {
   title: 'Starglow Protocol',
   description: `Glow and Grow Together with Your Star!`,
   icons: {
-    icon: '/favicon.ico',
+    icon: '/images/favicon.ico',
   },
   
   openGraph: {
@@ -51,6 +51,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${conthrax.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{
+          backgroundColor: '#000',
+        }}
       >
         {children}
       </body>

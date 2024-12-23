@@ -9,18 +9,17 @@ export default function Body() {
         className=""
         style={{
             position: 'relative',
-            marginTop: '5%',
         }}
         >
             <div className="Desktop" style={{
                 overflowX: 'hidden',
             }}>
             <Image
-                src="/images/body_2x.png"
+                src="/images/body.png"
                 alt="Header Image"
                 width={1920}
                 height={1080}
-                style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', display: 'block', marginTop: '28%'}}
+                style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', overflowY: 'hidden', display: 'block', paddingTop: '30%'}}
             />
                 {/* Gitbook Button
                 <a
@@ -44,7 +43,7 @@ export default function Body() {
                 href="#intro"
                 style={{
                     position: 'absolute',
-                    top: '15%',
+                    top: '20.6%',
                     left: '47.9%',
                     width: '4.2%',
                     height: '1.7%',
@@ -63,7 +62,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '80.7%',
+                    top: '83.6%',
                     left: '13%',
                     width: '19%',
                     height: '1.75%',
@@ -99,7 +98,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '98.2%',
+                    top: '100.65%',
                     left: '45.5%',
                     width: '2.2%',
                     height: '1%',
@@ -118,7 +117,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '98.2%',
+                    top: '100.65%',
                     left: '52%',
                     width: '2.5%',
                     height: '1%',
@@ -137,7 +136,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '98.2%',
+                    top: '100.65%',
                     left: '58.1%',
                     width: '3.65%',
                     height: '1%',
@@ -170,7 +169,7 @@ export default function Body() {
                 id='intro'
                 style={{
                     position: 'absolute',
-                    top: '17.5%',
+                    top: '27%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -185,7 +184,7 @@ export default function Body() {
                 id='product'
                 style={{
                     position: 'absolute',
-                    top: '65%',
+                    top: '71%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -200,7 +199,7 @@ export default function Body() {
                 id='contact'
                 style={{
                     position: 'absolute',
-                    top: '93%',
+                    top: '92%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -226,7 +225,7 @@ export default function Body() {
                 href="#introM"
                 style={{
                     position: 'absolute',
-                    top: '12.3%',
+                    top: '12.36%',
                     left: '43%',
                     width: '14%',
                     height: '1%',
@@ -245,7 +244,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '72.75%',
+                    top: '74%',
                     left: '5%',
                     width: '61.1%',
                     height: '0.95%',
@@ -281,7 +280,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '91.9%',
+                    top: '92.45%',
                     left: '36.5%',
                     width: '7.8%',
                     height: '0.6%',
@@ -300,7 +299,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '91.9%',
+                    top: '92.45%',
                     left: '55.5%',
                     width: '7.8%',
                     height: '0.6%',
@@ -319,7 +318,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '91.9%',
+                    top: '92.45%',
                     left: '72.5%',
                     width: '12%',
                     height: '0.6%',
@@ -336,7 +335,7 @@ export default function Body() {
                 id='mainM'
                 style={{
                     position: 'absolute',
-                    top: '3%',
+                    top: '0%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
