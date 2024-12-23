@@ -1,9 +1,18 @@
 // components/body.jsx
+'use client';
+
 import Image from "next/image";
 
 export default function Body() {
     return (
-        <div style={{ position: 'relative' }}>
+        <div
+        className=""
+        style={{
+            position: 'relative',
+            marginTop: '4%',
+        }}
+        >
+            <div className="Desktop">
             <Image
                 src="/images/body_2x.png"
                 alt="Header Image"
@@ -159,7 +168,7 @@ export default function Body() {
                 id='intro'
                 style={{
                     position: 'absolute',
-                    top: '20%',
+                    top: '16.5%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -174,7 +183,7 @@ export default function Body() {
                 id='product'
                 style={{
                     position: 'absolute',
-                    top: '60%',
+                    top: '57%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -189,7 +198,7 @@ export default function Body() {
                 id='contact'
                 style={{
                     position: 'absolute',
-                    top: '80%',
+                    top: '77%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -199,6 +208,208 @@ export default function Body() {
                 }}
                 ></section>
 
+            </div>
+
+            <div className="Mobile">
+                <Image
+                    src="/images/body_mobile.png"
+                    alt="Body Image"
+                    width={440}
+                    height={160}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+
+                {/* Scroll To */}
+                <a
+                href="#introM"
+                style={{
+                    position: 'absolute',
+                    top: '12.3%',
+                    left: '43%',
+                    width: '14%',
+                    height: '1%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(0, 255, 0, 0.4)',
+                }}
+                >
+                    
+                </a>
+
+                {/* Go To Telegram App */}
+                <a
+                href="https://t.me/starglow_redslippers_bot"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    position: 'absolute',
+                    top: '72.75%',
+                    left: '5%',
+                    width: '61.1%',
+                    height: '0.95%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                }}
+                >
+                    
+                </a>
+
+                {/* Book 
+                <a
+                href="/pageA"
+                style={{
+                    position: 'absolute',
+                    top: '91.9%',
+                    left: '17.5%',
+                    width: '7.8%',
+                    height: '0.6%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                }}
+                >
+                    
+                </a>*/}
+
+                {/* Twitter */}
+                <a
+                href="https://x.com/StarglowP"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    position: 'absolute',
+                    top: '91.9%',
+                    left: '36.5%',
+                    width: '7.8%',
+                    height: '0.6%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                }}
+                >
+                    
+                </a>
+
+                {/* Telegram */}
+                <a
+                href="https://t.me/StarglowP_Ann"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    position: 'absolute',
+                    top: '91.9%',
+                    left: '55.5%',
+                    width: '7.8%',
+                    height: '0.6%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                }}
+                >
+                    
+                </a>
+
+                {/* Medium */}
+                <a
+                href="https://medium.com/@starglowP"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    position: 'absolute',
+                    top: '91.9%',
+                    left: '72.5%',
+                    width: '12%',
+                    height: '0.6%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                }}
+                >
+                    
+                </a>
+
+                {/* Section : Main */}
+                <section
+                id='mainM'
+                style={{
+                    position: 'absolute',
+                    top: '3%',
+                    left: '0%',
+                    width: '100%',
+                    height: '1%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                }}
+                ></section>
+
+                {/* Section : Intro */}
+                <section
+                id='introM'
+                style={{
+                    position: 'absolute',
+                    top: '16.5%',
+                    left: '0%',
+                    width: '100%',
+                    height: '1%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                }}
+                ></section>
+
+                {/* Section : Product */}
+                <section
+                id='productM'
+                style={{
+                    position: 'absolute',
+                    top: '65.5%',
+                    left: '0%',
+                    width: '100%',
+                    height: '1%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                }}
+                ></section>
+
+                {/* Section : Contact */}
+                <section
+                id='contactM'
+                style={{
+                    position: 'absolute',
+                    top: '88%',
+                    left: '0%',
+                    width: '100%',
+                    height: '1%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                }}
+                ></section>
+            </div>
+            
+
+            {/* 스타일 분기 */}
+            <style jsx>{`
+                .Desktop {
+                display: block;
+                position: relative; /* 앵커 절대 위치 기준 */
+                }
+                .Mobile {
+                display: none;
+                position: relative; /* 앵커 절대 위치 기준 */
+                }
+                @media (max-width: 440px) {
+                .Desktop {
+                    display: none;
+                }
+                .Mobile {
+                    display: block;
+                }
+                }
+            `}</style>
         </div>
     );
 }
