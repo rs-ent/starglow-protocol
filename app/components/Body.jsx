@@ -1,9 +1,16 @@
 // components/body.jsx
 'use client';
 
+import React, { useEffect } from 'react';
 import Image from "next/image";
 
 export default function Body() {
+
+    useEffect(() => {
+        // 컴포넌트가 마운트된 후(즉, 로딩이 끝난 시점)
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <div
         className=""
@@ -350,7 +357,7 @@ export default function Body() {
                 id='introM'
                 style={{
                     position: 'absolute',
-                    top: '16.5%',
+                    top: '17.2%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -365,7 +372,7 @@ export default function Body() {
                 id='productM'
                 style={{
                     position: 'absolute',
-                    top: '65.5%',
+                    top: '67.7%',
                     left: '0%',
                     width: '100%',
                     height: '1%',

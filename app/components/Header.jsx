@@ -108,10 +108,10 @@ export default function Header() {
                     href="#mainM"
                     style={{
                         position: 'absolute',
-                        top: '77.3%',
+                        top: '72%',
                         left: '9%',
                         width: '11%',
-                        height: '10%',
+                        height: '12%',
                         display: 'block',
                         // 디버깅
                         //backgroundColor: 'rgba(0, 0, 255, 0.3)',
@@ -125,10 +125,10 @@ export default function Header() {
                     href="#introM"
                     style={{
                         position: 'absolute',
-                        top: '77.3%',
+                        top: '72%',
                         left: '28.3%',
                         width: '11%',
-                        height: '10%',
+                        height: '12%',
                         display: 'block',
                         // 디버깅
                         //backgroundColor: 'rgba(0, 0, 255, 0.3)',
@@ -142,10 +142,10 @@ export default function Header() {
                     href="#productM"
                     style={{
                         position: 'absolute',
-                        top: '77.3%',
+                        top: '72%',
                         left: '47.5%',
                         width: '18%',
-                        height: '10%',
+                        height: '12%',
                         display: 'block',
                         // 디버깅
                         //backgroundColor: 'rgba(0, 0, 255, 0.3)',
@@ -159,10 +159,10 @@ export default function Header() {
                     href="#contactM"
                     style={{
                         position: 'absolute',
-                        top: '77.3%',
+                        top: '72%',
                         left: '73.5%',
                         width: '17%',
-                        height: '10%',
+                        height: '12%',
                         display: 'block',
                         // 디버깅
                         //backgroundColor: 'rgba(0, 0, 255, 0.3)',
