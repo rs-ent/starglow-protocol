@@ -14,13 +14,15 @@ export default function Header() {
             zIndex: 999,
         }}
         >
-            <div className="Desktop">
+            <div className="Desktop" style={{
+                overflowX: 'hidden',
+            }}>
                 <Image
                     src="/images/header_2x.png"
                     alt="Header Image"
                     width={1920}
                     height={80}
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                    style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', display: 'block' }}
                 />
                     {/* Main */}
                     <a
@@ -28,8 +30,8 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '61.2%',
-                        width: '3%',
+                        left: '65.7%',
+                        width: '3.2%',
                         height: '21%',
                         display: 'block',
                         // 디버깅
@@ -45,8 +47,8 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '65.7%',
-                        width: '3%',
+                        left: '71.3%',
+                        width: '3.7%',
                         height: '21%',
                         display: 'block',
                         // 디버깅
@@ -62,8 +64,8 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '70.1%',
-                        width: '4.7%',
+                        left: '77.1%',
+                        width: '5.8%',
                         height: '21%',
                         display: 'block',
                         // 디버깅
@@ -79,8 +81,8 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '76.1%',
-                        width: '4.5%',
+                        left: '85.3%',
+                        width: '5.7%',
                         height: '21%',
                         display: 'block',
                         // 디버깅

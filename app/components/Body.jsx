@@ -9,16 +9,18 @@ export default function Body() {
         className=""
         style={{
             position: 'relative',
-            marginTop: '4%',
+            marginTop: '5%',
         }}
         >
-            <div className="Desktop">
+            <div className="Desktop" style={{
+                overflowX: 'hidden',
+            }}>
             <Image
                 src="/images/body_2x.png"
                 alt="Header Image"
                 width={1920}
                 height={1080}
-                style={{ width: '100%', height: 'auto', display: 'block' }}
+                style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', display: 'block', marginTop: '28%'}}
             />
                 {/* Gitbook Button
                 <a
@@ -42,9 +44,9 @@ export default function Body() {
                 href="#intro"
                 style={{
                     position: 'absolute',
-                    top: '13.53%',
-                    left: '48.2%',
-                    width: '3.55%',
+                    top: '15%',
+                    left: '47.9%',
+                    width: '4.2%',
                     height: '1.7%',
                     display: 'block',
                     // 디버깅
@@ -61,10 +63,10 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '70.4%',
-                    left: '22.6%',
-                    width: '14%',
-                    height: '1.5%',
+                    top: '80.7%',
+                    left: '13%',
+                    width: '19%',
+                    height: '1.75%',
                     display: 'block',
                     // 디버깅
                     backgroundColor: 'rgba(0, 255, 0, 0.3)',
@@ -97,9 +99,9 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '85.2%',
-                    left: '46.45%',
-                    width: '2%',
+                    top: '98.2%',
+                    left: '45.5%',
+                    width: '2.2%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
@@ -116,9 +118,9 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '85.2%',
-                    left: '51.45%',
-                    width: '2%',
+                    top: '98.2%',
+                    left: '52%',
+                    width: '2.5%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
@@ -135,9 +137,9 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '85.2%',
-                    left: '56.1%',
-                    width: '2.65%',
+                    top: '98.2%',
+                    left: '58.1%',
+                    width: '3.65%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
@@ -168,7 +170,7 @@ export default function Body() {
                 id='intro'
                 style={{
                     position: 'absolute',
-                    top: '16.5%',
+                    top: '17.5%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -183,7 +185,7 @@ export default function Body() {
                 id='product'
                 style={{
                     position: 'absolute',
-                    top: '57%',
+                    top: '65%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -198,7 +200,7 @@ export default function Body() {
                 id='contact'
                 style={{
                     position: 'absolute',
-                    top: '77%',
+                    top: '93%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
