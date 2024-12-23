@@ -43,7 +43,7 @@ export default function Body() {
                 href="#intro"
                 style={{
                     position: 'absolute',
-                    top: '20.6%',
+                    top: '22.5%',
                     left: '47.9%',
                     width: '4.2%',
                     height: '1.7%',
@@ -62,7 +62,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '83.6%',
+                    top: '95.8%',
                     left: '13%',
                     width: '19%',
                     height: '1.75%',
@@ -98,7 +98,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '100.65%',
+                    top: '115.45%',
                     left: '45.5%',
                     width: '2.2%',
                     height: '1%',
@@ -117,7 +117,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '100.65%',
+                    top: '115.45%',
                     left: '52%',
                     width: '2.5%',
                     height: '1%',
@@ -136,7 +136,7 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '100.65%',
+                    top: '115.45%',
                     left: '58.1%',
                     width: '3.65%',
                     height: '1%',
@@ -169,7 +169,7 @@ export default function Body() {
                 id='intro'
                 style={{
                     position: 'absolute',
-                    top: '27%',
+                    top: '28.5%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -184,7 +184,7 @@ export default function Body() {
                 id='product'
                 style={{
                     position: 'absolute',
-                    top: '71%',
+                    top: '80%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
@@ -199,7 +199,7 @@ export default function Body() {
                 id='contact'
                 style={{
                     position: 'absolute',
-                    top: '92%',
+                    top: '102%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
