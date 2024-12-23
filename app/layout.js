@@ -19,8 +19,40 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Starglow Protocol",
-  description: "Starglow Protocol",
+  title: 'Starglow Protocol',
+  description: `"Glow and Grow Together with Your Star" 
+RWA the Entertainment Industry 
+Curation daily music and artist 
+Engage to Earn TG Mini-App`,
+  icons: {
+    icon: '/favicon.ico',
+  },
+  
+  openGraph: {
+    title: 'Starglow Protocol',
+    description: `"Glow and Grow Together with Your Star" 
+RWA the Entertainment Industry 
+Curation daily music and artist 
+Engage to Earn TG Mini-App`,
+    images: [
+      {
+        url: '/images/link_image.webp',
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: 'website',
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Starglow Protocol',
+    description: `"Glow and Grow Together with Your Star" 
+RWA the Entertainment Industry 
+Curation daily music and artist 
+Engage to Earn TG Mini-App`,
+    images: ['/images/link_image.webp'],
+  },
 };
 
 export default function RootLayout({ children }) {
