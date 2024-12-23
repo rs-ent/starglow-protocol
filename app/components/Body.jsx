@@ -12,14 +12,14 @@ export default function Body() {
         }}
         >
             <div className="Desktop" style={{
-                overflowX: 'hidden',
+                position: 'relative',
             }}>
             <Image
                 src="/images/body.png"
                 alt="Header Image"
                 width={1920}
                 height={1080}
-                style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', overflowY: 'hidden', display: 'block', paddingTop: '30%'}}
+                style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', display: 'block', transformOrigin: 'top',}}
             />
                 {/* Gitbook Button
                 <a

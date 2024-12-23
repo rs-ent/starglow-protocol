@@ -16,8 +16,7 @@ export default function Header() {
         }}
         >
             <div className="Desktop" style={{
-                overflowX: 'hidden',
-                overflowY: 'hidden', 
+                overflow: 'hidden',
             }}>
                 <Image
                     src="/images/header.png"
