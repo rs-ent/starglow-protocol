@@ -35,7 +35,7 @@ export default function Header() {
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -52,7 +52,7 @@ export default function Header() {
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -69,7 +69,7 @@ export default function Header() {
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -86,7 +86,7 @@ export default function Header() {
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -113,7 +113,7 @@ export default function Header() {
                         height: '10%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -130,7 +130,7 @@ export default function Header() {
                         height: '10%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -147,7 +147,7 @@ export default function Header() {
                         height: '10%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         
@@ -164,7 +164,7 @@ export default function Header() {
                         height: '10%',
                         display: 'block',
                         // 디버깅
-                        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                     }}
                     >
                         

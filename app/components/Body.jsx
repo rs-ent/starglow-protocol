@@ -50,7 +50,7 @@ export default function Body() {
                     height: '1.7%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 255, 0, 0.4)',
+                    //backgroundColor: 'rgba(0, 255, 0, 0.4)',
                 }}
                 >
                     
@@ -69,7 +69,7 @@ export default function Body() {
                     height: '1.75%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                    //backgroundColor: 'rgba(0, 255, 0, 0.3)',
                 }}
                 >
                     
@@ -105,7 +105,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                 }}
                 >
                     
@@ -124,7 +124,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                 }}
                 >
                     
@@ -143,7 +143,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                 }}
                 >
                     
@@ -161,7 +161,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -176,7 +176,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -191,7 +191,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -206,7 +206,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -232,7 +232,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 255, 0, 0.4)',
+                    //backgroundColor: 'rgba(0, 255, 0, 0.4)',
                 }}
                 >
                     
@@ -251,7 +251,7 @@ export default function Body() {
                     height: '0.95%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                    //backgroundColor: 'rgba(0, 255, 0, 0.3)',
                 }}
                 >
                     
@@ -287,7 +287,7 @@ export default function Body() {
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                 }}
                 >
                     
@@ -306,7 +306,7 @@ export default function Body() {
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                 }}
                 >
                     
@@ -325,7 +325,7 @@ export default function Body() {
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
                 }}
                 >
                     
@@ -342,7 +342,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -357,7 +357,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -372,7 +372,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
 
@@ -387,7 +387,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
                 }}
                 ></section>
             </div>
