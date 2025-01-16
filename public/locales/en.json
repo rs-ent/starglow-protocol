@@ -1,0 +1,14 @@
+{
+    "poll": {
+        "ready": "Ready",
+        "ended": "Ended",
+        "thankYou": "Thank you for voting!",
+        "openIn": "RESULT OPEN IN",
+        "submit": "Submit",
+        "openInX": "RESULT OPEN IN X",
+        "yay": "YAY-!\nSTAY TUNED FOR THE RESULT :)",
+        "shareFriend": "Share to a friend",
+        "discoverMore": "Discover more polls",
+        "followStarglow": "Follow STARGLOW"
+    }
+}
