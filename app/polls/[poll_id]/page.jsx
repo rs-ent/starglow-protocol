@@ -12,7 +12,7 @@ export default function PollHome({ params }) {
         if (navigator.language.toLowerCase().startsWith("ko")) {
             locale = "ko";
         }
-        router.replace(`/voting/${poll_id}/${locale}`);
+        router.replace(`/polls/${poll_id}/${locale}`);
         
     }, [poll_id, router]);
 

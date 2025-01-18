@@ -11,7 +11,7 @@ function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
 }
 
-export default function Submitted({ endDate , t }) {
+export default function Submitted({ poll_id, endDate , t }) {
 
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
 
@@ -26,7 +26,7 @@ export default function Submitted({ endDate , t }) {
     }
 
     return (
-        <div className="m-4 p-2 flex flex-col items-center justify-center">
+        <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
             <div className="relative items-center justify-center">
                 <h1 className="text-center text-base text-outline-1 mt-10">
                     {t['poll']['openInX']}
@@ -39,7 +39,7 @@ export default function Submitted({ endDate , t }) {
                 </h1>
             </div>
             <a
-                href="https://t.me/starglow_redslippers_bot"
+                href={`https://starglow-protocol.vercel.app/polls/${poll_id}`}
                 target="_blank"
                 rel="noreferrer"
                 className="button-base mt-16"
@@ -47,8 +47,8 @@ export default function Submitted({ endDate , t }) {
                 <Image 
                     src='/ui/share-icon.png'
                     alt='share-icon'
-                    width={20}
-                    height={20}
+                    width={19}
+                    height={19}
                     className="mr-2"
                 />
                 {t['poll']['shareFriend']}
@@ -72,7 +72,7 @@ export default function Submitted({ endDate , t }) {
                 href="https://x.com/StarglowP"
                 target="_blank"
                 rel="noreferrer"
-                className="button-black mt-4"
+                className="button-black mt-4 mb-16"
             >
                 <Image 
                     src='/ui/x-icon.png'
@@ -84,13 +84,8 @@ export default function Submitted({ endDate , t }) {
                 {t['poll']['followStarglow']}
             </a>
 
-            <div className="mt-14 mb-2">
-                <Image 
-                    src='/sgt_logo.png'
-                    alt='STARGLOW LOGO'
-                    width={130}
-                    height={130}
-                />
+            <div className="mt-auto flex justify-center mb-4">
+                <Image src="/sgt_logo.png" alt="STARGLOW LOGO" width={130} height={130} />
             </div>
         </div>
     );

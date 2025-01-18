@@ -218,7 +218,7 @@ button {
   }
 
   .glow-12 {
-    box-shadow: 0 0 48px rgba(239, 222, 255, 0.25);
+    box-shadow: 0 0 36px rgba(239, 222, 255, 0.1);
   }
 
   .inner-shadow-strong {
@@ -255,11 +255,11 @@ button {
   }
 
   .button-base {
-    @apply flex text-center items-center justify-center rounded-full bg-[rgba(132,94,238,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(132,94,238,1)]
+    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(132,94,238,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(132,94,238,1)]
   }
 
   .button-black {
-    @apply flex text-center items-center justify-center rounded-full bg-[rgba(31,31,31,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(82,63,136,1)]
+    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(31,31,31,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(82,63,136,1)]
   }
 
   /* ë²„íŠ¼ ë² ì´ìŠ¤ ìŠ¤íƒ€ì¼ + í¼í”Œ Feather ë¼ì¸ */
@@ -320,6 +320,26 @@ button {
     color: #ffffff;
     font-size: 1.9rem;
     text-shadow: 0 0 24px rgba(255, 255, 255, 0.6);
+  }
+
+  .mask-hole {
+    -webkit-mask-image: radial-gradient(
+      circle, 
+      transparent 30%, 
+      black 31%
+    );
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: 100% 100%;
+
+    mask-image: radial-gradient(
+      circle, 
+      transparent 30%, 
+      black 31%
+    );
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 100% 100%;
   }
 }
 

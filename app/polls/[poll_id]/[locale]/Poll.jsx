@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { DataContext } from "../../../context/PollData";
 import { submitVote } from "../../../firebase/fetch";
 import Image from "next/image";
@@ -45,7 +45,7 @@ export default function Poll({ poll_id, t }) {
     }
 
     if (voted) {
-        return <Submitted endDate={endDate} t={t} />
+        return <Submitted poll_id={poll_id} endDate={endDate} t={t} />
     }
 
     const handleOptionClick = (idx) => {
@@ -60,21 +60,6 @@ export default function Poll({ poll_id, t }) {
         } catch (err) {
             console.error("Failed to get IP address:", err);
         }
-
-        /*const getPosition = () => new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-    
-        let geoInfo = null;
-        try {
-            const position = await getPosition();
-            geoInfo = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-            };
-        } catch (err) {
-            console.error("Failed to get geolocation:", err);
-        }*/
 
         const deviceInfo = {
             userAgent: navigator.userAgent,
@@ -93,7 +78,7 @@ export default function Poll({ poll_id, t }) {
     }
 
     return (
-        <div className="m-4 p-2 flex flex-col items-center justify-center">
+        <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
             <div className="relative items-center justify-center">
                 <h1 className="text-center text-base text-outline-1 mt-10">
                     {t['poll']['openIn']}
@@ -143,7 +128,7 @@ export default function Poll({ poll_id, t }) {
             </div>
             <button
                 className={`
-                    button-base mt-6
+                    button-base mt-6 mb-16
                     transition-all duration-500 ease-out transform
                     ${selection > -1 
                     ? 'opacity-100 translate-y-0' 
@@ -155,13 +140,8 @@ export default function Poll({ poll_id, t }) {
                 {t['poll']['submit']}
             </button>
 
-            <div className="mt-14 mb-2">
-                <Image 
-                    src='/sgt_logo.png'
-                    alt='STARGLOW LOGO'
-                    width={130}
-                    height={130}
-                />
+            <div className="mt-auto flex justify-center mb-4">
+                <Image src="/sgt_logo.png" alt="STARGLOW LOGO" width={130} height={130} />
             </div>
         </div>
     );

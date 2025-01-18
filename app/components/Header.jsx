@@ -27,7 +27,7 @@ export default function Header() {
                 />
                     {/* Main */}
                     <a
-                    href="#main"
+                    href="/#main"
                     style={{
                         position: 'absolute',
                         top: '40%',
@@ -44,7 +44,7 @@ export default function Header() {
 
                     {/* Intro */}
                     <a
-                    href="#intro"
+                    href="/#intro"
                     style={{
                         position: 'absolute',
                         top: '40%',
@@ -61,7 +61,7 @@ export default function Header() {
 
                     {/* Product */}
                     <a
-                    href="#product"
+                    href="/#product"
                     style={{
                         position: 'absolute',
                         top: '40%',
@@ -78,7 +78,7 @@ export default function Header() {
 
                     {/* Contact */}
                     <a
-                    href="#contact"
+                    href="/polls"
                     style={{
                         position: 'absolute',
                         top: '40%',
