@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
-import { DataContext } from "../../../context/PollData";
-import { submitVote } from "../../../firebase/fetch";
 import Image from "next/image";
 import Countdown from './Countdown';
-import LocaleFile from "./LocaleFile";
+import { useCallback } from 'react';
 
 function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
@@ -25,6 +22,26 @@ export default function Submitted({ poll_id, endDate , t }) {
         );
     }
 
+    const handleShare = useCallback(async () => {
+        const shareUrl = `https://starglow-protocol.vercel.app/polls/${poll_id}`;
+    
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+    
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'Starglow Poll',
+                    text: 'Check out this poll!',
+                    url: shareUrl,
+                });
+            } else {
+                alert('The Link has been Copied to Clipboard!');
+            }
+        } catch (error) {
+            console.error('Sharing failed', error);
+        }
+    }, [poll_id]);
+
     return (
         <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
             <div className="relative items-center justify-center">
@@ -38,11 +55,11 @@ export default function Submitted({ poll_id, endDate , t }) {
                     {t['poll']['yay']}
                 </h1>
             </div>
-            <a
-                href={`https://starglow-protocol.vercel.app/polls/${poll_id}`}
-                target="_blank"
-                rel="noreferrer"
+            <button
+                type="button"
+                onClick={handleShare}
                 className="button-base mt-16"
+                style={{ display: 'flex', alignItems: 'center' }}
             >
                 <Image 
                     src='/ui/share-icon.png'
@@ -52,10 +69,9 @@ export default function Submitted({ poll_id, endDate , t }) {
                     className="mr-2"
                 />
                 {t['poll']['shareFriend']}
-            </a>
+            </button>
             <a
-                href="https://t.me/starglow_redslippers_bot?start=r_vko5zj"
-                target="_blank"
+                href="/polls"
                 rel="noreferrer"
                 className="button-base mt-4"
             >
