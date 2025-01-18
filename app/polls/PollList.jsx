@@ -100,7 +100,7 @@ export default function PollList({pollResults}) {
                         </div>
 
                         <div className="text-center mt-1 px-4">
-                            <h1 className="text-4xl">
+                            <h1 className="text-4xl px-4">
                                 Wanna join for a vote?
                             </h1>
                             <a
