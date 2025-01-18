@@ -54,7 +54,7 @@ export default function Submitted({ poll_id, title, options, endDate , t }) {
                 <h1 className="text-center text-base text-outline-1 mt-10">
                     {t['poll']['openInX']}
                 </h1>
-                <h1 className="text-center text-6xl text-outline-1">
+                <h1 className="text-center text-5xl text-outline-1">
                     <Countdown endDate={endDate} />
                 </h1>
                 <h1 className="text-3xl whitespace-pre-wrap text-center mt-16 px-3">
