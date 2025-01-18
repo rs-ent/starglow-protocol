@@ -6,7 +6,7 @@ import { DataContext } from "../context/PollData";
 import PollCard from "./PollCard";
 import Image from "next/image";
 import Header from "../components/Header";
-import Footer from "./Footer";
+import Footer from "../components/Footer";
 
 export default function PollList({pollResults}) {
     const pollContext = useContext(DataContext);
@@ -75,11 +75,12 @@ export default function PollList({pollResults}) {
                 </div>
             ) : (
                 <div>
+                    <Header />
                     <div className="bg-[url('/poll-bg.png')] bg-top bg-no-repeat bg-fixed
                                 bg-black bg-blend-multiply bg-opacity-15
                                 items-center justify-center pb-36">
                         <div className="flex flex-col items-center text-center justify-center">
-                            <h1 className="text-5xl mt-32 mb-3">
+                            <h1 className="text-5xl mt-48 mb-3">
                                 K-POP POLLS
                             </h1>
                             <h4 className="text-sm mb-4">

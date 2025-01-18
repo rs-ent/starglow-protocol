@@ -4,6 +4,7 @@
 import Image from "next/image";
 
 export default function Header() {
+    const debugColor = 'rgba(150, 255, 0, 0)';
     return (
         <div
         style={{
@@ -19,11 +20,11 @@ export default function Header() {
                 overflow: 'hidden',
             }}>
                 <Image
-                    src="/images/header.png"
+                    src="/images/header2.png"
                     alt="Header Image"
                     width={1920}
                     height={80}
-                    style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', overflowY: 'hidden', display: 'block' }}
+                    style={{ width: '100%', height: 'auto', transform: 'scale(1.1)', overflowY: 'hidden', display: 'block' }}
                 />
                     {/* Main */}
                     <a
@@ -31,12 +32,12 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '65.7%',
-                        width: '3.2%',
+                        left: '70.45%',
+                        width: '3.0%',
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        backgroundColor: debugColor,
                     }}
                     >
                         
@@ -48,12 +49,12 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '71.3%',
-                        width: '3.7%',
+                        left: '75.05%',
+                        width: '3.5%',
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        backgroundColor: debugColor,
                     }}
                     >
                         
@@ -65,12 +66,90 @@ export default function Header() {
                     style={{
                         position: 'absolute',
                         top: '40%',
-                        left: '77.1%',
-                        width: '5.8%',
+                        left: '79.95%',
+                        width: '5.1%',
                         height: '21%',
                         display: 'block',
                         // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        backgroundColor: debugColor,
+                    }}
+                    >
+                        
+                    </a>
+
+                    {/* Polls */}
+                    <a
+                    href="/polls"
+                    style={{
+                        position: 'absolute',
+                        top: '40%',
+                        left: '86.5%',
+                        width: '6.5%',
+                        height: '21%',
+                        display: 'block',
+                        // 디버깅
+                        backgroundColor: debugColor,
+                    }}
+                    >
+                        
+                    </a>
+            </div>
+
+            <div className="Mobile">
+                <Image
+                    src="/images/header2_mobile.png"
+                    alt="Header Image"
+                    width={440}
+                    height={160}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+
+                {/* Main */}
+                <a
+                    href="/#mainM"
+                    style={{
+                        position: 'absolute',
+                        top: '71.5%',
+                        left: '5.8%',
+                        width: '11%',
+                        height: '14%',
+                        display: 'block',
+                        // 디버깅
+                        backgroundColor: debugColor,
+                    }}
+                    >
+                        
+                    </a>
+
+                    {/* Intro */}
+                    <a
+                    href="/#introM"
+                    style={{
+                        position: 'absolute',
+                        top: '71.5%',
+                        left: '24.8%',
+                        width: '11%',
+                        height: '14%',
+                        display: 'block',
+                        // 디버깅
+                        backgroundColor: debugColor,
+                    }}
+                    >
+                        
+                    </a>
+
+                    {/* Product */}
+                    <a
+                    href="/#productM"
+                    style={{
+                        position: 'absolute',
+                        top: '71.5%',
+                        left: '44.1%',
+                        width: '18%',
+                        height: '14%',
+                        display: 'block',
+                        // 디버깅
+                        backgroundColor: debugColor,
                     }}
                     >
                         
@@ -81,91 +160,13 @@ export default function Header() {
                     href="/polls"
                     style={{
                         position: 'absolute',
-                        top: '40%',
-                        left: '85.3%',
-                        width: '5.7%',
-                        height: '21%',
+                        top: '71.5%',
+                        left: '70.1%',
+                        width: '24%',
+                        height: '14%',
                         display: 'block',
                         // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
-                    }}
-                    >
-                        
-                    </a>
-            </div>
-
-            <div className="Mobile">
-                <Image
-                    src="/images/header_mobile.png"
-                    alt="Header Image"
-                    width={440}
-                    height={160}
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-
-                {/* Main */}
-                <a
-                    href="#mainM"
-                    style={{
-                        position: 'absolute',
-                        top: '72%',
-                        left: '9%',
-                        width: '11%',
-                        height: '12%',
-                        display: 'block',
-                        // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
-                    }}
-                    >
-                        
-                    </a>
-
-                    {/* Intro */}
-                    <a
-                    href="#introM"
-                    style={{
-                        position: 'absolute',
-                        top: '72%',
-                        left: '28.3%',
-                        width: '11%',
-                        height: '12%',
-                        display: 'block',
-                        // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
-                    }}
-                    >
-                        
-                    </a>
-
-                    {/* Product */}
-                    <a
-                    href="#productM"
-                    style={{
-                        position: 'absolute',
-                        top: '72%',
-                        left: '47.5%',
-                        width: '18%',
-                        height: '12%',
-                        display: 'block',
-                        // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
-                    }}
-                    >
-                        
-                    </a>
-
-                    {/* Contact */}
-                    <a
-                    href="#contactM"
-                    style={{
-                        position: 'absolute',
-                        top: '72%',
-                        left: '73.5%',
-                        width: '17%',
-                        height: '12%',
-                        display: 'block',
-                        // 디버깅
-                        //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                        backgroundColor: debugColor,
                     }}
                     >
                         
