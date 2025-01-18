@@ -45,7 +45,7 @@ export default function Poll({ poll_id, t }) {
     }
 
     if (voted) {
-        return <Submitted poll_id={poll_id} endDate={endDate} t={t} />
+        return <Submitted poll_id={poll_id} title={poll.title} options={options} endDate={endDate} t={t} />
     }
 
     const handleOptionClick = (idx) => {
