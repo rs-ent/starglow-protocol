@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { DataContext } from "../../../context/PollData";
 import { submitVote } from "../../../firebase/fetch";
 import Image from "next/image";
@@ -12,12 +13,17 @@ function parseAsKST(dateStrWithoutTZ) {
 }
 
 export default function Poll({ poll_id, t }) {
+    const router = useRouter();
+
     const [voted, setVoted] = useState(false);
     const [selection, setSelection] = useState(-1);
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
-    if (!poll || !poll.title) return <div></div>;
+    if (!poll_id || !poll || !poll.title){
+        router.replace('/polls');
+        return <div></div>
+    }
 
     const options = poll.options ? poll.options.split(";") : [];
 
@@ -26,13 +32,8 @@ export default function Poll({ poll_id, t }) {
     const endDate = parseAsKST(poll.end);
 
     if (today < startDate) {
-        return (
-            <div>
-                <h1>
-                    {t['poll']['ready']}
-                </h1>
-            </div>
-        );
+        router.replace('/polls');
+        return <div></div>
     }
     if (today > endDate) {
         return (

@@ -22,7 +22,7 @@ export default function PollList({pollResults}) {
 
     const isDesktop = useMedia('(min-width: 440px)');
     return (
-        <>
+        <div className="bg-black">
             {isDesktop ? (
                 <div>
                     <Header />
@@ -30,7 +30,7 @@ export default function PollList({pollResults}) {
                                 bg-black bg-blend-multiply bg-opacity-15
                                 items-center justify-center pb-64">
                         <div className="flex flex-col items-center text-center justify-center">
-                            <h1 className="text-6xl mt-52 mb-3">
+                            <h1 className="text-6xl mt-52 mb-3 px-4">
                                 K-POP POLLS
                             </h1>
                             <h4 className="text-base mb-4">
@@ -43,7 +43,9 @@ export default function PollList({pollResults}) {
                                 height={20}
                             />
                         </div>
-                        <div className="min-h-screen grid grid-cols-3 gap-4 p-40 place-content-center place-items-center">
+                        <div className="min-h-screen p-40
+                                        grid grid-cols-3 gap-4
+                                        justify-center place-items-center">
                             {pollData.map((poll) => (
                                 <PollCard key={poll.poll_id} poll={poll} result={pollResults.find(p => p.id === poll.poll_id)} />
                             ))}
@@ -80,7 +82,7 @@ export default function PollList({pollResults}) {
                                 bg-black bg-blend-multiply bg-opacity-15
                                 items-center justify-center pb-36">
                         <div className="flex flex-col items-center text-center justify-center">
-                            <h1 className="text-5xl mt-48 mb-3">
+                            <h1 className="text-5xl mt-48 mb-3 px-4">
                                 K-POP POLLS
                             </h1>
                             <h4 className="text-sm mb-4">
@@ -126,6 +128,6 @@ export default function PollList({pollResults}) {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

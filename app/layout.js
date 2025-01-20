@@ -2,12 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import localFont from 'next/font/local';
 import "./globals.css";
 
-const conthrax = localFont({
-  src: '../public/fonts/conthrax-sb.ttf',
-  variable: '--font-conthrax',
-  display: 'swap',
-});
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -50,7 +44,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${conthrax.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{
           backgroundColor: '#000',
         }}

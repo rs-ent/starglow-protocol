@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function PollHome({ params }) {
-    const { poll_id } = params;
+    const { poll_id } = useParams();
     const router = useRouter();
 
     useEffect(() => {
@@ -15,6 +15,4 @@ export default function PollHome({ params }) {
         router.replace(`/polls/${poll_id}/${locale}`);
         
     }, [poll_id, router]);
-
-    return <div>Loading...</div>;
 };
