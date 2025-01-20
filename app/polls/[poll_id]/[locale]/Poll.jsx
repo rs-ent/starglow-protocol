@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataContext } from "../../../context/PollData";
 import { submitVote } from "../../../firebase/fetch";
@@ -18,7 +18,8 @@ export default function Poll({ poll_id, t }) {
 
     const [voted, setVoted] = useState(false);
     const [selection, setSelection] = useState(-1);
-    const [timeLeft, setTimeLeft] = useState(null);
+    const [ended, setEnded] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(1);
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
@@ -31,22 +32,39 @@ export default function Poll({ poll_id, t }) {
 
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
     const startDate = parseAsKST(poll.start);
-    const endDate = parseAsKST(poll.end);
+    
 
-    if (today < startDate) {
-        router.replace('/polls');
-        return <div></div>
-    }
-    if (today > endDate) {
+    useEffect(() => {
+        const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+        
+        const startDate = parseAsKST(poll.start);
+        if (today < startDate) {
+            router.replace('/polls');
+            return <div></div>
+        }
+
+        const endDate = parseAsKST(poll.end);
+        if (today > endDate) {
+            console.log(today.toLocaleString(), endDate.toLocaleString());
+            setEnded(true);
+        }
+    }, [poll]);
+
+    if (ended) {
+        console.log("Ended: ", ended);
         return (
-            <div>
-                <TimesUp />
-            </div>
+            <TimesUp t={t} />
         );
     }
 
     if (voted) {
-        return <Submitted poll_id={poll_id} title={poll.title} options={options} endDate={endDate} t={t} />
+        console.log("Voted: ", voted);
+        if (timeLeft > 0) {
+            console.log("TimeLeft: ", timeLeft);
+            return <Submitted poll_id={poll_id} title={poll.title} options={options} endDate={parseAsKST(poll.end)} t={t} />
+        } else {
+            return <TimesUp t={t} />
+        }
     }
 
     const handleOptionClick = (idx) => {
@@ -77,13 +95,10 @@ export default function Poll({ poll_id, t }) {
         await submitVote(poll_id, option, deviceInfo);
         setVoted(true);
     }
-
-    const handleTick = (remainingSec) => {
-        setTimeLeft(remainingSec);
-        if (remainingSec === 0) {
-            console.log("D-DAY");
-        }
-    };
+    
+    const handleTick = (tick) => {
+        setTimeLeft(tick);
+    }
 
     return (
         <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
@@ -92,7 +107,7 @@ export default function Poll({ poll_id, t }) {
                     {t['poll']['openIn']}
                 </h1>
                 <h1 className="text-center text-4xl text-outline-1">
-                    <Countdown endDate={endDate} onTick={handleTick} />
+                    <Countdown endDate={parseAsKST(poll.end)} onTick={handleTick}/>
                 </h1>
                 <h1 className="text-3xl px-3 text-white text-glow-3 text-center mt-14">
                     {poll.title || ""}

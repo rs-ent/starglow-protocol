@@ -15,7 +15,7 @@ export default function PollList({pollResults}) {
         
         if (poll.title && poll.options && poll.start && poll.end) {
             const startDate = parseAsKST(poll.start);
-            if (startDate <= today && !poll.title.includes("test")) return true;
+            if (startDate <= today && poll.poll_id !== 'p99999') return true;
         }
         return false;
     }).sort(function (a, b) {

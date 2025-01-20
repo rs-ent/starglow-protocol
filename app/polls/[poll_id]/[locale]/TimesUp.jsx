@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function TimesUp() {
+export default function TimesUp({t}) {
     return (
         <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
             <div className="relative items-center justify-center">
@@ -13,15 +13,15 @@ export default function TimesUp() {
                 <h1 className="text-3xl whitespace-pre-wrap text-center mt-16 px-3">
                     {t['poll']['timesUp']}
                 </h1>
-                <hr className="border-t border-[rgba(255,255,255,0.7)] px-3 w-full" />
-                <h3 className="text-3xl whitespace-pre-wrap text-center mt-16 px-3">
+                <hr className="border-t border-[rgba(255,255,255,0.7)] my-3 px-3 w-full" />
+                <h3 className="text-lg whitespace-pre-wrap text-center px-3">
                     {t['poll']['closedPoll']}
                 </h3>
             </div>
             <a
                 href="/polls"
                 rel="noreferrer"
-                className="button-base mt-4"
+                className="button-base mt-16"
             >
                 <Image 
                     src='/ui/search-icon.png'

@@ -30,7 +30,8 @@ export async function getSheetsData() {
     const res = await fetch(
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7-XHjG1woLDYK1sUNEUmWUgormRv5GAckf9BS4LAuXcVoj_tA9jvBmhbr2FW8BGn6Lcarhlc3D6tV/pub?gid=0&single=true&output=csv',
       {
-        next: { revalidate: 1 },
+        cache: 'no-store',
+        next: { revalidate: 0 },
       }
     );
     const csvData = await res.text();
