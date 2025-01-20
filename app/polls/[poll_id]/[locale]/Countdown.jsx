@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useInterval } from 'react-use';
 
-function Countdown({ endDate }) {
-    const [timeLeft, setTimeLeft] = useState(0);
+function Countdown({ endDate, onTick }) {
+    const [timeLeft, setTimeLeft] = useState("00:00:00");
 
     useInterval(() => {
         const today = new Date(
@@ -24,6 +24,10 @@ function Countdown({ endDate }) {
         const hh = String(hours).padStart(2, "0");
         const mm = String(minutes).padStart(2, "0");
         const ss = String(seconds).padStart(2, "0");
+
+        if (onTick) {
+          onTick(diffSec);
+        }
     
         // 최종 결과를 문자열로 저장
         setTimeLeft(`${hh}:${mm}:${ss}`);

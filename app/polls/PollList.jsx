@@ -15,7 +15,7 @@ export default function PollList({pollResults}) {
         
         if (poll.title && poll.options && poll.start && poll.end) {
             const startDate = parseAsKST(poll.start);
-            if (startDate <= today) return true;
+            if (startDate <= today && !poll.title.includes("test")) return true;
         }
         return false;
     }).sort(function (a, b) {
@@ -53,7 +53,9 @@ export default function PollList({pollResults}) {
                             height={20}
                         />
                     </div>
-                    <div className="min-h-screen p-40
+                    <div className="min-h-screen
+                                    py-20
+                                    px-[10vw]
                                     grid grid-cols-3 gap-4
                                     items-start justify-items-center">
                         {pollData.map((poll) => (

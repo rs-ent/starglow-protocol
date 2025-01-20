@@ -7,6 +7,7 @@ import { submitVote } from "../../../firebase/fetch";
 import Image from "next/image";
 import Countdown from './Countdown';
 import Submitted from "./Submitted";
+import TimesUp from "./TimesUp";
 
 function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
@@ -17,6 +18,7 @@ export default function Poll({ poll_id, t }) {
 
     const [voted, setVoted] = useState(false);
     const [selection, setSelection] = useState(-1);
+    const [timeLeft, setTimeLeft] = useState(null);
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
@@ -38,9 +40,7 @@ export default function Poll({ poll_id, t }) {
     if (today > endDate) {
         return (
             <div>
-                <h1 className="text-xl text-gradient text-center mt-36">
-                    {t['poll']['ended']}
-                </h1>
+                <TimesUp />
             </div>
         );
     }
@@ -78,6 +78,13 @@ export default function Poll({ poll_id, t }) {
         setVoted(true);
     }
 
+    const handleTick = (remainingSec) => {
+        setTimeLeft(remainingSec);
+        if (remainingSec === 0) {
+            console.log("D-DAY");
+        }
+    };
+
     return (
         <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
             <div className="relative items-center justify-center">
@@ -85,7 +92,7 @@ export default function Poll({ poll_id, t }) {
                     {t['poll']['openIn']}
                 </h1>
                 <h1 className="text-center text-4xl text-outline-1">
-                    <Countdown endDate={endDate} />
+                    <Countdown endDate={endDate} onTick={handleTick} />
                 </h1>
                 <h1 className="text-3xl px-3 text-white text-glow-3 text-center mt-14">
                     {poll.title || ""}
