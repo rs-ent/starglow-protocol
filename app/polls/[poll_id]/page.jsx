@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function PollHome({ params }) {
+export default function PollHome() {
     const { poll_id } = useParams();
     const router = useRouter();
 
