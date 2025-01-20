@@ -29,14 +29,11 @@ export default function PollCard({poll, result}) {
                 {poll.img && (
                     <div className="bg-gradient-to-br from-[rgba(255,255,255,0.8)] to-[rgba(255,255,255,0.1)] rounded-3xl p-[1px] shadow-sm">
                         <div className="bg-black rounded-3xl">
-                            <div className="flex justify-center">
-                                <Image
+                            <div className="aspect-[2.0625/1] relative">
+                                <img
                                     src={poll.img}
                                     alt={poll.title}
-                                    width={330}
-                                    height={160}
-                                    unoptimized
-                                    className="rounded-3xl shadow-md w-full"
+                                    className="rounded-3xl shadow-md w-full h-full object-cover"
                                 />
                             </div>
                         </div>
