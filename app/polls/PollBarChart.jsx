@@ -15,8 +15,8 @@ export default function PollBarChart({ votes, options }) {
 
     const totalVotes = data.reduce((sum, item) => sum + item.count, 0) || 1; 
     const dataWithPercent = data.map((item) => ({
-        name: item.name,
-        value: (item.count / totalVotes) * 100,
+        name: item.name || '',
+        value: (item.count / totalVotes) * 100 || 0,
     }));    
 
     return (

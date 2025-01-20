@@ -1,5 +1,5 @@
 
-export default async function PollLayout({ children, params }) {
+export default async function PollLayout({ children }) {
     return (
         <body>
             <div className="bg-[rgba(52,60,76,1)] text-[var(--foreground)] font-[var(--font-body)] transition-all">

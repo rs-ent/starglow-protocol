@@ -6,11 +6,11 @@ export default async function PollLayout({ children, params }) {
     const pollData = await getSheetsData();
 
     return (
-        <body>
+        <div>
             <DataProvider value={pollData}>
                 {children}
                 <AnalyticsClient />
             </DataProvider>
-        </body>
+        </div>
     );
 }

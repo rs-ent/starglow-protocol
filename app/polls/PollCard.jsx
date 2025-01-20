@@ -12,6 +12,12 @@ export function formatDate(str) {
 
 export default function PollCard({poll, result}) {
     const options = poll.options.split(';');
+    let voteResult = {}
+    options.forEach(function (option, idx) {
+        voteResult[idx] = 0;
+    })
+
+    if (result && result.votes) voteResult = result.votes;
 
     return (
         <div className="max-w-[440px]">
@@ -27,8 +33,8 @@ export default function PollCard({poll, result}) {
                                 <Image
                                     src={poll.img}
                                     alt={poll.title}
-                                    width={500}
-                                    height={300}
+                                    width={330}
+                                    height={160}
                                     unoptimized
                                     className="rounded-3xl shadow-md w-full"
                                 />
@@ -50,7 +56,7 @@ export default function PollCard({poll, result}) {
                 </p>
 
                 <div className="mt-6">
-                    <PollBarChart votes={result.votes} options={options}/>
+                    <PollBarChart votes={voteResult} options={options}/>
                 </div>
             </div>
         </div>

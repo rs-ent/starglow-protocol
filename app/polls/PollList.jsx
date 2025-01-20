@@ -21,7 +21,6 @@ export default function PollList({pollResults}) {
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
 
     function handlePollClick() {
-        console.log('Poll Click');
         const targetElement = document.getElementById('JoinForVote');
         if (targetElement) {
             targetElement.scrollIntoView({ behavior: 'smooth' });
@@ -55,11 +54,20 @@ export default function PollList({pollResults}) {
                                         grid grid-cols-3 gap-4
                                         justify-center place-items-center">
                             {pollData.map((poll) => (
-                                <PollCard key={poll.poll_id} poll={poll} result={pollResults.find(p => p.id === poll.poll_id)} />
+                                <div
+                                    key={poll.poll_id}
+                                    onClick={() => handlePollClick()}
+                                    className="cursor-pointer"
+                                >
+                                    <PollCard 
+                                        key={poll.poll_id} poll={poll}
+                                        result={pollResults.find(p => p.id === poll.poll_id)}
+                                    />
+                                </div>
                             ))}
                         </div>
-                        <div className="text-center mt-14" id="JoinForVote">
-                            <h1 className="text-5xl">
+                        <div className="text-center mt-3" id="JoinForVote">
+                            <h1 className="text-5xl pt-16">
                                 Wanna join for a vote?
                             </h1>
                             <a
@@ -103,7 +111,8 @@ export default function PollList({pollResults}) {
                                 height={18}
                             />
                         </div>
-                        <div className="min-h-screen grid grid-cols-1 gap-4 p-8 place-content-center place-items-center">
+                        <div className="min-h-screen grid grid-cols-1 gap-4 p-8 
+                                        items-start justify-items-center">
                             {pollData.map((poll) => (
                                 <div
                                     key={poll.poll_id}
