@@ -13,7 +13,7 @@ export default function TimesUp({t}) {
                 <h1 className="text-3xl whitespace-pre-wrap text-center mt-16 px-3">
                     {t['poll']['timesUp']}
                 </h1>
-                <hr className="border-t border-[rgba(255,255,255,0.7)] my-3 px-3 w-full" />
+                <hr className="border-t border-[rgba(255,255,255,0.4)] my-3 px-3 w-full" />
                 <h3 className="text-lg whitespace-pre-wrap text-center px-3">
                     {t['poll']['closedPoll']}
                 </h3>

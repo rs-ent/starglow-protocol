@@ -2,6 +2,7 @@ import { db } from "./firestore-voting";
 import {
   doc,
   collection,
+  getDoc,
   getDocs,
   setDoc,
   updateDoc,
@@ -37,6 +38,39 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
         );        
     } catch (error) {
         console.error("submitVote Error:", error);
+    }
+}
+
+export async function getPollResult(pollId) {
+    try {
+        const pollDocRef = doc(db, "polls", pollId);
+        const pollSnap = await getDoc(pollDocRef);
+
+        if (!pollSnap.exists()) {
+            return null;
+        }
+
+        const pollData = pollSnap.data() || {};
+        const logsColRef = collection(db, "polls", pollId, "logs");
+        const logsSnapshot = await getDocs(logsColRef);
+
+        const logs = logsSnapshot.docs.map((logDoc) => {
+            const data = logDoc.data();
+            return {
+                id: logDoc.id,
+                ...data,
+                timestamp: data.timestamp ? data.timestamp.toMillis() : null,
+            };
+        });
+
+        return {
+            id: pollId,
+            ...pollData,
+            logs,
+        };
+    } catch (error) {
+        console.error("getPollResult Error:", error);
+        return null;
     }
 }
 
