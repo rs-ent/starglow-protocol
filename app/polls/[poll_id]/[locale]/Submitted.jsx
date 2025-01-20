@@ -10,10 +10,12 @@ function parseAsKST(dateStrWithoutTZ) {
 
 export default function Submitted({ poll_id, title, options, endDate , t }) {
 
-    const shareText = `🌟 STARGLOW 🚀 - K-POP Poll\n\n` +
-      `💬 "${title}"\n` +
-      `${options.map((opt, index) => `  ${index + 1}. "${opt}"`).join("\n")}\n\n` +
-      `💡 Check out this poll!\n🤔 What do you Think?\n🖱️ Tap the link below 👇\n🗳️ and Participate!\n`;
+    const shareText = `🌟 STARGLOW K-POP Poll 🚀\n\n` +
+      `"${title}"\n` +
+      `-----------------------\n` +
+      `${options.map((opt, index) => `⚪ ${opt}`).join("\n")}\n\n` +
+      `What do you Think? 🤔` + 
+      `Tap the link and vote ryt now!`;
     const shareUrl = `https://starglow-protocol.vercel.app/polls/${poll_id}`;
 
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));

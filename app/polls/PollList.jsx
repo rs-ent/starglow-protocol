@@ -20,6 +20,14 @@ export default function PollList({pollResults}) {
     });
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
 
+    function handlePollClick() {
+        console.log('Poll Click');
+        const targetElement = document.getElementById('JoinForVote');
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
     const isDesktop = useMedia('(min-width: 440px)');
     return (
         <div className="bg-black">
@@ -50,7 +58,7 @@ export default function PollList({pollResults}) {
                                 <PollCard key={poll.poll_id} poll={poll} result={pollResults.find(p => p.id === poll.poll_id)} />
                             ))}
                         </div>
-                        <div className="text-center mt-14">
+                        <div className="text-center mt-14" id="JoinForVote">
                             <h1 className="text-5xl">
                                 Wanna join for a vote?
                             </h1>
@@ -97,11 +105,20 @@ export default function PollList({pollResults}) {
                         </div>
                         <div className="min-h-screen grid grid-cols-1 gap-4 p-8 place-content-center place-items-center">
                             {pollData.map((poll) => (
-                                <PollCard key={poll.poll_id} poll={poll} result={pollResults.find(p => p.id === poll.poll_id)} />
+                                <div
+                                    key={poll.poll_id}
+                                    onClick={() => handlePollClick()}
+                                    className="cursor-pointer"
+                                >
+                                    <PollCard 
+                                        key={poll.poll_id} poll={poll}
+                                        result={pollResults.find(p => p.id === poll.poll_id)}
+                                    />
+                                </div>
                             ))}
                         </div>
 
-                        <div className="text-center mt-1 px-4">
+                        <div className="text-center mt-1 px-4" id="JoinForVote">
                             <h1 className="text-4xl px-4">
                                 Wanna join for a vote?
                             </h1>

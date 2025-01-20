@@ -38,7 +38,7 @@ export default function Poll({ poll_id, t }) {
     if (today > endDate) {
         return (
             <div>
-                <h1 className="text-xl text-gradient">
+                <h1 className="text-xl text-gradient text-center mt-36">
                     {t['poll']['ended']}
                 </h1>
             </div>
