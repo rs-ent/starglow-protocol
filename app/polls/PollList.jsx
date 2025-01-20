@@ -27,7 +27,7 @@ export default function PollList({pollResults}) {
         }
     }
 
-    const isDesktop = useMedia('(min-width: 440px)');
+    const isDesktop = useMedia('(min-width: 768px)');
     return (
         <div className="bg-black">
             {isDesktop ? (
@@ -52,7 +52,7 @@ export default function PollList({pollResults}) {
                         </div>
                         <div className="min-h-screen p-40
                                         grid grid-cols-3 gap-4
-                                        justify-center place-items-center">
+                                        items-start justify-items-center">
                             {pollData.map((poll) => (
                                 <div
                                     key={poll.poll_id}
