@@ -9,16 +9,16 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function PollList({pollResults}) {
+    const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
     const pollContext = useContext(DataContext);
     const pollData = Object.values(pollContext).filter(function (poll) {
-        if (poll.title && poll.options && poll.start && poll.end) return true;
+        if (poll.title && poll.options && poll.start && poll.end && poll.start <= today ) return true;
         return false;
     }).sort(function (a, b) {
         const numA = parseInt(a.poll_id.replace('p',''), 10);
         const numB = parseInt(b.poll_id.replace('p',''), 10);
         return numB - numA;
     });
-    const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
 
     function handlePollClick() {
         const targetElement = document.getElementById('JoinForVote');
