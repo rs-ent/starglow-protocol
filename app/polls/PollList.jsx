@@ -12,7 +12,11 @@ export default function PollList({pollResults}) {
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
     const pollContext = useContext(DataContext);
     const pollData = Object.values(pollContext).filter(function (poll) {
-        if (poll.title && poll.options && poll.start && poll.end && poll.start <= today ) return true;
+        
+        if (poll.title && poll.options && poll.start && poll.end) {
+            const startDate = parseAsKST(poll.start);
+            if (startDate <= today) return true;
+        }
         return false;
     }).sort(function (a, b) {
         const numA = parseInt(a.poll_id.replace('p',''), 10);
@@ -158,4 +162,8 @@ export default function PollList({pollResults}) {
             </div>
         )
     }
+}
+
+function parseAsKST(dateStrWithoutTZ) {
+    return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
 }
