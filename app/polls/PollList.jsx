@@ -98,11 +98,13 @@ export default function PollList({pollResults}) {
         )
     } else {
         return (
-            <div className="bg-black">
+            <div>
+                <div 
+                    className="fixed top-0 left-0 w-full h-full -z-10"
+                    style={{ backgroundImage: "url('/poll-bg.png')" }}
+                ></div>
                 <Header />
-                <div className="bg-[url('/poll-bg.png')] bg-top bg-no-repeat bg-fixed
-                            bg-black bg-blend-multiply bg-opacity-15
-                            items-center justify-center pb-36">
+                <div className="items-center justify-center pb-36">
                     <div className="flex flex-col items-center text-center justify-center">
                         <h1 className="text-5xl mt-48 mb-3 px-4">
                             K-POP POLLS
