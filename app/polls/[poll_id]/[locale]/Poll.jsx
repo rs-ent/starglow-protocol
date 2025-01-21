@@ -13,13 +13,14 @@ function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
 }
 
-export default function Poll({ poll_id, t }) {
+export default function Poll({ poll_id, t, overrideToday = null, overrideStart = null, overrideEnd = null, overrideVoted = false, preview = false }) {
     const router = useRouter();
 
     const [voted, setVoted] = useState(false);
     const [selection, setSelection] = useState(-1);
     const [ended, setEnded] = useState(false);
     const [timeLeft, setTimeLeft] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
@@ -29,42 +30,67 @@ export default function Poll({ poll_id, t }) {
     }
 
     const options = poll.options ? poll.options.split(";") : [];
-
-    const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-    const startDate = parseAsKST(poll.start);
     
-
     useEffect(() => {
         const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
         
         const startDate = parseAsKST(poll.start);
         if (today < startDate) {
-            router.replace('/polls');
-            return <div></div>
+            if(!preview) router.replace('/polls');
+            setLoading(true);
         }
 
         const endDate = parseAsKST(poll.end);
         if (today > endDate) {
-            console.log(today.toLocaleString(), endDate.toLocaleString());
             setEnded(true);
         }
     }, [poll]);
 
+    useEffect(() => {
+        setLoading(false);
+        setEnded(false);
+        setVoted(false);
+        console.log('drived');
+        setVoted(overrideVoted);
+        
+        const today = overrideToday
+            ? new Date(overrideToday)
+            : new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+        
+        const startDate = overrideStart
+            ? new Date(overrideStart)
+            : parseAsKST(poll.start);
+
+        if (today < startDate) {
+            if(!preview) router.replace('/polls');
+            setLoading(true);
+        }
+
+        const endDate = overrideEnd
+            ? new Date(overrideEnd)
+            : parseAsKST(poll.end);
+
+        if (today > endDate) {
+            setEnded(true);
+        }
+    }, [overrideToday, overrideStart, overrideEnd, overrideVoted])
+
     if (ended) {
-        console.log("Ended: ", ended);
         return (
             <TimesUp t={t} />
         );
     }
 
     if (voted) {
-        console.log("Voted: ", voted);
         if (timeLeft > 0) {
-            console.log("TimeLeft: ", timeLeft);
             return <Submitted poll_id={poll_id} title={poll.title} options={options} endDate={parseAsKST(poll.end)} t={t} />
         } else {
             return <TimesUp t={t} />
         }
+    }
+
+    if (loading) {
+        return <div></div>
     }
 
     const handleOptionClick = (idx) => {
@@ -107,7 +133,7 @@ export default function Poll({ poll_id, t }) {
                     {t['poll']['openIn']}
                 </h1>
                 <h1 className="text-center text-4xl text-outline-1">
-                    <Countdown endDate={parseAsKST(poll.end)} onTick={handleTick}/>
+                    <Countdown endDate={parseAsKST(overrideEnd || poll.end)} onTick={handleTick}/>
                 </h1>
                 <h1 className="text-3xl px-3 text-white text-glow-3 text-center mt-14">
                     {poll.title || ""}

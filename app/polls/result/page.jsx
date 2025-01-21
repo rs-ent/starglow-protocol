@@ -7,7 +7,7 @@ export default async function PollResult ({ searchParams }) {
     const result = await getPollResult(pollId);
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="flex items-center justify-center min-h-screen">
             <PollCardResult poll_id={pollId} result={result} />
         </div>
     );

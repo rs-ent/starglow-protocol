@@ -10,7 +10,7 @@ import {
     LabelList
 } from "recharts";
 
-export default function PollBarChart({ votes, options }) {
+export default function PollBarChart({ votes, options, bigFont=false }) {
     const data = buildVoteData(votes, options);
 
     const totalVotes = data.reduce((sum, item) => sum + item.count, 0) || 1; 
@@ -20,12 +20,13 @@ export default function PollBarChart({ votes, options }) {
     }));    
 
     return (
-        <PollBars data={dataWithPercent} />
+        <PollBars data={dataWithPercent} bigFont={bigFont} />
     );
 }
 
 // Make this a named export or a local function
-function PollBars({ data }) {
+function PollBars({ data, bigFont=false }) {
+
     return (
         <div>
             {data.map((item, idx) => {
