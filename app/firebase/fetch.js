@@ -1,4 +1,4 @@
-import { db } from "./firestore-voting";
+import { db, storage } from "./firestore-voting";
 import {
   doc,
   collection,
@@ -10,6 +10,8 @@ import {
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
 export async function submitVote(pollId, option, deviceInfo = {}) {
     try {
@@ -113,3 +115,54 @@ export async function getPollsResults() {
         return [];
     }
 }
+
+export const uploadFiles = (files, path = "uploads/", onProgress) => {
+    if (!Array.isArray(files) || files.length === 0) {
+        return Promise.reject(new Error("No files provided for upload."));
+    }
+  
+    const uploadPromises = files.map((file, index) => {
+        return new Promise((resolve, reject) => {
+            const sanitizedPath = path.endsWith("/") ? path : `${path}/`;
+            const uniqueName = `${uuidv4()}_${file.name}`;
+            const fileRef = ref(storage, `${sanitizedPath}${uniqueName}`);
+            const uploadTask = uploadBytesResumable(fileRef, file);
+    
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (onProgress) onProgress(index, progress); // 파일별 진행률 콜백 호출
+                },
+                (error) => {
+                    console.error("Upload failed for file:", file.name, error);
+                    reject(error);
+                },
+                async () => {
+                    try {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    console.log(`File available at: ${downloadURL}`);
+                    resolve({ fileName: file.name, downloadURL });
+                    } catch (error) {
+                    console.error("Error getting download URL for file:", file.name, error);
+                    reject(error);
+                    }
+                }
+            );
+        });
+    });
+  
+    return Promise.all(uploadPromises);
+};
+
+export const getFileDownloadURL = async (filePath) => {
+    try {
+        const fileRef = ref(storage, filePath);
+        const downloadURL = await getDownloadURL(fileRef);
+        console.log("Download URL:", downloadURL);
+        return downloadURL;
+    } catch (error) {
+        console.error("Error getting file download URL:", error);
+        throw error;
+    }
+};
