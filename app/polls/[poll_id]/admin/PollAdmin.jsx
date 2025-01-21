@@ -6,7 +6,7 @@ import Poll from "../[locale]/Poll";
 import LocaleFile from "../[locale]/LocaleFile";
 import PollCardResult from "../../result/PollCard.Result";
 
-const ADMIN_PASSWORD = "0415";
+const ADMIN_PASSWORD = "fpemtmfflvjtm01!";
 
 export default function PollAdmin({poll_id, result}) {
     const [locale, setLocale] = useState('en');

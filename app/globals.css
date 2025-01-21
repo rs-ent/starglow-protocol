@@ -124,6 +124,10 @@ button {
 
 /* --- ì»¤ìŠ¤í…€ ìœ í‹¸ë¦¬í‹° --- */
 @layer utilities {
+  .font-main {
+    font-family: 'Conthrax', sans-serif;
+  }
+
   .perspective-1000 {
     perspective: 1000px;
   }
