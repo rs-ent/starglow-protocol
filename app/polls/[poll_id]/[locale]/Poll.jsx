@@ -8,6 +8,7 @@ import Image from "next/image";
 import Countdown from './Countdown';
 import Submitted from "./Submitted";
 import TimesUp from "./TimesUp";
+import Spinner from "../../../components/Spinner";
 
 function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
@@ -21,6 +22,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     const [ended, setEnded] = useState(false);
     const [timeLeft, setTimeLeft] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
@@ -98,28 +100,31 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     }
 
     const handleSubmit = async (option) => {
+        setIsSubmitting(true);
         let ipData = { ip: "unknown" };
         try {
             const res = await fetch("https://api.ipify.org?format=json");
             ipData = await res.json();
+
+            const deviceInfo = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                deviceMemory: navigator.deviceMemory,
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                devicePixelRatio: window.devicePixelRatio,
+                ipAddress: ipData.ip,
+            };    
+    
+            await submitVote(poll_id, option, deviceInfo);
+            setVoted(true);
         } catch (err) {
             console.error("Failed to get IP address:", err);
+        } finally {
+            setIsSubmitting(false);
         }
-
-        const deviceInfo = {
-            userAgent: navigator.userAgent,
-            language: navigator.language,
-            platform: navigator.platform,
-            hardwareConcurrency: navigator.hardwareConcurrency,
-            deviceMemory: navigator.deviceMemory,
-            screenWidth: window.screen.width,
-            screenHeight: window.screen.height,
-            devicePixelRatio: window.devicePixelRatio,
-            ipAddress: ipData.ip,
-        };    
-
-        await submitVote(poll_id, option, deviceInfo);
-        setVoted(true);
     }
     
     const handleTick = (tick) => {
@@ -129,6 +134,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     return (
         <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
             <div className="relative items-center justify-center">
+                {isSubmitting && <Spinner />}   {/* 오버레이 스피너 */}
                 <h1 className="text-center text-base text-outline-1 mt-10">
                     {t['poll']['openIn']}
                 </h1>
@@ -185,6 +191,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
                     }
                 `}
                 onClick={() => handleSubmit(selection)}
+                disabled={isSubmitting}
                 >
                 {t['poll']['submit']}
             </button>

@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import { appendLogClient } from "../google-sheets/appendLog";
 
 export async function submitVote(pollId, option, deviceInfo = {}) {
     try {
@@ -38,6 +39,17 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
             },
             { merge: true }
         );        
+        
+        const rowData = [
+            pollId,
+            option,
+            ipAddress,
+            deviceInfo.language,
+        ];
+        await appendLogClient(rowData);
+
+        console.log("submitVote completed successfully.");
+
     } catch (error) {
         console.error("submitVote Error:", error);
     }
