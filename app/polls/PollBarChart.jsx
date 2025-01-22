@@ -12,12 +12,22 @@ import {
 
 export default function PollBarChart({ votes, options, bigFont=false }) {
     const data = buildVoteData(votes, options);
-
     const totalVotes = data.reduce((sum, item) => sum + item.count, 0) || 1; 
-    const dataWithPercent = data.map((item) => ({
-        name: item.name || '',
-        value: (item.count / totalVotes) * 100 || 0,
-    }));    
+    const sorted = [...data].sort((a, b) => b.count - a.count);
+    const rankMap = new Map();
+    sorted.forEach((item, index) => {
+        rankMap.set(item.name, index);
+    });
+    const dataWithPercent = data.map((item) => {
+        const value = (item.count / totalVotes) * 100 || 0;
+        const rank = rankMap.get(item.name);
+      
+        return {
+            name: item.name || '',
+            value,
+            rank,
+        };
+    }); 
 
     return (
         <PollBars data={dataWithPercent} bigFont={bigFont} />
@@ -25,12 +35,12 @@ export default function PollBarChart({ votes, options, bigFont=false }) {
 }
 
 // Make this a named export or a local function
-function PollBars({ data, bigFont=false }) {
+function PollBars({ data }) {
 
     return (
         <div>
             {data.map((item, idx) => {
-                const computedOpacity = 1.0 - ((0.5 / (data.length - 1)) * idx);
+                const computedOpacity = 1.0 - ((0.6 / (data.length - 1)) * item.rank);
                 return(
                     <div key={idx} className="mb-2" style={{ opacity: computedOpacity }}>
                         <h1 className="text-base mb-0.5">

@@ -14,9 +14,9 @@ export async function GET(request) {
         });
         const page = await browser.newPage();
         await page.setViewport({
-            width: 1200,
-            height: 1200,
-            deviceScaleFactor: 4,
+            width: 2560,
+            height: 2560,
+            deviceScaleFactor: 2,
         });
 
         await page.goto(targetUrl, { waitUntil: "networkidle0" });

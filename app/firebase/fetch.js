@@ -178,3 +178,16 @@ export const getFileDownloadURL = async (filePath) => {
         throw error;
     }
 };
+
+export async function updateResultImg(pollId, imageUrl) {
+    try {
+        const pollDocRef = doc(db, "polls", pollId);
+        await updateDoc(pollDocRef, {
+            result_img: imageUrl,
+        });
+        console.log(`result_img updated for ${pollId}: ${imageUrl}`);
+    } catch (error) {
+        console.error("updateResultImg Error:", error);
+        throw error;
+    }
+}

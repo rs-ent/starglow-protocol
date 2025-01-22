@@ -5,13 +5,13 @@ import { DataContext } from "../../../context/PollData";
 import Poll from "../[locale]/Poll";
 import LocaleFile from "../[locale]/LocaleFile";
 import PollCardResult from "../../result/PollCard.Result";
+import { uploadFiles, updateResultImg } from "../../../firebase/fetch";
 
-const ADMIN_PASSWORD = "fpemtmfflvjtm01!";
+const ADMIN_PASSWORD = "레드슬리퍼스01!";
 
 export default function PollAdmin({poll_id, result}) {
     const [locale, setLocale] = useState('en');
     const [t, setT] = useState(null);
-
     const [auth, setAuth] = useState(false);
 
     const pollData = useContext(DataContext);
@@ -42,6 +42,11 @@ export default function PollAdmin({poll_id, result}) {
     const [blockPassword, setBlockPassword] = useState(false);
 
     const [showRemote, setShowRemote] = useState(false);
+    const [showResultRemote, setShowResultRemote] = useState(false);
+    const [showImagePopup, setShowImagePopup] = useState(false);
+    const [imageURL, setImageURL] = useState(null);
+    const [localResultImg, setLocalResultImg] = useState(result?.result_img || null);
+    const [imageLoading, setImageLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -79,6 +84,54 @@ export default function PollAdmin({poll_id, result}) {
         setAdminVoted(tempVoted);
     };
 
+    const handleClosePopup = () => {
+        setShowImagePopup(false);
+        setImageURL(null);
+    };
+
+    const resetResultImage = async () => {
+        setLocalResultImg(null);
+        setImageURL(null);
+        handleGetResultImage();
+    }
+
+    const handleGetResultImage = async () => {
+        try {
+            setImageLoading(true);
+            if (localResultImg) {
+                setImageURL(localResultImg);
+                setShowImagePopup(true);
+                return;
+            }
+
+            const response = await fetch(`/api/get-result?pollId=${poll_id}`);
+            if (!response.ok) {
+                alert(`이미지 생성 오류: ${res.statusText}`);
+                return;
+            }
+
+            const blob = await response.blob();
+            const file = new File([blob], `poll_${poll_id}.png`, { type: "image/png" });
+            const [uploadResult] = await uploadFiles([file], "poll-results/");
+            if (!uploadResult.downloadURL) {
+                alert("업로드에 실패했습니다.");
+                return;
+            }
+            const finalURL = uploadResult.downloadURL;
+            await updateResultImg(poll_id, finalURL);
+
+            setLocalResultImg(finalURL);
+            setImageURL(finalURL);
+            setShowImagePopup(true);
+
+        } catch (err) {
+            console.error("handleGetResultImage error:", err);
+            alert("이미지 생성 도중 오류가 발생했습니다!");
+        } finally {
+            setImageLoading(false);
+        }
+    }
+
     if (auth) {
         return (
             <div className="relative">
@@ -90,6 +143,16 @@ export default function PollAdmin({poll_id, result}) {
                     >
                         Admin Controller
                     </button>
+
+                    {/* Result Page Function 리모컨 열기 버튼 */}
+                    {viewMode === "img" && (
+                        <button
+                            onClick={() => setShowResultRemote(!showResultRemote)}
+                            className="fixed left-4 bottom-4 bg-green-600 text-white px-3 py-2 rounded-full z-10"
+                        >
+                            Result Page Function
+                        </button>
+                    )}
     
                     {/* 리모컨 패널 */}
                     {showRemote && (
@@ -97,11 +160,11 @@ export default function PollAdmin({poll_id, result}) {
                             <div className="grid grid-cols-1 gap-6">
                                 <div className="flex gap-2 mb-4">
                                     <button
-                                    onClick={handleShowPoll}
-                                    className={
-                                        (viewMode === "poll" ? "bg-green-600" : "bg-gray-600")
-                                        + " text-white px-3 py-2 rounded"
-                                    }
+                                        onClick={handleShowPoll}
+                                        className={
+                                            (viewMode === "poll" ? "bg-green-600" : "bg-gray-600")
+                                            + " text-white px-3 py-2 rounded"
+                                        }
                                     >
                                         Show Poll Page
                                     </button>
@@ -193,6 +256,45 @@ export default function PollAdmin({poll_id, result}) {
                             </div>
                         </div>
                     )}
+
+                    {/* Result Page Function 리모컨 패널 */}
+                    {showResultRemote && (
+                        <div className="fixed left-4 bottom-16 p-4 bg-white text-black shadow-lg rounded-md z-50">
+                            <div className="relative flex gap-4 mx-auto">
+                                <button
+                                    onClick={handleGetResultImage} // 구현할 함수
+                                    className="bg-blue-600 text-white px-3 py-2 rounded"
+                                    disabled={imageLoading}
+                                >
+                                    {imageLoading ? 'Wait for it...' : 'Get Result Image'}
+                                </button>
+
+                                <button
+                                    onClick={resetResultImage} // 구현할 함수
+                                    className="bg-red-600 text-white px-3 py-2 rounded"
+                                    disabled={imageLoading}
+                                >
+                                    {imageLoading ? 'Wait for it...' : 'Reset'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {showImagePopup && imageURL && (
+                    <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 z-50 flex items-center justify-center" 
+                         onClick={handleClosePopup}
+                    >
+                        <div className="bg-black rounded shadow-md relative z-20" onClick={(e) => e.stopPropagation()}>
+                            <button
+                                onClick={handleClosePopup}
+                                className="absolute top-2 right-2"
+                            >
+                                X
+                            </button>
+                            <img src={localResultImg} alt="Result Preview" width={700} />
+                        </div>
+                    </div>
+                    )}
     
                     {viewMode === "poll" ? (
     
@@ -211,9 +313,10 @@ export default function PollAdmin({poll_id, result}) {
                             />
                         </main>
                     ) : (
-                        <div className="bg-[url('/today-bg.png')] bg-cover w-[100vw] h-[77.5vw]">
+                        <div className="bg-[url('/poll-result-bg.png')] bg-cover w-dvw h-dvh">
                             <div className="flex items-center justify-center min-h-screen">
-                                <div className="scale-90">
+                                <div 
+                                    className="scale-[0.65] absolute">
                                     <PollCardResult poll_id={poll_id} result={result} />
                                 </div>
                             </div>
