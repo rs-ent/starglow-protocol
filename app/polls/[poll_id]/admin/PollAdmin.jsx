@@ -92,7 +92,7 @@ export default function PollAdmin({poll_id, result}) {
     const resetResultImage = async () => {
         setLocalResultImg(null);
         setImageURL(null);
-        handleGetResultImage();
+        alert("결과 이미지 초기화!");
     }
 
     const handleGetResultImage = async () => {
@@ -119,6 +119,25 @@ export default function PollAdmin({poll_id, result}) {
             }
             const finalURL = uploadResult.downloadURL;
             await updateResultImg(poll_id, finalURL);
+
+            await fetch("/api/put-result-img", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pollId: poll_id, finalURL }),
+              })
+                .then(async (res) => {
+                  const data = await res.json();
+                  if (!data.success) {
+                    console.error("put-result-img error:", data.error);
+                    alert("시트 업데이트 오류: " + data.error);
+                  } else {
+                    console.log("시트 업데이트 성공");
+                  }
+                })
+                .catch((err) => {
+                  console.error("fetch put-result-img error:", err);
+                  alert("시트 업데이트 도중 오류 발생");
+                });
 
             setLocalResultImg(finalURL);
             setImageURL(finalURL);
@@ -260,7 +279,7 @@ export default function PollAdmin({poll_id, result}) {
                     {/* Result Page Function 리모컨 패널 */}
                     {showResultRemote && (
                         <div className="fixed left-4 bottom-16 p-4 bg-white text-black shadow-lg rounded-md z-50">
-                            <div className="relative flex gap-4 mx-auto">
+                            <div className="relative flex gap-2 mx-auto">
                                 <button
                                     onClick={handleGetResultImage} // 구현할 함수
                                     className="bg-blue-600 text-white px-3 py-2 rounded"
@@ -271,7 +290,7 @@ export default function PollAdmin({poll_id, result}) {
 
                                 <button
                                     onClick={resetResultImage} // 구현할 함수
-                                    className="bg-red-600 text-white px-3 py-2 rounded"
+                                    className="bg-red-600 text-xs text-white px-2 py-2 rounded"
                                     disabled={imageLoading}
                                 >
                                     {imageLoading ? 'Wait for it...' : 'Reset'}

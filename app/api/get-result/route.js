@@ -22,7 +22,8 @@ export async function GET(request) {
       deviceScaleFactor: 1.8,
     });
 
-    const targetUrl = `http://localhost:3000/polls/result?pollId=${pollId}`;
+    //const targetUrl = `http://localhost:3000/polls/result?pollId=${pollId}`;
+    const targetUrl = `https://starglow-protocol.vercel.app/polls/result?pollId=${pollId}`;
     await page.goto(targetUrl, { waitUntil: "networkidle0" });
     await page.evaluate(() => {
       document.body.style.background = "transparent";
