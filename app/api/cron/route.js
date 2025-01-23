@@ -35,7 +35,7 @@ export async function GET() {
             console.log('====================');
             if (status === "pending") {
                 console.log('Status is Pending, Try upload');
-                const dateObj = new Date(new Date(scheduledAt).toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                const dateObj = new Date(scheduledAt);
                 console.log('Date Object: ', dateObj);
                 console.log('Today: ', today);
                 if (dateObj <= today) {
