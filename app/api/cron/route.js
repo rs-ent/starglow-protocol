@@ -22,13 +22,21 @@ export async function GET() {
         let processedCount = 0;
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(",");
+            console.log('ROW: ', lines[i]);
             if (row.length < 6) continue;
             const [schedule_id, poll_id, scheduledAt, text, imageUrl, status] = row.map(col => col.trim());
+            console.log('schedule_id: ', schedule_id);
+            console.log('poll_id: ', poll_id);
+            console.log('scheduledAt: ', scheduledAt);
+            console.log('text: ', text);
+            console.log('imageUrl: ', imageUrl);
+            console.log('status: ', status);
             if (status === "pending") {
                 const dateObj = new Date(scheduledAt);
                 if (dateObj <= new Date()) {
                     
                     await postTweet(text, imageUrl);
+                    console.log('Tweet success!');
 
                     const rowIndex = i + 1;
                     await sheets.spreadsheets.values.update({
