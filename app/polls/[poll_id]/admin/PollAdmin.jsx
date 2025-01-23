@@ -226,7 +226,7 @@ export default function PollAdmin({poll_id, result}) {
                     body: JSON.stringify({
                         text: announceText,
                         imageUrl: poll.result_img || localResultImg,
-                        scheduledAt: new Date().toLocaleString().replace('T',' '),
+                        scheduledAt: toLocalInputString(new Date()).replace('T',' '),
                         poll_id: poll.poll_id,
                     }),
                 });
