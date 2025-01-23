@@ -355,6 +355,20 @@ button {
   }
 }
 
+@keyframes blinkText {
+  0%, 50% {
+    opacity: 0;
+  }
+  51%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.85);
+  }
+}
+
+.blink {
+  animation: blinkText 1s infinite;
+}
+
 @keyframes draw {
   from {
       background-size: 0% 40%;

@@ -29,6 +29,7 @@
     "recharts": "^2.15.0",
     "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
+    "twitter-api-v2": "^1.19.0",
     "uuid": "^11.0.5"
   },
   "devDependencies": {

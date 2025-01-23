@@ -23,6 +23,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     const [timeLeft, setTimeLeft] = useState(1);
     const [loading, setLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [blink, setBlink] = useState(false);
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
@@ -129,6 +130,12 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     
     const handleTick = (tick) => {
         setTimeLeft(tick);
+        
+        if (tick < 600) {
+            setBlink(true);
+        } else {
+            setBlink(false);
+        }
     }
 
     return (
@@ -138,8 +145,8 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
                 <h1 className="text-center text-base text-outline-1 mt-10">
                     {t['poll']['openIn']}
                 </h1>
-                <h1 className="text-center text-4xl text-outline-1">
-                    <Countdown endDate={parseAsKST(overrideEnd || poll.end)} onTick={handleTick}/>
+                <h1 className={`text-center text-4xl ${blink ? "blink" : "text-outline-1"}`}>
+                    <Countdown endDate={parseAsKST(overrideEnd || poll.end)} onTick={handleTick} />
                 </h1>
                 <h1 className="text-3xl px-3 text-white text-glow-3 text-center mt-14">
                     {poll.title || ""}

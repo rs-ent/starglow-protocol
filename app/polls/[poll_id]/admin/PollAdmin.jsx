@@ -48,12 +48,32 @@ export default function PollAdmin({poll_id, result}) {
     const [localResultImg, setLocalResultImg] = useState(result?.result_img || null);
     const [imageLoading, setImageLoading] = useState(false);
 
+    const [showXUploadPopup, setShowXUploadPopup] = useState(false);
+    const defaultHour = 17;
+    const defaultMinute = 10;
+    const now = new Date();
+    now.setHours(defaultHour, defaultMinute, 0, 0);
+    const defaultScheduledTime = toLocalInputString(now);
+
+    const [scheduledTime, setScheduledTime] = useState(defaultScheduledTime);
+    const [announceText, setAnnounceText] = useState(poll.announce_result || "");
+
+    useEffect(() => {
+        const storedExpires = localStorage.getItem("adminAuthExpires");
+        if (!storedExpires) return;
+      
+        const expiresNum = parseInt(storedExpires, 10);
+        if (Date.now() < expiresNum) {
+            setAuth(true);
+        }
+    }, []);
+
     useEffect(() => {
         (async () => {
-          const localeFile = await LocaleFile(locale);
-          setT(localeFile);
+            const localeFile = await LocaleFile(locale);
+            setT(localeFile);
         })();
-      }, [locale]);
+    }, [locale]);
 
     if (!t) {
         return <div>Loading...</div>;
@@ -64,6 +84,10 @@ export default function PollAdmin({poll_id, result}) {
             setPasswordTry(0);
             setBlockPassword(false);
             setAuth(true);
+
+            const expiresAt = Date.now() + (24 * 60 * 60 * 1000);
+            localStorage.setItem("adminAuthExpires", String(expiresAt));
+
         } else {
             const newTry = passwordTry + 1;
             setPasswordTry(newTry);
@@ -148,6 +172,95 @@ export default function PollAdmin({poll_id, result}) {
             alert("이미지 생성 도중 오류가 발생했습니다!");
         } finally {
             setImageLoading(false);
+        }
+    }
+
+    const uploadToX = async () => {
+        try {
+            if (!poll.announce_result) {
+                const wouldOpen = window.confirm("Announcement 문구가 없습니다.\n구글 시트에서 announce_result의 값을 입력한 뒤, 새로고침해주세요.\n\n구글 시트를 열까요?");
+                if (!wouldOpen) return;
+                window.open(
+                    "https://docs.google.com/spreadsheets/d/1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4/edit?gid=0#gid=0",
+                    "_blank"
+                );
+                return;
+            }
+
+            if (!poll.result_img && !localResultImg) {
+                alert("결과 발표 이미지가 없습니다.\n'Get Result Image'버튼을 선행하거나 구글 시트에서 result_img의 값을 입력한 뒤, 새로고침해주세요.");
+                return;
+            }
+
+            setAnnounceText(poll.announce_result);
+            setScheduledTime(defaultScheduledTime);
+            setShowXUploadPopup(true);
+
+        } catch (error) {
+            console.error("uploadToX error:", error);
+            alert("오류가 발생했습니다: " + error.message);
+        }
+    }
+
+    const handleConfirmUploadX = async () => {
+        const sure = window.confirm(`
+            정말 업로드할까요?\n
+            예약 시간: 
+            ----------------
+            ${scheduledTime.toLocaleString().replace('T',' ')}
+            ----------------
+
+            문구: 
+            ----------------
+            ${announceText}
+            ----------------
+          `);
+        if (!sure) return;
+
+        try {
+            const dateObj = new Date(scheduledTime);
+            if (dateObj <= new Date()) {
+                const immediateRes = await fetch("/api/tweet-immediate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        text: announceText,
+                        imageUrl: poll.result_img || localResultImg,
+                        scheduledAt: new Date(),
+                        poll_id: poll.poll_id,
+                    }),
+                });
+
+                const immediateData = await immediateRes.json();
+                if (!immediateData.success) {
+                    throw new Error(immediateData.error || "즉시 업로드 실패");
+                }
+
+                alert("과거 시각이므로 지금 즉시 업로드를 수행합니다!");
+                setShowXUploadPopup(false);
+                return;
+            }
+
+            const scheduleRes = await fetch("/api/tweet-scheduled", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    text: announceText,
+                    imageUrl: poll.result_img || localResultImg,
+                    scheduledAt: scheduledTime,
+                    poll_id: poll.poll_id,
+                }),
+            });
+            const scheduleData = await scheduleRes.json();
+            if (!scheduleData.success) {
+                throw new Error(scheduleData.error || "예약 업로드 실패");
+            }
+
+            alert(`업로드가 ${scheduledTime}에 예약되었습니다! (ID: ${scheduleData.docId || "??"})`);
+            setShowXUploadPopup(false);
+        } catch (err) {
+            console.error("handleConfirmUploadX error:", err);
+            alert("업로드 중 오류가 발생했습니다: " + err.message);
         }
     }
 
@@ -281,7 +394,7 @@ export default function PollAdmin({poll_id, result}) {
                         <div className="fixed left-4 bottom-16 p-4 bg-white text-black shadow-lg rounded-md z-50">
                             <div className="relative flex gap-2 mx-auto">
                                 <button
-                                    onClick={handleGetResultImage} // 구현할 함수
+                                    onClick={handleGetResultImage}
                                     className="bg-blue-600 text-white px-3 py-2 rounded"
                                     disabled={imageLoading}
                                 >
@@ -289,30 +402,101 @@ export default function PollAdmin({poll_id, result}) {
                                 </button>
 
                                 <button
-                                    onClick={resetResultImage} // 구현할 함수
+                                    onClick={resetResultImage}
                                     className="bg-red-600 text-xs text-white px-2 py-2 rounded"
                                     disabled={imageLoading}
                                 >
                                     {imageLoading ? 'Wait for it...' : 'Reset'}
                                 </button>
                             </div>
+
+                            <button
+                                onClick={uploadToX}
+                                className="bg-black text-white px-2 py-2 rounded w-full mt-2"
+                                disabled={imageLoading}
+                            >
+                                {imageLoading ? 'Wait for it...' : 'Upload To X'}
+                            </button>
                         </div>
                     )}
 
+                    {/* Get Result Image 팝업 */}
                     {showImagePopup && imageURL && (
-                    <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 z-50 flex items-center justify-center" 
-                         onClick={handleClosePopup}
-                    >
-                        <div className="bg-black rounded shadow-md relative z-20" onClick={(e) => e.stopPropagation()}>
-                            <button
-                                onClick={handleClosePopup}
-                                className="absolute top-2 right-2"
-                            >
-                                X
-                            </button>
-                            <img src={localResultImg} alt="Result Preview" width={700} />
+                        <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 z-50 flex items-center justify-center" 
+                            onClick={handleClosePopup}
+                        >
+                            <div className="bg-black rounded shadow-md relative z-20" onClick={(e) => e.stopPropagation()}>
+                                <button
+                                    onClick={handleClosePopup}
+                                    className="absolute top-2 right-2"
+                                >
+                                    X
+                                </button>
+                                <img src={localResultImg} alt="Result Preview" width={700} />
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {/* Upload to X 팝업 */}
+                    {showXUploadPopup && (
+                        
+                        <div
+                            className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center backdrop-blur-sm overflow-y-scroll"
+                            onClick={() => setShowXUploadPopup(false)}
+                        >
+                            <div
+                                className="bg-white text-black p-4 rounded shadow-md relative"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <h1 className="text-xl font-bold mb-2">Upload to X (Twitter)</h1>
+
+                                {/* 이미지 미리보기 */}
+                                {poll.img && (
+                                    <img
+                                    src={poll.result_img || localResultImg}
+                                    alt="preview"
+                                    className="w-full h-auto mb-4"
+                                    style={{ 
+                                        width: "512px",
+                                        height: "397px"
+                                    }}
+                                    />
+                                )}
+
+                                {/* 문구 편집기 */}
+                                <label className="block font-bold mb-1">Announcement Text:</label>
+                                <textarea
+                                    value={announceText}
+                                    onChange={(e) => setAnnounceText(e.target.value)}
+                                    className="border w-full h-24 p-2 mb-3"
+                                />
+
+                                {/* 업로드 예약 시간 */}
+                                <label className="block font-bold mb-1">Schedule Time:</label>
+                                <input
+                                    type="datetime-local"
+                                    value={scheduledTime}
+                                    onChange={(e) => setScheduledTime(e.target.value)}
+                                    className="border w-full px-2 py-1"
+                                />
+
+                                {/* 버튼들 */}
+                                <div className="flex justify-end gap-2 mt-4">
+                                    <button
+                                        onClick={() => setShowXUploadPopup(false)}
+                                        className="bg-gray-400 text-white px-3 py-2 rounded"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleConfirmUploadX}
+                                        className="bg-blue-600 text-white px-3 py-2 rounded"
+                                    >
+                                        UPLOAD
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     )}
     
                     {viewMode === "poll" ? (
