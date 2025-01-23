@@ -1,25 +1,28 @@
 import { NextResponse } from "next/server";
-import puppeteer from "puppeteer";
 import sharp from "sharp";
 import fs from "fs/promises";
 
-import { bucket } from "../../firebase/firebase-server";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const pollId = searchParams.get("pollId") || "p1";
 
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-    const page = await browser.newPage();
+    const executablePath = await chromium.executablePath;
 
+    const browser = await puppeteer.launch({
+        executablePath,
+        headless: "new",
+        args: chromium.args,
+    });
+    
+    const page = await browser.newPage();
     await page.setViewport({
-      width: 1300,
-      height: 1080,
-      deviceScaleFactor: 1.8,
+        width: 1300,
+        height: 1080,
+        deviceScaleFactor: 1.8,
     });
 
     //const targetUrl = `http://localhost:3000/polls/result?pollId=${pollId}`;

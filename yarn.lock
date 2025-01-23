@@ -900,6 +900,14 @@
     unbzip2-stream "^1.4.3"
     yargs "^17.7.2"
 
+"@sparticuz/chromium@^131.0.1":
+  version "131.0.1"
+  resolved "https://registry.yarnpkg.com/@sparticuz/chromium/-/chromium-131.0.1.tgz#311e196f970b11dbb42b1d1abda101d151327818"
+  integrity sha512-VfmHkQmb/Px0zjwdSQwjRMwFw63Qfj+g4Giumz4jiAGEpXHgIZk6xEwlUz6yiUHVDveK2TEgMR2MR6I3okOE7w==
+  dependencies:
+    follow-redirects "^1.15.9"
+    tar-fs "^3.0.6"
+
 "@swc/counter@0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@swc/counter/-/counter-0.1.3.tgz#cc7463bd02949611c6329596fccd2b0ec782b0e9"
@@ -1913,6 +1921,11 @@ fitty@2:
   resolved "https://registry.yarnpkg.com/fitty/-/fitty-2.4.2.tgz#7e75f8325e901f866dffcdb56c310682e15cf2eb"
   integrity sha512-GNhWgImK4+wEkgEZjBkQMyu5NLSmmryg/CaRP7zYby+TWzCrUou6BHL+iqbjKzJRXMyzuJkH+LBB1+lh4oO77g==
 
+follow-redirects@^1.15.9:
+  version "1.15.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
+  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
+
 foreground-child@^3.1.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.3.0.tgz#0ac8644c06e431439f8561db8ecf29a7b5519c77"
@@ -2923,7 +2936,7 @@ pump@^3.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-puppeteer-core@24.1.0:
+puppeteer-core@24.1.0, puppeteer-core@^24.1.0:
   version "24.1.0"
   resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-24.1.0.tgz#4ea006ab26077dfbf6c72e2cf74797a7ff6db468"
   integrity sha512-ReefWoQgqdyl67uWEBy/TMZ4mAB7hP0JB5HIxSE8B1ot/4ningX1gmzHCOSNfMbTiS/VJHCvaZAe3oJTXph7yw==
