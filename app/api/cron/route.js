@@ -4,6 +4,8 @@ import { postTweet } from "../../scripts/post-tweet";
 
 export async function GET() {
     try {
+        const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+
         const sheets = getSheetsClient();
 
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS7-XHjG1woLDYK1sUNEUmWUgormRv5GAckf9BS4LAuXcVoj_tA9jvBmhbr2FW8BGn6Lcarhlc3D6tV/pub?gid=2862463&single=true&output=csv";
@@ -22,7 +24,6 @@ export async function GET() {
         let processedCount = 0;
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(",");
-            console.log('ROW: ', lines[i]);
             if (row.length < 6) continue;
             const [schedule_id, poll_id, scheduledAt, text, imageUrl, status] = row.map(col => col.trim());
             console.log('schedule_id: ', schedule_id);
@@ -31,10 +32,14 @@ export async function GET() {
             console.log('text: ', text);
             console.log('imageUrl: ', imageUrl);
             console.log('status: ', status);
+            console.log('====================');
             if (status === "pending") {
-                const dateObj = new Date(scheduledAt);
-                if (dateObj <= new Date()) {
-                    
+                console.log('Status is Pending, Try upload');
+                const dateObj = new Date(new Date(scheduledAt).toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                console.log('Date Object: ', dateObj);
+                console.log('Today: ', today);
+                if (dateObj <= today) {
+                    console.log('Today >= Date Object: ', today, dateObj);
                     await postTweet(text, imageUrl);
                     console.log('Tweet success!');
 

@@ -467,7 +467,7 @@ export default function PollAdmin({poll_id, result}) {
                                 <label className="block font-bold mb-1">Announcement Text:</label>
                                 <textarea
                                     value={announceText}
-                                    onChange={(e) => setAnnounceText(e.target.value)}
+                                    onChange={(e) => setAnnounceText(e.target.value.replace(/,/g, '，'))}
                                     className="border w-full h-24 p-2 mb-3"
                                 />
 
