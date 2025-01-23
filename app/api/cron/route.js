@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
 import { getSheetsClient } from "../../google-sheets/getSheetsClient";
-import { TwitterApi } from "twitter-api-v2";
+import { postTweet } from "../../scripts/post-tweet";
 
 export async function GET() {
     try {
         const sheets = getSheetsClient();
-        const client = new TwitterApi({
-            appKey: process.env.TWITTER_API_KEY,
-            appSecret: process.env.TWITTER_API_SECRET,
-            accessToken: process.env.TWITTER_ACCESS_TOKEN,
-            accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-        });
 
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS7-XHjG1woLDYK1sUNEUmWUgormRv5GAckf9BS4LAuXcVoj_tA9jvBmhbr2FW8BGn6Lcarhlc3D6tV/pub?gid=2862463&single=true&output=csv";
         const csvRes = await fetch(csvUrl);
@@ -33,18 +27,8 @@ export async function GET() {
             if (status === "pending") {
                 const dateObj = new Date(scheduledAt);
                 if (dateObj <= new Date()) {
-                    let mediaId = null;
-                    if (imageUrl) {
-                        const res = await fetch(imageUrl);
-                        const buffer = Buffer.from(await res.arrayBuffer());
-                        mediaId = await client.v1.uploadMedia(buffer, { type: "png" });
-                    }
-
-                    const tweetParams = {
-                        status: text,
-                        ...(mediaId && { media_ids: [mediaId] }),
-                    };
-                    const tweet = await client.v1.tweet(tweetParams);
+                    
+                    await postTweet(text, imageUrl);
 
                     const rowIndex = i + 1;
                     await sheets.spreadsheets.values.update({

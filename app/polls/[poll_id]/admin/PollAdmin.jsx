@@ -226,7 +226,7 @@ export default function PollAdmin({poll_id, result}) {
                     body: JSON.stringify({
                         text: announceText,
                         imageUrl: poll.result_img || localResultImg,
-                        scheduledAt: new Date(),
+                        scheduledAt: new Date().toLocaleString().replace('T',' '),
                         poll_id: poll.poll_id,
                     }),
                 });
@@ -256,7 +256,7 @@ export default function PollAdmin({poll_id, result}) {
                 throw new Error(scheduleData.error || "예약 업로드 실패");
             }
 
-            alert(`업로드가 ${scheduledTime}에 예약되었습니다! (ID: ${scheduleData.docId || "??"})`);
+            alert(`업로드가 ${scheduledTime}에 예약되었습니다! (ID: ${scheduleData.schedule_id || "??"})`);
             setShowXUploadPopup(false);
         } catch (err) {
             console.error("handleConfirmUploadX error:", err);
