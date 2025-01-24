@@ -14,7 +14,7 @@ export async function POST(request) {
         const sheets = getSheetsClient();
         await sheets.spreadsheets.values.append({
             spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
-            range: "Publishing Schedules!A1",
+            range: "Poll Result Status!A1",
             valueInputOption: "USER_ENTERED",
             requestBody: {
                 values: [[

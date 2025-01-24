@@ -46,7 +46,7 @@ export async function GET() {
                     const rowIndex = i + 1;
                     await sheets.spreadsheets.values.update({
                         spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
-                        range: `Publishing Schedules!F${rowIndex}`,
+                        range: `Poll Result Status!F${rowIndex}`,
                         valueInputOption: "USER_ENTERED",
                         requestBody: {
                             values: [["done"]],

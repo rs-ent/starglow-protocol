@@ -11,7 +11,7 @@ export async function POST(request) {
     const sheets = getSheetsClient();
     const readRes = await sheets.spreadsheets.values.get({
       spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
-      range: "List!A:R",
+      range: "Poll List!A:R",
     });
 
     const rows = readRes.data.values;
