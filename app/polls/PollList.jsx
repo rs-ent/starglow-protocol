@@ -246,7 +246,7 @@ function LoadMoreList({ polls, pollResults, handlePollClick, isBlur }) {
   function MobileCarousel({ polls, pollResults, handlePollClick, isBlur }) {
     // 슬라이더 설정
     const settings = {
-        dots: true,
+        dots: false,
         infinite: false,
         slidesToShow: 1,
         slidesToScroll: 1,

@@ -24,7 +24,6 @@ export default function PollCard({poll, result}) {
             <div className="flex flex-col p-4
                             border border-[rgba(255,255,255,0.4)] rounded-3xl
                             bg-gradient-to-t from-[rgba(0,0,0,0.9)] via-[rgba(0,0,0,0.3)] to-[rgba(0,0,0,0)]
-                            glow-12
                             ">
                 {poll.img && (
                     <div className="bg-gradient-to-br from-[rgba(255,255,255,0.8)] to-[rgba(255,255,255,0.1)] rounded-3xl p-[1px] shadow-sm">
