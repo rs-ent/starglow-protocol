@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateResultImgURL } from "../../scripts/update-result-img-url";
+import { updateResultImgURL } from "../../scripts/update-result-image-url";
 
 export async function POST(request) {
   try {
