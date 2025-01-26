@@ -1,0 +1,63 @@
+import { getSheetsClient } from "../google-sheets/getSheetsClient";
+import { postTweet } from "./post-tweet";
+
+export async function runCronTweetScheduler() {
+    const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+  
+    const sheets = getSheetsClient();
+  
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS7-XHjG1woLDYK1sUNEUmWUgormRv5GAckf9BS4LAuXcVoj_tA9jvBmhbr2FW8BGn6Lcarhlc3D6tV/pub?gid=2862463&single=true&output=csv";
+    const csvRes = await fetch(csvUrl);
+    if (!csvRes.ok) {
+        throw new Error("CSV fetch failed: " + csvRes.statusText);
+    }
+  
+    const csvText = await csvRes.text();
+    const lines = csvText.split("\n").map(line => line.trim());
+  
+    if (lines.length < 2) {
+        return { success: true, message: "No data or just header.", processedCount: 0 };
+    }
+    
+    let processedCount = 0;
+    for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split(",");
+        if (row.length < 6) continue;
+  
+        const [schedule_id, poll_id, scheduledAt, text, imageUrl, status] = row.map(col => col.trim());
+        console.log("schedule_id:", schedule_id);
+        console.log("poll_id:", poll_id);
+        console.log("scheduledAt:", scheduledAt);
+        console.log("text:", text);
+        console.log("imageUrl:", imageUrl);
+        console.log("status:", status);
+        console.log("====================");
+  
+        if (status === "pending") {
+            console.log("Status is Pending, Try upload");
+            const dateObj = new Date(scheduledAt);
+            console.log("Date Object:", dateObj);
+            console.log("Today:", today);
+  
+            if (dateObj <= today) {
+                console.log("Today >= Date Object:", today, dateObj);
+                await postTweet(text, imageUrl);
+                console.log("Tweet success!");
+  
+                const rowIndex = i + 1;
+                await sheets.spreadsheets.values.update({
+                    spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
+                    range: `Poll Result Status!F${rowIndex}`,
+                    valueInputOption: "USER_ENTERED",
+                    requestBody: {
+                        values: [["done"]],
+                    },
+                });
+  
+                processedCount++;
+            }
+        }
+    }
+  
+    return { success: true, processedCount };
+}

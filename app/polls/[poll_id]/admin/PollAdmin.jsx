@@ -5,7 +5,6 @@ import { DataContext } from "../../../context/PollData";
 import Poll from "../[locale]/Poll";
 import LocaleFile from "../[locale]/LocaleFile";
 import PollCardResult from "../../result/PollCard.Result";
-import { uploadFiles, updateResultImg } from "../../../firebase/fetch";
 
 const ADMIN_PASSWORD = "레드슬리퍼스01!";
 
@@ -44,8 +43,7 @@ export default function PollAdmin({poll_id, result}) {
     const [showRemote, setShowRemote] = useState(false);
     const [showResultRemote, setShowResultRemote] = useState(false);
     const [showImagePopup, setShowImagePopup] = useState(false);
-    const [imageURL, setImageURL] = useState(null);
-    const [localResultImg, setLocalResultImg] = useState(result?.result_img || null);
+    const [localResultImg, setLocalResultImg] = useState(poll.result_img || null);
     const [imageLoading, setImageLoading] = useState(false);
 
     const [showXUploadPopup, setShowXUploadPopup] = useState(false);
@@ -110,70 +108,55 @@ export default function PollAdmin({poll_id, result}) {
 
     const handleClosePopup = () => {
         setShowImagePopup(false);
-        setImageURL(null);
     };
 
     const resetResultImage = async () => {
         setLocalResultImg(null);
-        setImageURL(null);
         alert("결과 이미지 초기화!");
     }
 
     const handleGetResultImage = async () => {
         try {
-            setImageLoading(true);
-            if (localResultImg) {
-                setImageURL(localResultImg);
-                setShowImagePopup(true);
-                return;
-            }
-
-            const response = await fetch(`/api/get-result?pollId=${poll_id}`);
-            if (!response.ok) {
-                alert(`이미지 생성 오류: ${res.statusText}`);
-                return;
-            }
-
-            const blob = await response.blob();
-            const file = new File([blob], `poll_${poll_id}.png`, { type: "image/png" });
-            const [uploadResult] = await uploadFiles([file], "poll-results/");
-            if (!uploadResult.downloadURL) {
-                alert("업로드에 실패했습니다.");
-                return;
-            }
-            const finalURL = uploadResult.downloadURL;
-            await updateResultImg(poll_id, finalURL);
-
-            await fetch("/api/put-result-img", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ pollId: poll_id, finalURL }),
-              })
-                .then(async (res) => {
-                  const data = await res.json();
-                  if (!data.success) {
-                    console.error("put-result-img error:", data.error);
-                    alert("시트 업데이트 오류: " + data.error);
-                  } else {
-                    console.log("시트 업데이트 성공");
-                  }
-                })
-                .catch((err) => {
-                  console.error("fetch put-result-img error:", err);
-                  alert("시트 업데이트 도중 오류 발생");
-                });
-
-            setLocalResultImg(finalURL);
-            setImageURL(finalURL);
+          setImageLoading(true);
+      
+          // 만약 이미 localResultImg가 있으면 그냥 팝업
+          if (localResultImg) {
             setShowImagePopup(true);
-
+            return;
+          }
+      
+          // (1) 서버에 한번에 요청
+          const response = await fetch(`/api/get-put-result-img?pollId=${poll_id}`);
+          if (!response.ok) {
+            const data = await response.json();
+            alert(`이미지 생성 오류: ${data?.error || response.statusText}`);
+            return;
+          }
+      
+          // (2) 결과 파싱
+          const data = await response.json();
+          if (!data.success) {
+            alert(`이미지 생성 오류: ${data?.error || "Unknown"}`);
+            return;
+          }
+      
+          // (3) 서버가 최종 URL 반환
+          const finalURL = data.finalURL;
+          const announcementText = data.announcementText;
+          console.log(announcementText);
+      
+          // (4) React state 갱신
+          setLocalResultImg(finalURL);
+          setShowImagePopup(true);
+          setAnnounceText(announcementText);
+      
         } catch (err) {
-            console.error("handleGetResultImage error:", err);
-            alert("이미지 생성 도중 오류가 발생했습니다!");
+          console.error("handleGetResultImage error:", err);
+          alert("이미지 생성 도중 오류가 발생했습니다!");
         } finally {
-            setImageLoading(false);
+          setImageLoading(false);
         }
-    }
+    };
 
     const uploadToX = async () => {
         try {
@@ -421,7 +404,7 @@ export default function PollAdmin({poll_id, result}) {
                     )}
 
                     {/* Get Result Image 팝업 */}
-                    {showImagePopup && imageURL && (
+                    {showImagePopup && localResultImg && (
                         <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 z-50 flex items-center justify-center" 
                             onClick={handleClosePopup}
                         >
@@ -451,7 +434,7 @@ export default function PollAdmin({poll_id, result}) {
                                 <h1 className="text-xl font-bold mb-2">Upload to X (Twitter)</h1>
 
                                 {/* 이미지 미리보기 */}
-                                {poll.img && (
+                                {localResultImg && (
                                     <img
                                     src={poll.result_img || localResultImg}
                                     alt="preview"

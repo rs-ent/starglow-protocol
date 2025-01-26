@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { DataContext } from "../../context/PollData";
-import Measure from "react-measure";
 import {
     ResponsiveContainer,
     BarChart,
@@ -34,7 +33,6 @@ export default function PollCardResult({ poll_id, result, bigFont = false }) {
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
     if (!poll_id || !poll || !poll.title){
-        router.replace('/polls');
         return <div></div>
     }
     
@@ -62,15 +60,22 @@ export default function PollCardResult({ poll_id, result, bigFont = false }) {
         value: (item.count / totalVotes) * 100 || 0,
     })).sort((a,b) => b.value - a.value);
 
-    const [bounds, setBounds] = useState({ width: 0, height: 0 });
     const [fontSize, setFontSize] = useState(20);
+    const containerRef = useRef(null);
 
     useEffect(() => {
-        if (bounds.width) {
-          const newFontSize = Math.max(50, Math.min(bounds.width / 10, 110));
-          setFontSize(newFontSize);
+        function handleResize() {
+            if (!containerRef.current) return;
+            // (3) 박스의 실제 너비를 측정
+            const { width } = containerRef.current.getBoundingClientRect();
+
+            // (4) 박스 너비 기반으로 폰트 크기 계산
+            const newFontSize = Math.max(70, Math.min(width / winner.length, 120));
+            setFontSize(newFontSize);
         }
-    }, [bounds]);
+    
+        handleResize();
+    }, []);
 
     return (
         <div className="poll-card-result-wrapper">
@@ -78,35 +83,32 @@ export default function PollCardResult({ poll_id, result, bigFont = false }) {
                 <h2 className="text-6xl text-gradient ">
                     #{pollNumber} POLL RESULT
                 </h2>
-                <div className="mb-5 w-[1300px] h-[280px] flex justify-center mx-auto">
-                <Measure
-                    bounds
-                    onResize={(contentRect) => {
-                    setBounds(contentRect.bounds);
-                    }}
+                <div
+                    ref={containerRef}
+                    className="mb-5 w-[96%] h-[30vh] flex justify-center mx-auto my-3"
                 >
-                    {({ measureRef }) => (
-                    <div 
-                        ref={measureRef} 
+                    {/* (B) 폰트 동적 적용 */}
+                    <div
                         style={{
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            lineHeight: 1.1,
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        lineHeight: 1.1,
                         }}
                     >
-                        <h1 className="text-[rgba(146,92,218,1)] text-shadow-strong text-center" style={{ fontSize }}>
+                        <h1
+                            className="text-[rgba(146,92,218,1)] text-shadow-strong text-center"
+                            style={{ fontSize }}
+                        >
                             {winner}
                         </h1>
                     </div>
-                    )}
-                </Measure>
                 </div>
             </div>
             <div className="relative flex justify-center w-dvw"> 
-                <div className="grid grid-cols-[45%_55%] gap-9 justify-center items-center px-[4vw] mx-auto">
+                <div className="grid grid-cols-[45%_55%] gap-9 justify-center items-center px-[2%] mx-auto pt-4">
                     <div className="relative">
                         <img
                                 src="/sgt-logo-glow.png"
@@ -152,7 +154,6 @@ export default function PollCardResult({ poll_id, result, bigFont = false }) {
                             <div>
                                 {dataWithPercent.map((item, idx) => {
                                     const computedOpacity = 1.0 - ((0.5 / (data.length - 1)) * idx);
-                                    console.log(item);
                                     return(
                                         <div key={idx} className="mb-[0.4rem]" style={{ opacity: computedOpacity }}>
                                             <h1 className="text-[1.7rem] mb-[0.01rem]">

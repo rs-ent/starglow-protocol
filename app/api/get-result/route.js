@@ -1,67 +1,15 @@
 import { NextResponse } from "next/server";
-import sharp from "sharp";
-import fs from "fs/promises";
-
-import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
+import { createResultImage } from "../../scripts/create-result-image";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const pollId = searchParams.get("pollId") || "p1";
 
-    const executablePath = await chromium.executablePath;
+    // (1) 별도의 함수로 추출된 로직 호출
+    const finalBuffer = await createResultImage(pollId);
 
-    const browser = await puppeteer.launch({
-        executablePath,
-        headless: "new",
-        args: chromium.args,
-    });
-    
-    const page = await browser.newPage();
-    await page.setViewport({
-        width: 1300,
-        height: 1080,
-        deviceScaleFactor: 1.8,
-    });
-
-    //const targetUrl = `http://localhost:3000/polls/result?pollId=${pollId}`;
-    const targetUrl = `https://starglow-protocol.vercel.app/polls/result?pollId=${pollId}`;
-    await page.goto(targetUrl, { waitUntil: "networkidle0" });
-    await page.evaluate(() => {
-      document.body.style.background = "transparent";
-    });
-
-    const element = await page.$(".poll-card-result-wrapper");
-    if (!element) {
-      throw new Error("Element .poll-card-result-wrapper not found");
-    }
-
-    const screenshotBuffer = await element.screenshot({
-      type: "png",
-      omitBackground: true,
-    });
-
-    await browser.close();
-
-    const canvasWidth = 2560;
-    const canvasHeight = 1985;
-
-    const bgBuffer = await fs.readFile("./public/poll-result-bg.png");
-    const baseBackground = await sharp(bgBuffer)
-      .resize(canvasWidth, canvasHeight, { fit: "cover" })
-      .png()
-      .toBuffer();
-
-    const { width, height } = await sharp(screenshotBuffer).metadata();
-    const left = Math.floor((canvasWidth - (width || 0)) / 2);
-    const top = Math.floor((canvasHeight - (height || 0)) / 2);
-
-    const finalBuffer = await sharp(baseBackground)
-      .composite([{ input: screenshotBuffer, left, top }])
-      .png()
-      .toBuffer();
-    
+    // (2) PNG 이미지(Binary)로 응답
     return new NextResponse(finalBuffer, {
       status: 200,
       headers: {
