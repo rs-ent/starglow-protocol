@@ -227,13 +227,15 @@ function LoadMoreList({ polls, pollResults, handlePollClick, isBlur }) {
     
             {/* 표시한 개수 < 전체 개수일 때만 버튼 노출 */}
             {limit < polls.length && (
-            <div className="flex justify-center mt-6">
-                <button
-                onClick={loadMore}
-                className="px-6 py-2 rounded bg-white text-black"
-                >
-                More
-                </button>
+            <div className="flex justify-center mt-8">
+                <div className="rounded-full p-[1px] bg-gradient-to-br from-[rgba(255,255,255,1)] to-[rgba(0,0,0,0.5)]">
+                    <button
+                        onClick={loadMore}
+                        className="px-6 py-2 rounded-full bg-gradient-to-br from-[rgba(0,0,5,1)] to-[#1c1c2d] text-white font-main"
+                    >
+                    MORE
+                    </button>
+                </div>
             </div>
             )}
         </>

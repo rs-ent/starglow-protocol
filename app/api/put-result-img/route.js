@@ -7,10 +7,10 @@ export async function POST(request) {
     const { pollId, finalURL } = await request.json();
 
     // 2) updateResultImgURL 호출
-    const updatedURL = await updateResultImgURL(pollId, finalURL);
+    const {updatedURL , text} = await updateResultImgURL(pollId, finalURL);
 
     // 3) 성공 응답
-    return NextResponse.json({ success: true, url: updatedURL });
+    return NextResponse.json({ success: true, url: updatedURL, text: text });
   } catch (error) {
     console.error("put-result-img Error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
