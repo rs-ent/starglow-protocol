@@ -3,6 +3,10 @@ import admin from "firebase-admin";
 import { createResultImage } from "../../scripts/create-result-image"; 
 import { updateResultImgURL } from "../../scripts/update-result-image-url";
 
+export const config = {
+    runtime: "nodejs",
+};
+
 if (!admin.apps.length) {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVER_SERVICE_ACCOUNT_KEY || "{}");
     admin.initializeApp({

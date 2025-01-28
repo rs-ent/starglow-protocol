@@ -4,7 +4,7 @@ import fs from "fs/promises";
 export async function createResultImage(pollId) {
 
     let puppeteerImport, chromiumImport;
-    if (process.env.NEXT_PUBLIC_BASE_URL === "http://localhost:3000") {
+    if (process.env.NEXT_PUBLIC_BASE_URL === "http://localhost:3001" || process.env.NEXT_PUBLIC_BASE_URL === "http://localhost:3000") {
         // 개발환경
         puppeteerImport = await import("puppeteer");
         chromiumImport = null;

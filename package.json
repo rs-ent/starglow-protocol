@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sparticuz/chromium": "^131.0.1",
+    "@sparticuz/chromium": "^132.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
@@ -19,7 +19,7 @@
     "next": "15.1.2",
     "next-intl": "^3.26.3",
     "puppeteer": "^24.1.0",
-    "puppeteer-core": "^24.1.0",
+    "puppeteer-core": "^24.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-fittext": "^1.0.0",
