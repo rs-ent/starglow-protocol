@@ -1,7 +1,7 @@
 {
     "functions": {
-      "api/get-put-result-img/route": {
-        "includeFiles": "node_modules/@sparticuz/chromium/**"
-      }
+        "app/api/get-put-result-img/route": {
+            "includeFiles": "node_modules/@sparticuz/chromium/**"
+        }
     }
 }
