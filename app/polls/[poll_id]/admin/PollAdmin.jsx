@@ -15,6 +15,7 @@ export default function PollAdmin({poll_id, result}) {
 
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
+    console.log(poll);
     if (!poll_id || !poll || !poll.title){
         return <div>Check ID</div>
     }
