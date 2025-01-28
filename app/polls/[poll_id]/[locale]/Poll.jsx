@@ -41,7 +41,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
         
         const startDate = parseAsKST(poll.start);
         console.log(startDate);
-        if (openOffset >= startDate) {
+        if (openOffset < startDate) {
             if(!preview) router.replace('/polls');
             setLoading(true);
         }
