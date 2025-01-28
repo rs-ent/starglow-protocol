@@ -36,7 +36,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     
     useEffect(() => {
         const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-        const openOffset = new Date(today.getTime() - 5 * 60 * 1000);
+        const openOffset = new Date(today.getTime() + 10 * 60 * 1000);
         console.log(openOffset);
         
         const startDate = parseAsKST(poll.start);
