@@ -1,0 +1,7 @@
+{
+    "functions": {
+        "app/api/get-put-result-img/route.js": {
+            "includeFiles": "node_modules/@sparticuz/chromium/bin/**"
+        }
+    }
+}

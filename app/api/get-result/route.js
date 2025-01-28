@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { createResultImage } from "../../scripts/create-result-image";
 
+export const config = {
+  runtime: "nodejs",
+};
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
