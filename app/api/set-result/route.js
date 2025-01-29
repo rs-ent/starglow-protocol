@@ -52,7 +52,7 @@ export async function GET(request) {
         const koreaTimeString = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
         const koreaTime = new Date(koreaTimeString);
         koreaTime.setHours(17, 30, 0, 0);
-        const scheduledAt = koreaTime.toISOString();
+        const scheduledAt = toLocalInputString(koreaTime);
 
         const tweetRegisterRes = await tweetScheduledRegister({
             text: announcementText || "",
@@ -74,4 +74,17 @@ export async function GET(request) {
         console.error("get-put-result-img Error:", error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
+}
+
+function parseAsKST(dateStrWithoutTZ) {
+    return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
+}
+
+function toLocalInputString(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
 }

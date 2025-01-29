@@ -1,15 +1,27 @@
 // app/scripts/create-result-image.js
-import puppeteer from "puppeteer"; 
+import puppeteerLocal from "puppeteer"; 
+import chromium from "@sparticuz/chromium";
+import puppeteerCore from "puppeteer-core";
 import sharp from "sharp";
 import fs from "fs/promises";
 
 export async function createResultImage(pollId) {
-    // 1) Puppeteer 전체 버전 사용
-    const browser = await puppeteer.launch({
-        headless: "new",
-        // 보통 puppeteer가 내장된 Chromium을 자동으로 사용
-        // 필요하면 여기서 executablePath 등을 설정 가능
-    });
+    let browser;
+    if (process.env.NEXT_PUBLIC_BASE_URL === "https://starglow-protocol.vercel.app") {
+        const path = await chromium.executablePath();
+        console.log("Chromium path:", path);
+
+        browser = await puppeteerCore.launch({
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
+        });
+    } else {
+        browser = await puppeteerLocal.launch({
+            headless: "new",
+        });
+    }
     
     const page = await browser.newPage();
     await page.setViewport({ width: 1300, height: 1080, deviceScaleFactor: 1.8 });
