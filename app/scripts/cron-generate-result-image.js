@@ -56,32 +56,16 @@ export async function runCronGenerateResultImage() {
               try {
                 // 본인의 실제 배포 URL이 있으면 절대 경로를 써야 할 수도 있습니다
                 const origin = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-                const apiUrl = `${origin}/api/get-put-result-img?pollId=${pollId}`;
+                const apiUrl = `${origin}/api/set-result?pollId=${pollId}`;
       
                 const res = await fetch(apiUrl);
                 if (!res.ok) {
-                  console.error("get-put-result-img failed:", await res.text());
+                  console.error("set-result-img failed:", await res.text());
                 } else {
                   const data = await res.json();
                   if (data.success) {
                     console.log(`Success for pollId=${pollId}, finalURL=${data.finalURL}`);
                     processed++;
-
-                    const tweetScheduledAt = new Date(now.getTime() + 10 * 60 * 1000).toISOString();
-                    const tweetText = data.announcementText;
-
-                    const scheduleResult = await tweetScheduledRegister({
-                        text: tweetText,
-                        imageUrl: data.finalURL,
-                        scheduledAt: tweetScheduledAt,
-                        poll_id: pollId,
-                    });
-
-                    if (scheduleResult.success) {
-                        console.log(`Tweet scheduled at ${tweetScheduledAt} for pollId=${pollId}`);
-                    } else {
-                        console.error("Failed to schedule tweet:", scheduleResult.error);
-                    }
                   } else {
                     console.error("API responded with error:", data.error);
                   }
