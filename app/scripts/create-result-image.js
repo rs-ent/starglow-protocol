@@ -4,6 +4,7 @@ import chromium from "@sparticuz/chromium";
 import puppeteerCore from "puppeteer-core";
 import sharp from "sharp";
 import fs from "fs/promises";
+import path from "path";
 
 export async function createResultImage(pollId) {
     let browser;
@@ -49,7 +50,8 @@ export async function createResultImage(pollId) {
     const canvasWidth = 2560;
     const canvasHeight = 1985;
 
-    const bgBuffer = await fs.readFile("./public/poll-result-bg.png");
+    const imagePath = path.join(process.cwd(), "public", "poll-result-bg.png");
+    const bgBuffer = await fs.readFile(imagePath);
     const baseBackground = await sharp(bgBuffer)
         .resize(canvasWidth, canvasHeight, { fit: "cover" })
         .png()
