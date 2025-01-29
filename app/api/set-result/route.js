@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import admin from "firebase-admin";
 import { createResultImage } from "../../scripts/create-result-image"; 
 import { updateResultImgURL } from "../../scripts/update-result-image-url";
+import { tweetScheduledRegister } from "../../scripts/result-schedule-registration";
 
 if (!admin.apps.length) {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVER_SERVICE_ACCOUNT_KEY || "{}");
@@ -47,6 +48,18 @@ export async function GET(request) {
     
         // (D) 3) 구글 스프레드시트에 result_img 업데이트
         const {url, announcementText} = await updateResultImgURL(pollId, finalURL, pollData);
+
+        const koreaTimeString = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
+        const koreaTime = new Date(koreaTimeString);
+        koreaTime.setHours(17, 30, 0, 0);
+        const scheduledAt = koreaTime.toISOString();
+
+        const tweetRegisterRes = await tweetScheduledRegister({
+            text: announcementText || "",
+            imageUrl: finalURL,
+            scheduledAt,
+            poll_id: pollId,
+        });
     
         // (E) 결과 반환
         return NextResponse.json({
@@ -55,6 +68,7 @@ export async function GET(request) {
             finalURL,
             pollData,
             announcementText,
+            tweetRegisterRes,
         });
     } catch (error) {
         console.error("get-put-result-img Error:", error);

@@ -1,49 +1,31 @@
+// app/scripts/create-result-image.js
+import puppeteer from "puppeteer"; 
 import sharp from "sharp";
 import fs from "fs/promises";
 
 export async function createResultImage(pollId) {
-
-    let puppeteerImport, chromiumImport;
-    if (process.env.NEXT_PUBLIC_BASE_URL === "http://localhost:3000") {
-        // 개발환경
-        puppeteerImport = await import("puppeteer");
-        chromiumImport = null;
-    } else {
-        // 프로덕션(배포)환경
-        puppeteerImport = await import("puppeteer-core");
-        chromiumImport = await import("@sparticuz/chromium");
-    }
-
-    const puppeteer = puppeteerImport.default;
-    const chromium = chromiumImport?.default;
-    
-    const executablePath = chromium
-        ? await chromium.executablePath
-        : undefined;
-
-    console.log("Chromium executablePath:", await chromium.executablePath);
-
-    const args = chromium ? chromium.args : [];
+    // 1) Puppeteer 전체 버전 사용
     const browser = await puppeteer.launch({
         headless: "new",
-        executablePath,
-        args,
+        // 보통 puppeteer가 내장된 Chromium을 자동으로 사용
+        // 필요하면 여기서 executablePath 등을 설정 가능
     });
     
     const page = await browser.newPage();
     await page.setViewport({ width: 1300, height: 1080, deviceScaleFactor: 1.8 });
 
+    // 2) 타겟 URL 접속
     const targetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/polls/result?pollId=${pollId}`;
     await page.goto(targetUrl, { waitUntil: "networkidle0" });
     await page.evaluate(() => {
         document.body.style.background = "transparent";
     });
 
+    // 3) 특정 DOM 요소 스크린샷
     const element = await page.$(".poll-card-result-wrapper");
     if (!element) {
         throw new Error("Element .poll-card-result-wrapper not found");
     }
-
     const screenshotBuffer = await element.screenshot({
         type: "png",
         omitBackground: true,
@@ -51,7 +33,7 @@ export async function createResultImage(pollId) {
 
     await browser.close();
 
-    // 2) Sharp로 배경 합성
+    // 4) Sharp로 배경 합성
     const canvasWidth = 2560;
     const canvasHeight = 1985;
 
