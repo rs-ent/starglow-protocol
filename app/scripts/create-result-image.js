@@ -21,6 +21,8 @@ export async function createResultImage(pollId) {
         ? await chromium.executablePath
         : undefined;
 
+    console.log("Chromium executablePath:", await chromium.executablePath);
+
     const args = chromium ? chromium.args : [];
     const browser = await puppeteer.launch({
         headless: "new",
