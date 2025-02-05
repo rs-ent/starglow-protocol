@@ -5,16 +5,17 @@ import Image from "next/image";
 
 export default function Header() {
     const debugColor = 'rgba(150, 255, 0, 0)';
+
     return (
         <div
-        style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            zIndex: 999,
-            overflowY: 'hidden',
-        }}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                zIndex: 999,
+                overflowY: 'hidden',
+            }}
         >
             <div className="Desktop" style={{
                 overflow: 'hidden',
@@ -177,11 +178,11 @@ export default function Header() {
             <style jsx>{`
                 .Desktop {
                 display: block;
-                position: relative; /* 앵커 절대 위치 기준 */
+                position: relative;
                 }
                 .Mobile {
                 display: none;
-                position: relative; /* 앵커 절대 위치 기준 */
+                position: relative;
                 }
                 @media (max-width: 440px) {
                 .Desktop {

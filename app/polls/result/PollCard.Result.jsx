@@ -29,7 +29,7 @@ export function formatDate(str) {
     return `${mm}/${dd}/${yy}`;
 }
 
-export default function PollCardResult({ poll_id, result, bigFont = false }) {
+export default function PollCardResult({ poll_id, result }) {
     const pollData = useContext(DataContext);
     const poll = pollData?.[poll_id];
     if (!poll_id || !poll || !poll.title){
@@ -87,7 +87,7 @@ export default function PollCardResult({ poll_id, result, bigFont = false }) {
                     ref={containerRef}
                     className="mb-5 w-[96%] h-[30vh] flex justify-center mx-auto my-3"
                 >
-                    {/* (B) 폰트 동적 적용 */}
+                    {/* 폰트 동적 적용 */}
                     <div
                         style={{
                         width: "100%",

@@ -23,6 +23,13 @@ Mobile First + Simple is the Best + Professionalism*/
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Conthrax-Bold';
+  src: url('/fonts/conthrax-bold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* --- ê¸€ë¡œë²Œ ë³€ìˆ˜ ì„¤ì • --- */
 :root {
   /* ì „ì²´ ë°°ê²½/í…ìŠ¤íŠ¸ */
@@ -126,6 +133,10 @@ button {
 @layer utilities {
   .font-main {
     font-family: 'Conthrax', sans-serif;
+  }
+
+  .font-main-bold {
+    font-family: 'Conthrax-Bold', sans-serif;
   }
 
   .perspective-1000 {
@@ -260,6 +271,28 @@ button {
   .text-outline-4 {
     color: transparent;
     -webkit-text-stroke: 2px var(--foreground);
+  }
+
+  .text-outline-5 {
+    color: transparent;
+    -webkit-text-stroke: 2.5px var(--foreground);
+  }
+
+  .text-outline-6 {
+    color: transparent;
+    -webkit-text-stroke: 3.5px var(--foreground);
+  }
+
+  .text-outline-5-purple {
+    color: transparent;
+    -webkit-text-stroke: 4px rgb(139, 92, 246);
+  }
+
+  .text-outline-5-purple-glassblack {
+    color: rgba(0,0,0,0.1);
+    -webkit-text-stroke: 3.5px rgb(139, 92, 246);
+    text-shadow:
+      0 0 18px rgba(0, 0, 0, 0.7);
   }
 
   .text-add-outline-1 {
