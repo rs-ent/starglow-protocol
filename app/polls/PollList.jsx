@@ -62,6 +62,9 @@ export default function PollList({ pollResults }) {
             const res = await fetch("https://api.ipify.org?format=json");
             ipData = await res.json();
 
+        } catch (err) {
+            console.error("Failed", err);
+        } finally{
             const deviceInfo = {
                 userAgent: navigator.userAgent,
                 language: navigator.language,
@@ -75,8 +78,6 @@ export default function PollList({ pollResults }) {
             };    
             
             clickAccessButton(deviceInfo);
-        } catch (err) {
-            console.error("Failed", err);
         }
     }
 
