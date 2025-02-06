@@ -109,7 +109,9 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
         try {
             const res = await fetch("https://api.ipify.org?format=json");
             ipData = await res.json();
-
+        } catch (err) {
+            console.error("Failed to get IP address:", err);
+        } finally {
             const deviceInfo = {
                 userAgent: navigator.userAgent,
                 language: navigator.language,
@@ -124,9 +126,6 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     
             await submitVote(poll_id, option, deviceInfo);
             setVoted(true);
-        } catch (err) {
-            console.error("Failed to get IP address:", err);
-        } finally {
             setIsSubmitting(false);
         }
     }
