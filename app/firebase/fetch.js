@@ -29,12 +29,15 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
         );
 
         const ipAddress = deviceInfo.ipAddress || "unknown";
+        const refinedDeviceInfo = Object.fromEntries(
+            Object.entries(deviceInfo).filter(([key, value]) => value !== undefined)
+        );
         const logDocRef = doc(db, "polls", pollId, "logs", ipAddress);
         await setDoc(
             logDocRef, 
             {
                 selectedOption: option,
-                device: deviceInfo,
+                device: refinedDeviceInfo,
                 timestamp: serverTimestamp(),
             },
             { merge: true }
@@ -68,11 +71,14 @@ export async function clickAccessButton(deviceInfo = {}) {
         );
 
         const ipAddress = deviceInfo.ipAddress || "unknown";
+        const refinedDeviceInfo = Object.fromEntries(
+            Object.entries(deviceInfo).filter(([key, value]) => value !== undefined)
+        );
         const logDocRef = doc(db, "accessButton", "accessButton", "logs", ipAddress);
         await setDoc(
             logDocRef, 
             {
-                device: deviceInfo,
+                device: refinedDeviceInfo,
                 timestamp: serverTimestamp(),
             },
             { merge: true }
