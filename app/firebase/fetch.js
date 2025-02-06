@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-import { appendLogClient } from "../google-sheets/appendLog";
+import { appendLogClient, appendLogButton } from "../google-sheets/appendLog";
 
 export async function submitVote(pollId, option, deviceInfo = {}) {
     try {
@@ -52,6 +52,40 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
 
     } catch (error) {
         console.error("submitVote Error:", error);
+    }
+}
+
+export async function clickAccessButton(deviceInfo = {}) {
+    try {
+        const docRef = doc(db, "acessButton", "accessButton");
+
+        await setDoc(
+            docRef,
+            {
+                clicked: increment(1),
+            },
+            { merge: true }
+        );
+
+        const ipAddress = deviceInfo.ipAddress || "unknown";
+        const logDocRef = doc(db, "accessButton", "accessButton", "logs", ipAddress);
+        await setDoc(
+            logDocRef, 
+            {
+                device: deviceInfo,
+                timestamp: serverTimestamp(),
+            },
+            { merge: true }
+        );        
+        
+        const rowData = [
+            ipAddress,
+            deviceInfo.language,
+        ];
+        await appendLogButton(rowData);
+
+    } catch (error) {
+        console.error("Error:", error);
     }
 }
 
