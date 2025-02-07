@@ -1,13 +1,12 @@
-
-/*Reference : https://funderful.kr/investdetail/project/132/project
-Mobile First + Simple is the Best + Professionalism*/
 /* src/app/globals.css */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* --- Font-face ì •ì˜ --- */
+/* ---------------------------------------------------------------------------
+   Font Faces
+--------------------------------------------------------------------------- */
 @font-face {
   font-family: 'Pretendard';
   src: url('/fonts/PretendardVariable.woff2') format('woff2');
@@ -30,61 +29,100 @@ Mobile First + Simple is the Best + Professionalism*/
   font-style: normal;
 }
 
-/* --- ê¸€ë¡œë²Œ ë³€ìˆ˜ ì„¤ì • --- */
+/* ---------------------------------------------------------------------------
+   CSS Variables (Colors, Fonts, Transitions)
+--------------------------------------------------------------------------- */
 :root {
-  /* ì „ì²´ ë°°ê²½/í…ìŠ¤íŠ¸ */
-  --background: #0A0A0A;        /* ì•„ì£¼ ì§™ì€ ë¸”ëž™í†¤ */
-  --foreground: #f2f2f2;        /* ë°ì€ í…ìŠ¤íŠ¸ (í™”ì´íŠ¸ ê³„ì—´) */
-
-  /* ë¶€ê°€ í…ìŠ¤íŠ¸/ë°°ê²½ */
-  --foreground-muted: #9CA3AF;  /* ì¢€ ë” íë¦° í…ìŠ¤íŠ¸ */
-  --foreground-unfocus: #666666;/* ë¹„í™œì„±í™”/í…Œë‘ë¦¬ ë“± */
-  --background-second: #1A1A1A; /* ë©”ì¸ë³´ë‹¤ ì•½ê°„ ì—°í•œ ì–´ë‘ìš´ ë°°ê²½ */
+  /* Background & Foreground */
+  --background: #0A0A0A;
+  --foreground: #f2f2f2;
+  --foreground-muted: #9CA3AF;
+  --foreground-unfocus: #666666;
+  --background-second: #1A1A1A;
   --background-third: #1d1b1f;
-  --background-muted: #2A2A2A;  /* ë²„íŠ¼ ë“± ë¬µì§í•œ ë³´ì¡° ë°°ê²½ */
-  --background-brushed: #222222;/* ì•½ê°„ì˜ ë³€í™”ë¥¼ ì£¼ê³  ì‹¶ì„ ë•Œ */
+  --background-muted: #2A2A2A;
+  --background-brushed: #222222;
 
+  /* Border Colors */
   --border-start: #f2f2f2;
   --border-mid: #858585;
   --border-end: #141414;
 
-  /* ë¸Œëžœë“œ/í¬ì¸íŠ¸ ì»¬ëŸ¬ */
-  --primary: #9f33dd;   /* ê¸°ì¡´ â€œë”¥ ë¸”ë£¨â€ ê·¸ëŒ€ë¡œ */
-  --secondary: #4A5568; /* ê·¸ë ˆì´í†¤ - ë‹¤í¬ëª¨ë“œì—ì„œë„ í° ë¬´ë¦¬ ì—†ìŒ */
-  --accent: #D4AF37;    /* ê³ ê¸‰ìŠ¤ëŸ¬ìš´ ê³¨ë“œ (ë„¤ì˜¨ ëŠë‚Œì—ë„ ìž˜ ì–´ìš¸ë¦¼) */
-  --success: #2A4365;   /* ë™ì¼í•˜ê²Œ ë”¥ ë¸”ë£¨ */
-  --danger: #C53030;    /* ë¶‰ì€ ê³„ì—´ ê²½ê³  ìƒ‰ìƒ */
-  --warning: #D4AF37;   /* ê³¨ë“œ í¬ì¸íŠ¸ */
-  --info: #3182CE;      /* ì‹œì›í•œ ë¸”ë£¨ */
+  /* Accent Colors */
+  --primary: #9f33dd;
+  --secondary: #4A5568;
+  --accent: #D4AF37;
+  --success: #2A4365;
+  --danger: #C53030;
+  --warning: #D4AF37;
+  --info: #3182CE;
 
-  /* í…ìŠ¤íŠ¸ ì „ìš© */
-  --text-primary: #f2f2f2;    /* ë³¸ë¬¸ í…ìŠ¤íŠ¸(ê¸°ë³¸) */
-  --text-secondary: #b0b2b5;  /* ë¶€ë“œëŸ¬ìš´ í…ìŠ¤íŠ¸ */
-  --text-third: #888888;      /* ë” íë¦¿í•œ ë³´ì¡° í…ìŠ¤íŠ¸ */
-  --text-reverse: #242424;    /* ì—­ìƒ */
+  /* Text Colors */
+  --text-primary: #f2f2f2;
+  --text-secondary: #b0b2b5;
+  --text-third: #888888;
+  --text-reverse: #242424;
   --text-muted: #999999;
 
-  /* ìœ ë¦¬(Glass) ëŠë‚Œ íˆ¬ëª…ë„ */
-  --glass-bg-light: rgba(255, 255, 255, 0.05); 
+  /* Glass Background */
+  --glass-bg-light: rgba(255, 255, 255, 0.05);
 
-  /* í°íŠ¸/íŠ¸ëžœì§€ì…˜ */
+  /* Fonts */
   --font-body: 'Pretendard', sans-serif;
 
+  /* Transitions */
   --transition-fast: 0.2s ease-in-out;
   --transition-slow: 0.4s ease-in-out;
 }
 
-/* ê¸°ë³¸(ì˜ì–´) í°íŠ¸: Conthrax */
+/* Set heading font based on language */
 :root:lang(en) {
   --font-heading: 'Conthrax', sans-serif;
 }
 
-/* í•œêµ­ì–´ í°íŠ¸: Kimm */
 :root:lang(ko) {
   --font-heading: 'KimmBold', sans-serif;
 }
 
-/* --- ê¸°ë³¸ ì„¤ì • --- */
+/* ---------------------------------------------------------------------------
+   Global Styles
+--------------------------------------------------------------------------- */
+
+/* Smooth Scrolling */
+html,
+body {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* macOS Style Scrollbar for WebKit Browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* macOS Style Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+}
+
+/* Base Body & Typography */
 body {
   @apply bg-[var(--background)] text-[var(--foreground)] font-[var(--font-body)];
   transition: background-color var(--transition-slow), color var(--transition-slow);
@@ -98,8 +136,11 @@ button {
   font-family: var(--font-body);
 }
 
-/* --- ì»¤ìŠ¤í…€ --- */
+/* ---------------------------------------------------------------------------
+   Utility Classes
+--------------------------------------------------------------------------- */
 
+/* Hide Scrollbar */
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -108,6 +149,7 @@ button {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* Section Base Spacing */
 .section-base {
   @apply py-28 px-3 backdrop-blur-sm transition-all;
 }
@@ -116,25 +158,30 @@ button {
   @apply backdrop-blur-sm transition-all;
 }
 
+/* Section Title */
 .section-title {
   @apply text-gradient text-xl font-bold mb-4 border-gradient-b pb-2;
 }
 
+/* Expand Button */
 .expand-button {
   @apply w-full my-2 py-2 text-gradient text-xs rounded-md border border-[var(--border-mid)] hover:text-[var(--text-primary)] hover:border-[var(--border-start)] transition-all;
   font-family: 'Conthrax';
 }
 
+/* Common Content Timeline */
 .common-content-timeline {
   @apply text-lg text-center p-1 break-words whitespace-normal leading-tight;
 }
 
-/* --- ì»¤ìŠ¤í…€ ìœ í‹¸ë¦¬í‹° --- */
+/* ---------------------------------------------------------------------------
+   Custom Utilities (via @layer utilities)
+--------------------------------------------------------------------------- */
 @layer utilities {
   .font-main {
     font-family: 'Conthrax', sans-serif;
   }
-
+  
   .font-main-bold {
     font-family: 'Conthrax-Bold', sans-serif;
   }
@@ -160,26 +207,19 @@ button {
   }
 
   .border-gradient {
-    @apply border border-transparent rounded-md text-gradient; 
-    border-image: linear-gradient(
-      to right, 
-      var(--border-start), 
-      var(--border-end)
-    ) 1; 
-    border-image-slice: 1; 
+    @apply border border-transparent rounded-md text-gradient;
+    border-image: linear-gradient(to right, var(--border-start), var(--border-end)) 1;
+    border-image-slice: 1;
     font-family: 'Conthrax';
   }
 
   .border-gradient-b {
     @apply border-b border-transparent;
-    border-image: linear-gradient(
-      to right, 
-      var(--border-start), 
-      var(--border-end)
-    ) 1; 
-    border-image-slice: 1; 
+    border-image: linear-gradient(to right, var(--border-start), var(--border-end)) 1;
+    border-image-slice: 1;
   }
 
+  /* Purple Glow Utilities */
   .purple-glow-1 {
     box-shadow: 0 0 4px 1px rgba(157, 78, 221, 0.2);
   }
@@ -237,8 +277,7 @@ button {
   }
 
   .inner-shadow-strong {
-    box-shadow: 
-      inset 0 2px 10px rgba(0, 0, 0, 0.2); 
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
   .text-glow {
@@ -255,17 +294,17 @@ button {
 
   .text-outline-1 {
     color: transparent;
-    -webkit-text-stroke: 0.5px var(--foreground); 
+    -webkit-text-stroke: 0.5px var(--foreground);
   }
 
   .text-outline-2 {
     color: transparent;
-    -webkit-text-stroke: 1px var(--foreground); 
+    -webkit-text-stroke: 1px var(--foreground);
   }
 
   .text-outline-3 {
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--foreground); 
+    -webkit-text-stroke: 1.5px var(--foreground);
   }
   
   .text-outline-4 {
@@ -289,10 +328,9 @@ button {
   }
 
   .text-outline-5-purple-glassblack {
-    color: rgba(0,0,0,0.1);
+    color: rgba(0, 0, 0, 0.1);
     -webkit-text-stroke: 3.5px rgb(139, 92, 246);
-    text-shadow:
-      0 0 18px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
   }
 
   .text-add-outline-1 {
@@ -300,14 +338,13 @@ button {
   }
 
   .button-base {
-    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(132,94,238,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(132,94,238,1)]
+    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(132,94,238,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(132,94,238,1)];
   }
 
   .button-black {
-    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(31,31,31,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(82,63,136,1)]
+    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(31,31,31,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(82,63,136,1)];
   }
 
-  /* ë²„íŠ¼ ë² ì´ìŠ¤ ìŠ¤íƒ€ì¼ + í¼í”Œ Feather ë¼ì¸ */
   .button-feather-purple {
     position: relative;
     z-index: 0;
@@ -329,38 +366,29 @@ button {
     transition: color 0.25s ease, all 0.25s ease;
   }
 
-  /* ì–‘ìª½ "feather" ë¼ì¸(ê°€ìƒ ìš”ì†Œ) */
   .button-feather-purple::before,
   .button-feather-purple::after {
     content: '';
     position: absolute;
-    z-index: -1;               /* í…ìŠ¤íŠ¸ ë’¤ì— ë Œë”ë§ë˜ë„ë¡ ì„¤ì • */
+    z-index: -1;
     top: 50%;
     transform: translateY(-50%);
     height: 4px;
-    width: 50%;                /* ì„  ê¸¸ì´ (ë²„íŠ¼ ë°˜ìœ¼ë¡œ ì„¤ì •) */
+    width: 50%;
     pointer-events: none;
-    background: linear-gradient(
-      to right, 
-      rgba(167,88,231,1),      /* ì™¼ìª½ 100% ë³´ë¼ */
-      rgba(157,78,221,0)       /* ì˜¤ë¥¸ìª½ 0% íˆ¬ëª… */
-    );
-    filter: blur(4px);         /* ë¸”ëŸ¬ íš¨ê³¼ */
+    background: linear-gradient(to right, rgba(167, 88, 231, 1), rgba(157, 78, 221, 0));
+    filter: blur(4px);
   }
 
-  /* ì™¼ìª½ ë¼ì¸: ë°˜ëŒ€ ë°©í–¥ìœ¼ë¡œ íšŒì „í•˜ì—¬ "ì™¼â†’íˆ¬ëª…, ì˜¤ë¥¸â†’í¼í”Œ" */
   .button-feather-purple::before {
     left: 0;
-    transform: translateY(-50%) rotateY(180deg); 
-    /* rotateY(180deg)ë¡œ ê·¸ë¼ë””ì–¸íŠ¸ ë°©í–¥ ë’¤ì§‘ê¸° */
+    transform: translateY(-50%) rotateY(180deg);
   }
 
-  /* ì˜¤ë¥¸ìª½ ë¼ì¸ */
   .button-feather-purple::after {
     right: 0;
   }
 
-  /* Hover ì‹œ ì‚´ì§ ê°•ì¡°í•´ë³´ê³  ì‹¶ë‹¤ë©´ */
   .button-feather-purple:hover {
     color: #ffffff;
     font-size: 1.9rem;
@@ -368,26 +396,20 @@ button {
   }
 
   .mask-hole {
-    -webkit-mask-image: radial-gradient(
-      circle, 
-      transparent 30%, 
-      black 31%
-    );
+    -webkit-mask-image: radial-gradient(circle, transparent 30%, black 31%);
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: 100% 100%;
-
-    mask-image: radial-gradient(
-      circle, 
-      transparent 30%, 
-      black 31%
-    );
+    mask-image: radial-gradient(circle, transparent 30%, black 31%);
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: 100% 100%;
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Keyframes & Animations
+--------------------------------------------------------------------------- */
 @keyframes blinkText {
   0%, 50% {
     opacity: 0;
@@ -404,14 +426,13 @@ button {
 
 @keyframes draw {
   from {
-      background-size: 0% 40%;
+    background-size: 0% 40%;
   }
   to {
-      background-size: 100% 40%;
+    background-size: 100% 40%;
   }
 }
 
-/* ê°•ì¡° ìš”ì†Œ ì• ë‹ˆë©”ì´ì…˜ */
 @keyframes pulse-soft {
   0%, 100% {
     opacity: 1;
@@ -423,7 +444,7 @@ button {
   }
 }
 
-/* ë™ì  ë°°ê²½ ê°•ì¡° */
+/* Dynamic Background */
 .dynamic-bg {
   @apply bg-gradient-to-r from-[var(--primary)] to-[var(--accent)];
   transition: background-color var(--transition-slow);

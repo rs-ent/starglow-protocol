@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useContext } from "react";
+import dynamic from 'next/dynamic';
 import { useMedia } from "react-use";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import Image from "next/image";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PollCard from "./PollCard";
 import { DataContext } from "../context/PollData";
@@ -19,6 +19,7 @@ const TABS = {
     SCHEDULED: "scheduled",
 };
 
+const Header = dynamic(() => import('../components/Header'), { ssr: false });
 export default function PollList({ pollResults }) {
     const pollContext = useContext(DataContext);
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));

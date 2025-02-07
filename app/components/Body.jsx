@@ -11,6 +11,8 @@ export default function Body() {
         window.scrollTo(0, 0);
     }, []);
 
+    const bgDebug = 'rgba(0, 255, 0, 0.0)';
+
     return (
         <div
         className=""
@@ -22,41 +24,42 @@ export default function Body() {
                 position: 'relative',
             }}>
             <Image
-                src="/images/body.png"
+                src="/images/body2x.png"
                 alt="Header Image"
                 width={1920}
                 height={1080}
                 style={{ width: '100%', height: 'auto', transform: 'scale(1.35)', display: 'block', transformOrigin: 'top',}}
             />
-                {/* Gitbook Button
+                {/* Gitbook Button */}
                 <a
-                href="/pageA"
+                href="https://s-organization-687.gitbook.io/starglow.pro"
+                target="_blank"
                 style={{
                     position: 'absolute',
-                    top: '9%',
-                    left: '44.2%',
-                    width: '11.6%',
-                    height: '1.7%',
+                    top: '14.6%',
+                    left: '42.3%',
+                    width: '15.5%',
+                    height: '2.45%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 255, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
-                </a> */}
+                </a>
 
                 {/* Scroll To */}
                 <a
                 href="#intro"
                 style={{
                     position: 'absolute',
-                    top: '22.5%',
+                    top: '21.3%',
                     left: '47.9%',
                     width: '4.2%',
-                    height: '1.7%',
+                    height: '1.8%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 255, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -69,34 +72,34 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '95.8%',
+                    top: '93.3%',
                     left: '13%',
                     width: '19%',
                     height: '1.75%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
                 </a>
 
-                {/* Book 
+                {/* GitBook */}
                 <a
-                href="/pageA"
+                href="https://s-organization-687.gitbook.io/starglow.pro"
+                target="_blank"
                 style={{
                     position: 'absolute',
-                    top: '85.2%',
-                    left: '41.55%',
+                    top: '116.15%',
+                    left: '38.95%',
                     width: '2%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
-                    
-                </a>*/}
+                </a>
 
                 {/* Twitter */}
                 <a
@@ -105,13 +108,13 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '115.45%',
+                    top: '116.15%',
                     left: '45.5%',
                     width: '2.2%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -124,13 +127,13 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '115.45%',
+                    top: '116.15%',
                     left: '52%',
                     width: '2.5%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -143,13 +146,13 @@ export default function Body() {
                 rel="noopener noreferrer"
                 style={{
                     position: 'absolute',
-                    top: '115.45%',
+                    top: '116.15%',
                     left: '58.1%',
                     width: '3.65%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -167,7 +170,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -176,13 +179,13 @@ export default function Body() {
                 id='intro'
                 style={{
                     position: 'absolute',
-                    top: '28.5%',
+                    top: '22.5%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -191,13 +194,13 @@ export default function Body() {
                 id='product'
                 style={{
                     position: 'absolute',
-                    top: '80%',
+                    top: '76.5%',
                     left: '0%',
                     width: '100%',
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -212,7 +215,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -227,6 +230,22 @@ export default function Body() {
                     style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
 
+                {/* Gitbook Button */}
+                <a
+                href="https://s-organization-687.gitbook.io/starglow.pro"
+                target="_blank"
+                style={{
+                    position: 'absolute',
+                    top: '9.55%',
+                    left: '28.0%',
+                    width: '44.25%',
+                    height: '0.9%',
+                    display: 'block',
+                    // 디버깅
+                    backgroundColor: bgDebug,
+                }}
+                ></a>
+
                 {/* Scroll To */}
                 <a
                 href="#introM"
@@ -238,7 +257,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 255, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -257,28 +276,29 @@ export default function Body() {
                     height: '0.95%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
                 </a>
 
-                {/* Book 
+                {/* GitBook */}
                 <a
-                href="/pageA"
+                href="https://s-organization-687.gitbook.io/starglow.pro"
+                target="_blank"
                 style={{
                     position: 'absolute',
-                    top: '91.9%',
+                    top: '92.45%',
                     left: '17.5%',
                     width: '7.8%',
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
-                </a>*/}
+                </a>
 
                 {/* Twitter */}
                 <a
@@ -293,7 +313,7 @@ export default function Body() {
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -312,7 +332,7 @@ export default function Body() {
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -331,7 +351,7 @@ export default function Body() {
                     height: '0.6%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(0, 0, 255, 0.3)',
+                    backgroundColor: bgDebug,
                 }}
                 >
                     
@@ -348,7 +368,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -363,7 +383,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -378,7 +398,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
 
@@ -393,7 +413,7 @@ export default function Body() {
                     height: '1%',
                     display: 'block',
                     // 디버깅
-                    //backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                    backgroundColor: bgDebug,
                 }}
                 ></section>
             </div>

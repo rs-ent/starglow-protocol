@@ -1,11 +1,9 @@
-import Header from "./components/Header";
-import Body from "./components/Body";
+import Main from './Main';
 
 export default function Home() {
   return (
-    <>
-      <Header />
-      <Body />
-    </>
+    <div className='bg-black'>
+      <Main />
+    </div>
   );
 }
