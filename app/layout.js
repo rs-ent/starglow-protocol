@@ -17,6 +17,7 @@ export const metadata = {
   description: `Glow and Grow Together with Your Star!`,
   icons: {
     icon: '/images/favicon.ico',
+    apple: '/images/favicon.png',
   },
   
   openGraph: {
