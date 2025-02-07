@@ -223,7 +223,7 @@ export default function Body() {
 
             <div className="Mobile">
                 <Image
-                    src="/images/body_mobile.png"
+                    src="/images/body_mobile3x.png"
                     alt="Body Image"
                     width={440}
                     height={160}

@@ -25,12 +25,14 @@ export default function Footer({device}) {
                         FOLLOW US ON SOCIAL MEDIA
                     </h1>
                     <div className="flex justify-between py-2 px-4">
+                        <Link href="https://s-organization-687.gitbook.io/starglow.pro" target="_blank">
                             <Image 
                                 src='/ui/gitbook-icon-black-round.png'
                                 alt='starglow-logo'
                                 width={socialMediaIconSize}
                                 height={socialMediaIconSize}
                             />
+                        </Link>
 
                         <Link href="https://x.com/StarglowP" target="_blank">
                         <Image 
@@ -82,12 +84,14 @@ export default function Footer({device}) {
                 </div>
                 <div>
                     <div className="grid grid-cols-4 justify-between mt-2 pt-2">
+                        <Link href="https://s-organization-687.gitbook.io/starglow.pro" target="_blank">
                             <Image 
                                 src='/ui/gitbook-icon-black-round.png'
                                 alt='starglow-logo'
                                 width={socialMediaIconSize}
                                 height={socialMediaIconSize}
                             />
+                        </Link>
 
                         <Link href="https://x.com/StarglowP" target="_blank">
                         <Image 
