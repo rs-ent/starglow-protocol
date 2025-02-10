@@ -6,11 +6,7 @@ export function getSheetsClient() {
   if (!serviceAccountJson) {
     throw new Error("Service account key not found in env.");
   }
-  const fixedServiceAccountJson = serviceAccountJson.replace(
-    /(\r\n|\n|\r)/g,
-    "\\n"
-  );
-  const credentials = JSON.parse(fixedServiceAccountJson);
+  const credentials = JSON.parse(serviceAccountJson);
 
   // 2) GoogleAuth 생성
   const auth = new google.auth.GoogleAuth({

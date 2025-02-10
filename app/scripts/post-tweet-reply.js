@@ -57,6 +57,9 @@ export async function postTweetReply(text, imageUrl, tags = []) {
     const tweetToReply = tweets[randomTweetIndex];
     if (!tweetToReply || !tweetToReply.id) {
       console.warn(`선택된 트윗이 유효하지 않습니다. (query: ${query})`);
+      console.log("tweets: ", tweets);
+      console.log("tweetToReply: ", tweetToReply);
+      console.log("tweetToReply ID: ",tweetToReply.id);
       return;
     }
     const tweetId = tweetToReply.id;
