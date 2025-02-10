@@ -52,7 +52,7 @@ export default function PollCard({poll, result}) {
                 </p>
 
                 <div className="mt-6">
-                    <PollBarChart votes={voteResult} options={options}/>
+                    <PollBarChart votes={voteResult} options={options} start={poll.start} end={poll.end}/>
                 </div>
             </div>
         </div>
