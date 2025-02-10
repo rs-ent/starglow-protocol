@@ -37,11 +37,13 @@ export default function PollList({ pollResults }) {
             if (poll.title && poll.options && poll.start && poll.end && poll.poll_id && poll.poll_id !== 'p99999') {
                 const startDate = parseAsKST(poll.start);
                 const endDate = parseAsKST(poll.end);
-                const endDatePending = new Date(endDate.getTime() + 20 * 60 * 1000);
+                const endDateMinus3Days = new Date(endDate);
+                endDateMinus3Days.setDate(endDate.getDate() - 3);
+                const endDatePlus1Hour = new Date(endDate.getTime() + 1 * 60 * 60 * 1000);
 
                 if (startDate > today && poll.show_scheduled === 'TRUE') scheduled.push(poll);
-                else if (startDate <= today && today <= endDate) onGoing.push(poll);
-                else if (today > endDatePending) ended.push(poll);
+                else if (startDate <= today && today <= endDateMinus3Days) onGoing.push(poll);
+                else if (today > endDatePlus1Hour) ended.push(poll);
             }
         });
 

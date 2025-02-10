@@ -31,48 +31,48 @@ export async function runCronTweetReply() {
     };
   }
 
-  let processedCount = 0;
   let tweetUrl = "";
+  let targetList = [];
   for (let i = 0; i < lines.length; i++) {
-    const { START, END, TEXT, MEDIA, HASHTAGS, REPLIED, URL } = lines[i];
-    console.log(lines[i]);
-    console.log("====================");
-
-    const startDate = parseKST(START);
-    const endDate = parseKST(END);
-
+    lines[i].row = i + 2;
+    const startDate = parseKST(lines[i].START);
+    const endDate = parseKST(lines[i].END);
     if (startDate <= today && endDate >= today) {
-      const tags = HASHTAGS.split(";");
-      tweetUrl = await postTweetReply(TEXT, MEDIA, tags);
-
-      const rowIndex = i + 2;
-      let repliedCount = parseInt(REPLIED !== "" ? REPLIED : 0, 10);
-      const originalUrl = URL.split(";");
-      const updatedUrl = originalUrl.push(tweetUrl);
-      const updateData = [
-        {
-          range: `Auto Reply X!F${rowIndex}`,
-          values: [[++repliedCount]],
-        },
-        {
-          range: `Auto Reply X!G${rowIndex}`,
-          values: [[updatedUrl.join(";")]],
-        },
-      ];
-
-      await sheets.spreadsheets.values.batchUpdate({
-        spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
-        requestBody: {
-          data: updateData,
-          valueInputOption: "USER_ENTERED",
-        },
-      });
-
-      processedCount++;
+      targetList.push(lines[i]);
     }
   }
 
-  return { success: true, tweetUrl, processedCount };
+  const targetIndex = Math.floor(Math.random() * targetList.length);
+  const target = targetList[targetIndex];
+  console.log("TARGET: ", target);
+  
+  const { START, END, TEXT, MEDIA, HASHTAGS, REPLIED, URL, rowIndex } = target;
+  
+  const tags = HASHTAGS.split(";");
+  tweetUrl = await postTweetReply(TEXT, MEDIA, tags);
+  let repliedCount = parseInt(REPLIED !== "" ? REPLIED : 0, 10);
+  const urls = URL.split(";");
+  urls.push(tweetUrl);
+  const updateData = [
+    {
+      range: `Auto Reply X!F${rowIndex}`,
+      values: [[++repliedCount]],
+    },
+    {
+      range: `Auto Reply X!G${rowIndex}`,
+      values: [[urls.join(";")]],
+    },
+  ];
+
+  await sheets.spreadsheets.values.batchUpdate({
+    spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
+    requestBody: {
+      data: updateData,
+      valueInputOption: "USER_ENTERED",
+    },
+  });
+
+  return { success: true, tweetUrl, target };
 }
 
 function parseKST(dateStr) {

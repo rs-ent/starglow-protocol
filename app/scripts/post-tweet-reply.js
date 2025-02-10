@@ -44,7 +44,7 @@ export async function postTweetReply(text, imageUrl, tags = []) {
 
   try {
     // Twitter API v2의 검색 요청은 최소 max_results가 10이어야 하므로 10으로 요청합니다.
-    const searchResult = await searchWithRetry(client, query, 10, 5);
+    const searchResult = await searchWithRetry(client, query, 10, 1);
     console.log("searchResult:", JSON.stringify(searchResult, null, 2));
 
     if (!searchResult || !searchResult.data || searchResult.data.length === 0) {
@@ -52,14 +52,12 @@ export async function postTweetReply(text, imageUrl, tags = []) {
       return;
     }
 
-    const tweets = searchResult.data;
+    const tweets = searchResult.data.data;
     const randomTweetIndex = Math.floor(Math.random() * tweets.length);
     const tweetToReply = tweets[randomTweetIndex];
+    console.log("tweetToReply: ", tweetToReply);
     if (!tweetToReply || !tweetToReply.id) {
       console.warn(`선택된 트윗이 유효하지 않습니다. (query: ${query})`);
-      console.log("tweets: ", tweets);
-      console.log("tweetToReply: ", tweetToReply);
-      console.log("tweetToReply ID: ",tweetToReply.id);
       return;
     }
     const tweetId = tweetToReply.id;
