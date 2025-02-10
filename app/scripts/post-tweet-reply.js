@@ -91,7 +91,7 @@ async function searchWithRetry(
     });
     return searchResult;
   } catch (error) {
-    if (error.code === 429 && attempt < maxAttempts) {
+    if (error.code === 429) {
       let waitTime;
       if (error.rateLimit && error.rateLimit.reset) {
         const resetTime = error.rateLimit.reset * 1000;

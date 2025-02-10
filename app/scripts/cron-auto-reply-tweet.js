@@ -50,6 +50,7 @@ export async function runCronTweetReply() {
   const tags = HASHTAGS.split(";");
   let tweetUrl = "";
   tweetUrl = await postTweetReply(TEXT, MEDIA, tags);
+  console.log(tweetUrl);
   if (!tweetUrl) {
     return { success: false, error: "Tweet failed" };
   }
