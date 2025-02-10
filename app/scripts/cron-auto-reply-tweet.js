@@ -31,13 +31,12 @@ export async function runCronTweetReply() {
     };
   }
 
-  let tweetUrl = "";
   let targetList = [];
   for (let i = 0; i < lines.length; i++) {
-    lines[i].row = i + 2;
+    lines[i].rowIndex = i + 2;
     const startDate = parseKST(lines[i].START);
     const endDate = parseKST(lines[i].END);
-    if (startDate <= today && endDate >= today) {
+    if (lines[i].TEXT && lines[i].HASHTAGS && startDate <= today && endDate >= today) {
       targetList.push(lines[i]);
     }
   }
@@ -49,7 +48,12 @@ export async function runCronTweetReply() {
   const { START, END, TEXT, MEDIA, HASHTAGS, REPLIED, URL, rowIndex } = target;
   
   const tags = HASHTAGS.split(";");
+  let tweetUrl = "";
   tweetUrl = await postTweetReply(TEXT, MEDIA, tags);
+  if (!tweetUrl) {
+    return { success: false, error: "Tweet failed" };
+  }
+
   let repliedCount = parseInt(REPLIED !== "" ? REPLIED : 0, 10);
   const urls = URL.split(";");
   urls.push(tweetUrl);

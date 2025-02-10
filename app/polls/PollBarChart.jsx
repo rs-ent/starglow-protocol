@@ -92,6 +92,10 @@ function PollBars({ data, blur }) {
                         </div>
                     )
                 })}
+                <p className="text-xs font-light text-[rgba(255,255,255,0.6)]">
+                    * States hidden before 3 days of end date. Result will be revealed on end date.
+                </p>
+                
             </div>
         );
     } else {
