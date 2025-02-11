@@ -61,7 +61,8 @@ export default function Store() {
         <div className="container mx-auto px-6 py-12 justify-center">
           <h1 className="text-4xl font-bold text-center mb-10 mt-20">Store</h1>
           <div className="my-4 flex justify-center items-center p-4 text-center text-white text-sm">
-            <TelegramLoginButton />
+            {/* Telegram 로그인 */}
+            <TelegramLoginButton onTelegramAuth={setTelegramUser} />
           </div>
           <div className="flex flex-col items-center">
             {/* 이미지 노출 */}

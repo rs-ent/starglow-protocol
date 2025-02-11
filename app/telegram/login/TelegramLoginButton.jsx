@@ -1,38 +1,78 @@
+// app/telegram/login/TelegramLoginButton.jsx
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { signIn, useSession } from "next-auth/react";
+import TelegramLogoutButton from "./TelegramLogoutButton";
 
-export default function TelegramLoginButton() {
+export default function TelegramLoginButton({ onTelegramAuth }) {
   const containerRef = useRef(null);
+  const [telegramUser, setTelegramUser] = useState(null);
+  const [popupOpened, setPopupOpened] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
-    // 글로벌 콜백을 먼저 정의합니다.
-    window.onTelegramAuth = (user) => {
-      alert(
-        `Logged in as ${user.first_name} ${user.last_name} (${user.id}${
-          user.username ? ", @" + user.username : ""
-        })`
-      );
-    };
+    if (!session) {
+      setTelegramUser(null);
+    }
+  }, [session]);
 
-    // 스크립트 태그를 동적으로 생성하여 container에 추가합니다.
+  const handleTelegramAuth = (user) => {
+    console.log("Telegram user:", user);
+    setTelegramUser(user);
+
+    if (onTelegramAuth) {
+      onTelegramAuth(user);
+    }
+
+    // NextAuth의 Credentials Provider를 통해 로그인 시도
+    signIn("credentials", { telegramUser: JSON.stringify(user) }, { redirect: false });
+  };
+
+  useEffect(() => {
+    window.handleTelegramAuth = handleTelegramAuth;
+
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.setAttribute("data-telegram-login", "starglow_redslippers_bot");
     script.setAttribute("data-size", "large");
     script.setAttribute("data-userpic", "true");
     script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)");
+    script.setAttribute("data-onauth", "handleTelegramAuth(user)");
     script.async = true;
     containerRef.current.appendChild(script);
 
-    // 컴포넌트 unmount 시 스크립트 제거 (선택사항)
     return () => {
-      containerRef.current.removeChild(script);
+      if (containerRef.current && containerRef.current.contains(script)) {
+        containerRef.current.removeChild(script);
+      }
+      delete window.handleTelegramAuth;
     };
   }, []);
 
-  return (
-      <div ref={containerRef} />
+  const handlePopup = () => {
+    setPopupOpened((prev) => !prev);
+  };
+
+  return telegramUser ? (
+    <div>
+      <button 
+        className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
+        onClick={handlePopup}
+      >
+        {telegramUser.username}
+      </button>
+
+      {popupOpened && (
+        <div className="fixed flex items-center justify-center" onClick={() => setPopupOpened(false)}>
+          <div className="bg-[rgba(255,255,255,0.3)] mt-2 rounded-lg backdrop-blur-md shadow-md" onClick={(e) => e.stopPropagation()}>
+            <TelegramLogoutButton />
+          </div>
+        </div>
+      )}
+    </div>
+  ) : (
+    <div ref={containerRef} />
   );
 }
+// app/api/auth/%5B...nextauth%5D/route.js
