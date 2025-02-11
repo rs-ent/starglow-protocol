@@ -12,6 +12,7 @@ export default function TelegramLoginButton({ onTelegramAuth }) {
   const { data: session } = useSession();
 
   useEffect(() => {
+    console.log("telegramUser: ", telegramUser);
     if (!session) {
       setTelegramUser(null);
     }
