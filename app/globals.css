@@ -341,6 +341,10 @@ button {
     @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(132,94,238,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(132,94,238,1)];
   }
 
+  .button-telegram {
+    @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(84,169,235,1)] font-medium py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(84,169,235,1)];
+  }
+
   .button-black {
     @apply inline-flex text-center items-center justify-center rounded-full bg-[rgba(31,31,31,1)] font-semibold py-2 px-5 text-base shadow-md drop-shadow-md border border-[rgba(82,63,136,1)];
   }

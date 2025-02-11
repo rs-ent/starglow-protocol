@@ -7,8 +7,9 @@ import TelegramLogoutButton from "./TelegramLogoutButton";
 
 export default function TelegramLoginButton() {
   const containerRef = useRef(null);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
+  const [telegramUser, setTelegramUser] = useState(null);
 
   const onTelegramAuth = (user) => {
     console.log("Telegram user:", user);
@@ -19,10 +20,21 @@ export default function TelegramLoginButton() {
   };
 
   useEffect(() => {
-    if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
-      
+    if (process.env.NEXT_PUBLIC_BASE_URL === "http://localhost:3000") {
+      const tester = {
+        "id": 7582540534,
+        "first_name": "Wayd",
+        "last_name": "Cloud",
+        "username": "waydcloud",
+        "auth_date": 1739247482,
+        "hash": "1ab3f507af7536161527e37425888c1cd5f45dd3a404d6814a365637f4f45672"
+      };
+      setTelegramUser(tester);
     } else {
-      if (session?.user) return;
+      if (session?.user) {
+        setTelegramUser(session.user);
+        return;
+      }
 
       window.onTelegramAuth = onTelegramAuth;
 
@@ -34,6 +46,8 @@ export default function TelegramLoginButton() {
       script.setAttribute("data-request-access", "write");
       script.setAttribute("data-onauth", "onTelegramAuth(user)");
       script.async = true;
+
+      console.log(containerRef.current);
 
       if (containerRef.current) {
         containerRef.current.appendChild(script);
@@ -48,16 +62,20 @@ export default function TelegramLoginButton() {
     }
   }, []);
 
+  useEffect(() => {
+    if (session?.user) {
+      setTelegramUser(JSON.parse(session.user));
+    }
+  }, [session]);
+
   const handlePopup = () => {
     setPopupOpened((prev) => !prev);
   };
 
-  const shouldRenderWidget = !session?.user;
-
-  return session?.user ? (
+  return telegramUser !== null ? (
     <div className="login-completed-box">
       <button
-        className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
+        className="button-telegram inline-flex items-center"
         onClick={handlePopup}
       >
         <Image
@@ -67,7 +85,7 @@ export default function TelegramLoginButton() {
           height={17}
           className="mr-2"
         />
-        {session.user.username}
+        {telegramUser.username}
       </button>
 
       {popupOpened && (
@@ -79,6 +97,6 @@ export default function TelegramLoginButton() {
       )}
     </div>
   ) : (
-    shouldRenderWidget && <div ref={containerRef} />
+    <div ref={containerRef} />
   );
 }
