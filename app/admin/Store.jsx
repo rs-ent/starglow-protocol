@@ -15,18 +15,6 @@ export default function Store() {
   // Telegram 로그인 후 사용자 정보를 저장할 상태
   const [telegramUser, setTelegramUser] = useState(null);
 
-  // Telegram 로그인 콜백 함수 등록
-  useEffect(() => {
-    window.onTelegramAuth = (user) => {
-      setTelegramUser(user);
-      alert(
-        `Logged in as ${user.first_name} ${user.last_name} (${
-          user.username ? "@" + user.username : "no username"
-        })`
-      );
-    };
-  }, []);
-
   // 구매 버튼 클릭 시 호출되는 함수
   const handlePurchase = async () => {
     if (!telegramUser || !telegramUser.username) {
@@ -72,15 +60,9 @@ export default function Store() {
       >
         <div className="container mx-auto px-6 py-12 justify-center">
           <h1 className="text-4xl font-bold text-center mb-10 mt-20">Store</h1>
-          {telegramUser ? (
-            <div className="my-4 p-4 text-center text-white text-sm">
-              Hello, {telegramUser.username}!
-            </div>
-          ) : (
-            <div className="my-4 flex justify-center items-center p-4 text-center text-white text-sm">
-              <TelegramLoginButton />
-            </div>
-          )}
+          <div className="my-4 flex justify-center items-center p-4 text-center text-white text-sm">
+            <TelegramLoginButton />
+          </div>
           <div className="flex flex-col items-center">
             {/* 이미지 노출 */}
             <div className="mb-10">
