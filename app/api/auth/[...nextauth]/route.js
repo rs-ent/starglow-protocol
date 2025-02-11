@@ -28,7 +28,7 @@ const handler = NextAuth({
 
         // 예시로 필수 필드가 있는지 검증합니다.
         // 실제 환경에서는 Telegram에서 전달받은 데이터에 대한 서명 검증 로직을 추가하세요.
-        if (!user.id || !user.username) {
+        if (!user.id) {
           return null;
         }
 

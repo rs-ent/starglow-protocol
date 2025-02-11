@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { signIn, useSession } from "next-auth/react";
 import TelegramLogoutButton from "./TelegramLogoutButton";
 
-export default function TelegramLoginButton({ onTelegramAuth }) {
+export default function TelegramLoginButton() {
   const containerRef = useRef(null);
   const [telegramUser, setTelegramUser] = useState(null);
   const [popupOpened, setPopupOpened] = useState(false);
@@ -18,20 +18,19 @@ export default function TelegramLoginButton({ onTelegramAuth }) {
     }
   }, [session]);
 
-  const handleTelegramAuth = (user) => {
+  const onTelegramAuth = (user) => {
     console.log("Telegram user:", user);
     setTelegramUser(user);
 
-    if (onTelegramAuth) {
-      onTelegramAuth(user);
-    }
-
     // NextAuth의 Credentials Provider를 통해 로그인 시도
-    signIn("credentials", { telegramUser: JSON.stringify(user) }, { redirect: false });
+    signIn("credentials", { 
+      telegramUser: JSON.stringify(user),
+      redirect: false
+    });    
   };
 
   useEffect(() => {
-    window.handleTelegramAuth = handleTelegramAuth;
+    window.onTelegramAuth = onTelegramAuth;
 
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
@@ -39,7 +38,7 @@ export default function TelegramLoginButton({ onTelegramAuth }) {
     script.setAttribute("data-size", "large");
     script.setAttribute("data-userpic", "true");
     script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "handleTelegramAuth(user)");
+    script.setAttribute("data-onauth", "onTelegramAuth(user)");
     script.async = true;
     containerRef.current.appendChild(script);
 
@@ -47,7 +46,7 @@ export default function TelegramLoginButton({ onTelegramAuth }) {
       if (containerRef.current && containerRef.current.contains(script)) {
         containerRef.current.removeChild(script);
       }
-      delete window.handleTelegramAuth;
+      delete window.onTelegramAuth;
     };
   }, []);
 

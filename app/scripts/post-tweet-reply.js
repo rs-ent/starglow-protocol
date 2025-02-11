@@ -47,12 +47,13 @@ export async function postTweetReply(text, imageUrl, tags = []) {
     const searchResult = await searchWithRetry(client, query, 10, 1);
     console.log("searchResult:", JSON.stringify(searchResult, null, 2));
 
-    if (!searchResult || !searchResult.data || searchResult.data.length === 0) {
+    if (!searchResult || !searchResult.data || !searchResult.data.data || searchResult.data.data.length === 0) {
       console.log(`해시태그 ${query}에 해당하는 트윗을 찾지 못했습니다.`);
       return;
     }
 
     const tweets = searchResult.data.data;
+    console.log("tweets: ", tweets);
     const randomTweetIndex = Math.floor(Math.random() * tweets.length);
     const tweetToReply = tweets[randomTweetIndex];
     console.log("tweetToReply: ", tweetToReply);
@@ -85,36 +86,25 @@ async function searchWithRetry(
   maxAttempts = 15,
   attempt = 1
 ) {
+  if (attempt > maxAttempts) {
+    throw new Error("최대 재시도 횟수를 초과했습니다.");
+  }
+  
   try {
-    const searchResult = await client.v2.search(query, {
-      max_results: maxResults,
-    });
+    const searchResult = await client.v2.search(query, { max_results: maxResults });
     return searchResult;
   } catch (error) {
     if (error.code === 429) {
       let waitTime;
       if (error.rateLimit && error.rateLimit.reset) {
         const resetTime = error.rateLimit.reset * 1000;
-        waitTime = Math.max(
-          resetTime - Date.now(),
-          Math.pow(2, attempt) * 1000
-        );
+        waitTime = Math.max(resetTime - Date.now(), Math.pow(2, attempt) * 1000);
       } else {
         waitTime = Math.pow(2, attempt) * 1000;
       }
-      console.warn(
-        `Rate limit exceeded. Retrying attempt ${attempt + 1} in ${
-          waitTime / 1000
-        } s.`
-      );
+      console.warn(`Rate limit exceeded. Retrying attempt ${attempt + 1} in ${waitTime / 1000} s.`);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
-      return await searchWithRetry(
-        client,
-        query,
-        maxResults,
-        maxAttempts,
-        attempt + 1
-      );
+      return await searchWithRetry(client, query, maxResults, maxAttempts, attempt + 1);
     } else {
       throw error;
     }
