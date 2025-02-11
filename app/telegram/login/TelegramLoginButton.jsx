@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import TelegramLogoutButton from "./TelegramLogoutButton";
 
@@ -11,7 +12,7 @@ export default function TelegramLoginButton() {
 
   const onTelegramAuth = (user) => {
     console.log("Telegram user:", user);
-    signIn("credentials", { 
+    signIn("credentials", {
       telegramUser: JSON.stringify(user),
       redirect: false
     });
@@ -51,18 +52,18 @@ export default function TelegramLoginButton() {
 
   return session?.user ? (
     <div className="login-completed-box">
-      <button 
+      <button
         className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
         onClick={handlePopup}
       >
-        <Image 
-                                src='/ui/telegram-icon.png'
-                                alt='search-icon'
-                                width={17}
-                                height={17}
-                                className="mr-2"
-                            />
-                            Play STARGLOW
+        <Image
+          src='/ui/telegram-icon.png'
+          alt='search-icon'
+          width={17}
+          height={17}
+          className="mr-2"
+        />
+        Play STARGLOW
       </button>
 
       {popupOpened && (
