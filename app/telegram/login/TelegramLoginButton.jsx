@@ -16,7 +16,7 @@ export default function TelegramLoginButton() {
     // NextAuth Credentials Provider를 통해 로그인 시도 (리다이렉트 없이)
     signIn("credentials", {
       telegramUser: JSON.stringify(user),
-      redirect: false,
+      redirect: true,
     });
   };
 
