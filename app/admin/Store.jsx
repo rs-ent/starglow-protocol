@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import Footer from "../components/Footer";
 import TelegramLoginButton from "../telegram/login/TelegramLoginButton";
 
@@ -10,12 +11,16 @@ import TelegramLoginButton from "../telegram/login/TelegramLoginButton";
 const Header = dynamic(() => import("../components/Header"), { ssr: false });
 
 export default function Store() {
-  // 티켓 수량 상태
-  const [ticketCount, setTicketCount] = useState(1);
-  // Telegram 로그인 후 사용자 정보를 저장할 상태
   const [telegramUser, setTelegramUser] = useState(null);
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session?.user) {
+      setTelegramUser(JSON.parse(session.user.telegramUser));
+    }
+  }, [session]);
 
-  // 구매 버튼 클릭 시 호출되는 함수
+  const [ticketCount, setTicketCount] = useState(1);
+
   const handlePurchase = async () => {
     if (!telegramUser || !telegramUser.username) {
       alert("구매를 진행하려면 먼저 Telegram 로그인을 해주세요.");

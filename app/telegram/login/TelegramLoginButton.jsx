@@ -9,6 +9,7 @@ export default function TelegramLoginButton() {
   const scriptRef = useRef(null); // 스크립트 요소를 저장하기 위한 ref
   const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
+  const [points, setPoints] = useState(0);
 
   // Telegram 로그인 성공 시 호출되는 콜백 함수
   const onTelegramAuth = (user) => {
@@ -27,6 +28,26 @@ export default function TelegramLoginButton() {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
         scriptRef.current = null;
       }
+
+      const fetchPoints = async () => {
+        try {
+          const response = await fetch(
+            `/api/meme-quest-point-check?username=${encodeURIComponent(
+              session.user.username
+            )}`
+          );
+          if (!response.ok) {
+            throw new Error("포인트를 가져오는데 실패했습니다.");
+          }
+          const data = await response.json();
+          console.log("meme-quest-point-check response:", data);
+          setPoints(data.points || 0);
+        } catch (error) {
+          console.error("Error fetching points:", error);
+        }
+      };
+      fetchPoints();
+
       return;
     }
 
@@ -39,7 +60,7 @@ export default function TelegramLoginButton() {
     script.setAttribute("data-size", "large");
     script.setAttribute("data-userpic", "true");
     script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)"); // 필요 시 "onTelegramAuth"로 변경 가능
+    script.setAttribute("data-onauth", "onTelegramAuth(user)");
     script.async = true;
 
     if (containerRef.current) {
@@ -47,7 +68,6 @@ export default function TelegramLoginButton() {
       scriptRef.current = script;
     }
 
-    // Cleanup: 스크립트와 전역 콜백 제거
     return () => {
       if (scriptRef.current && scriptRef.current.parentNode) {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
@@ -69,7 +89,7 @@ export default function TelegramLoginButton() {
           className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
           onClick={handlePopup}
         >
-          {session.user.username}
+          {session.user.username} ({points.toLocaleString()}P)
         </button>
         {popupOpened && (
           <div
