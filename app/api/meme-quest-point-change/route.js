@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { username, points } = body;
+        const { telegramId, points } = body;
 
-        if (!username || points === undefined) {
+        if (!telegramId || telegramId === undefined) {
             return NextResponse.json(
-                { error: 'username과 points 값이 필요합니다.' },
+                { error: 'telegramId points 값이 필요합니다.' },
                 { status: 400 }
             );
         }
@@ -21,7 +21,7 @@ export async function POST(req) {
                 'Content-Type': 'application/json',
                 'mquest-admin-secret': ADMIN_SECRET,
             },
-            body: JSON.stringify({ username, points }),
+            body: JSON.stringify({ telegramId, points }),
         });
 
         const data = await apiResponse.json();

@@ -46,7 +46,7 @@ export default function TelegramLoginButton() {
           console.error("Error fetching points:", error);
         }
       };
-      fetchPoints();
+      //fetchPoints();
 
       return;
     }

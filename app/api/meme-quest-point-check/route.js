@@ -2,17 +2,17 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
-    const username = searchParams.get('username');
+    const telegramId = searchParams.get('telegramId');
 
-    if (!username) {
+    if (!telegramId) {
         return NextResponse.json(
-            { error: 'username 파라미터가 필요합니다.' },
+            { error: 'telegramId 파라미터가 필요합니다.' },
             { status: 400 }
         );
     }
 
     const ADMIN_SECRET = process.env.NEXT_PUBLIC_MEMEQUEST_SECRET;
-    const apiUrl = `https://api.meme-quest.xyz/starglow/points?username=${encodeURIComponent(username)}`;
+    const apiUrl = `https://api.meme-quest.xyz/starglow/points?telegramId=${encodeURIComponent(telegramId)}`;
 
     try {
         const apiResponse = await fetch(apiUrl, {
