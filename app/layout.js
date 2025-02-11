@@ -1,4 +1,5 @@
 import "./globals.css";
+import Providers from "./context/Providers";
 
 export const metadata = {
   title: 'Starglow Protocol',
@@ -58,7 +59,9 @@ export default function RootLayout({ children }) {
           backgroundColor: 'transparent'
         }}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
