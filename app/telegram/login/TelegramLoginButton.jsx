@@ -18,6 +18,8 @@ export default function TelegramLoginButton() {
   };
 
   useEffect(() => {
+    if (session?.user) return;
+
     window.onTelegramAuth = onTelegramAuth;
 
     const script = document.createElement("script");
@@ -28,7 +30,10 @@ export default function TelegramLoginButton() {
     script.setAttribute("data-request-access", "write");
     script.setAttribute("data-onauth", "onTelegramAuth(user)");
     script.async = true;
-    containerRef.current.appendChild(script);
+
+    if (containerRef.current) {
+      containerRef.current.appendChild(script);
+    }
 
     return () => {
       if (containerRef.current && containerRef.current.contains(script)) {
@@ -50,7 +55,14 @@ export default function TelegramLoginButton() {
         className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
         onClick={handlePopup}
       >
-        {session.user.username}
+        <Image 
+                                src='/ui/telegram-icon.png'
+                                alt='search-icon'
+                                width={17}
+                                height={17}
+                                className="mr-2"
+                            />
+                            Play STARGLOW
       </button>
 
       {popupOpened && (
