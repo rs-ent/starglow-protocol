@@ -6,6 +6,7 @@ import TelegramLogoutButton from "./TelegramLogoutButton";
 
 export default function TelegramLoginButton() {
   const containerRef = useRef(null);
+  const scriptRef = useRef(null); // 스크립트 요소를 저장하기 위한 ref
   const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
 
@@ -20,10 +21,16 @@ export default function TelegramLoginButton() {
   };
 
   useEffect(() => {
-    // 만약 이미 로그인한 상태라면 텔레그램 위젯 스크립트를 로드하지 않음
-    if (session?.user) return;
+    // 로그인 상태라면 이미 스크립트가 있다면 제거하고 새로 추가하지 않음.
+    if (session?.user) {
+      if (scriptRef.current && scriptRef.current.parentNode) {
+        scriptRef.current.parentNode.removeChild(scriptRef.current);
+        scriptRef.current = null;
+      }
+      return;
+    }
 
-    // 전역에 콜백 함수 등록
+    // 로그인하지 않은 상태일 때만 텔레그램 위젯 스크립트를 추가
     window.onTelegramAuth = onTelegramAuth;
 
     const script = document.createElement("script");
@@ -32,16 +39,19 @@ export default function TelegramLoginButton() {
     script.setAttribute("data-size", "large");
     script.setAttribute("data-userpic", "true");
     script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)");
+    script.setAttribute("data-onauth", "onTelegramAuth(user)"); // 필요 시 "onTelegramAuth"로 변경 가능
     script.async = true;
 
     if (containerRef.current) {
       containerRef.current.appendChild(script);
+      scriptRef.current = script;
     }
 
+    // Cleanup: 스크립트와 전역 콜백 제거
     return () => {
-      if (containerRef.current && containerRef.current.contains(script)) {
-        containerRef.current.removeChild(script);
+      if (scriptRef.current && scriptRef.current.parentNode) {
+        scriptRef.current.parentNode.removeChild(scriptRef.current);
+        scriptRef.current = null;
       }
       delete window.onTelegramAuth;
     };
@@ -51,11 +61,11 @@ export default function TelegramLoginButton() {
     setPopupOpened((prev) => !prev);
   };
 
-  // 로그인 상태라면 로그인 완료 박스 렌더링
+  // 로그인 상태라면 로그인 완료 UI 렌더링
   if (session?.user) {
     return (
       <div className="login-completed-box">
-        <button 
+        <button
           className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
           onClick={handlePopup}
         >
@@ -78,5 +88,6 @@ export default function TelegramLoginButton() {
     );
   }
 
+  // 로그인하지 않은 상태일 때는 위젯 스크립트가 붙을 컨테이너 렌더링
   return <div ref={containerRef} />;
 }
