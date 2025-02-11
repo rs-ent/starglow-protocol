@@ -87,8 +87,7 @@ export default function Store() {
                 Voting Ticket
               </h2>
               <p className="mb-6 text-center">
-                Purchase your Voting Ticket to participate in exclusive variety
-                polls!
+                Purchase your Voting Ticket to participate in K-POP POLLS!
               </p>
               <div className="flex items-center justify-center mb-6">
                 <label htmlFor="ticketCount" className="mr-3 text-lg font-main">

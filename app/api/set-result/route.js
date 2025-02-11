@@ -51,7 +51,7 @@ export async function GET(request) {
 
         const koreaTimeString = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
         const koreaTime = new Date(koreaTimeString);
-        koreaTime.setHours(17, 30, 0, 0);
+        koreaTime.setHours(17, 9, 0, 0);
         const scheduledAt = toLocalInputString(koreaTime);
 
         const tweetRegisterRes = await tweetScheduledRegister({
