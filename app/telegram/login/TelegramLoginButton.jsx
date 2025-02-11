@@ -1,32 +1,20 @@
-// app/telegram/login/TelegramLoginButton.jsx
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import TelegramLogoutButton from "./TelegramLogoutButton";
 
 export default function TelegramLoginButton() {
   const containerRef = useRef(null);
-  const [telegramUser, setTelegramUser] = useState(null);
+  const { data: session, status } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    console.log("telegramUser: ", telegramUser);
-    if (!session) {
-      setTelegramUser(null);
-    }
-  }, [session]);
 
   const onTelegramAuth = (user) => {
     console.log("Telegram user:", user);
-    setTelegramUser(user);
-
-    // NextAuth의 Credentials Provider를 통해 로그인 시도
     signIn("credentials", { 
       telegramUser: JSON.stringify(user),
       redirect: false
-    });    
+    });
   };
 
   useEffect(() => {
@@ -54,13 +42,15 @@ export default function TelegramLoginButton() {
     setPopupOpened((prev) => !prev);
   };
 
-  return telegramUser ? (
-    <div>
+  const shouldRenderWidget = status !== "loading" && !session?.user;
+
+  return session?.user ? (
+    <div className="login-completed-box">
       <button 
         className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
         onClick={handlePopup}
       >
-        {telegramUser.username}
+        {session.user.username}
       </button>
 
       {popupOpened && (
@@ -72,7 +62,6 @@ export default function TelegramLoginButton() {
       )}
     </div>
   ) : (
-    <div ref={containerRef} />
+    shouldRenderWidget && <div ref={containerRef} />
   );
 }
-// app/api/auth/%5B...nextauth%5D/route.js
