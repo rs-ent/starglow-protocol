@@ -29,10 +29,10 @@ export default function TelegramLoginButton() {
         scriptRef.current = null;
       }
 
-      const fetchPoints = async () => {
+      /*const fetchPoints = async () => {
         try {
           const response = await fetch(
-            `/api/meme-quest-point-check?username=${encodeURIComponent(
+            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
               session.user.username
             )}`
           );
@@ -46,7 +46,7 @@ export default function TelegramLoginButton() {
           console.error("Error fetching points:", error);
         }
       };
-      //fetchPoints();
+      fetchPoints();*/
 
       return;
     }
