@@ -44,7 +44,7 @@ export async function postTweetReply(text, imageUrl, tags = []) {
 
   try {
     // Twitter API v2의 검색 요청은 최소 max_results가 10이어야 하므로 10으로 요청합니다.
-    const searchResult = await searchWithRetry(client, query, 10, 1);
+    const searchResult = await searchWithRetry(client, query, 1, 1);
     console.log("searchResult:", JSON.stringify(searchResult, null, 2));
 
     if (!searchResult || !searchResult.data || !searchResult.data.data || searchResult.data.data.length === 0) {
