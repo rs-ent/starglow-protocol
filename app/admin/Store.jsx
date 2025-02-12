@@ -20,7 +20,7 @@ export default function Store() {
     if (session?.user) {
       try {
         console.log("Telegram user:", session.user);
-        setTelegramUser(JSON.parse(session.user));
+        setTelegramUser(session.user);
       } catch (error) {
         console.error("Failed to parse telegramUser:", error);
         setTelegramUser(null);
