@@ -19,6 +19,7 @@ export default function Store() {
     // session이 존재하고 telegramUser 값이 있을 경우에만 파싱합니다.
     if (session?.user) {
       try {
+        console.log("Telegram user:", session.user);
         setTelegramUser(JSON.parse(session.user));
       } catch (error) {
         console.error("Failed to parse telegramUser:", error);
