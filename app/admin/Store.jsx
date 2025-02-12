@@ -41,7 +41,7 @@ export default function Store() {
       return;
     }
 
-    const telegramId = telegramUser.id;
+    const telegramId = telegramUser.id + '';
     const addPoints = -votingTicketPrice * ticketCount;
     const data = await changePoints({
       telegramId: telegramUser.id,
