@@ -10,6 +10,7 @@ export default function TelegramLoginButton() {
   const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
   const [points, setPoints] = useState(0);
+  const [telegramUser, setTelegramUser] = useState(null);
 
   // Telegram 로그인 성공 시 호출되는 콜백 함수
   const onTelegramAuth = (user) => {
@@ -20,6 +21,7 @@ export default function TelegramLoginButton() {
           telegramUser: JSON.stringify(user),
           redirect: true,
         });
+        setTelegramUser(user);
       } catch (error) {
         console.error("Failed to parse JSON:", error);
       }
@@ -29,6 +31,26 @@ export default function TelegramLoginButton() {
     }
   };
 
+  useEffect(() => {
+    const fetchPoints = async () => {
+      try {
+        const response = await fetch(
+          `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
+            session.user.id
+          )}`
+        );
+        if (!response.ok) {
+          throw new Error("포인트를 가져오는데 실패했습니다.");
+        }
+        const data = await response.json();
+        console.log("meme-quest-point-check response:", data);
+        setPoints(data.points || 0);
+      } catch (error) {
+        console.error("Error fetching points:", error);
+      }
+    };
+    fetchPoints();
+  }, [telegramUser]);
 
   useEffect(() => {
     // 로그인 상태라면 이미 스크립트가 있다면 제거하고 새로 추가하지 않음.
@@ -37,25 +59,6 @@ export default function TelegramLoginButton() {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
         scriptRef.current = null;
       }
-
-      const fetchPoints = async () => {
-        try {
-          const response = await fetch(
-            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
-              session.user.id
-            )}`
-          );
-          if (!response.ok) {
-            throw new Error("포인트를 가져오는데 실패했습니다.");
-          }
-          const data = await response.json();
-          console.log("meme-quest-point-check response:", data);
-          setPoints(data.points || 0);
-        } catch (error) {
-          console.error("Error fetching points:", error);
-        }
-      };
-      fetchPoints();
 
       return;
     }
