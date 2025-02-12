@@ -14,7 +14,6 @@ export default function TelegramLoginButton() {
   // Telegram 로그인 성공 시 호출되는 콜백 함수
   const onTelegramAuth = (user) => {
     console.log("Telegram user:", user);
-    // NextAuth Credentials Provider를 통해 로그인 시도 (리다이렉트 없이)
     signIn("credentials", {
       telegramUser: JSON.stringify(user),
       redirect: true,
@@ -29,29 +28,10 @@ export default function TelegramLoginButton() {
         scriptRef.current = null;
       }
 
-      /*const fetchPoints = async () => {
-        try {
-          const response = await fetch(
-            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
-              session.user.username
-            )}`
-          );
-          if (!response.ok) {
-            throw new Error("포인트를 가져오는데 실패했습니다.");
-          }
-          const data = await response.json();
-          console.log("meme-quest-point-check response:", data);
-          setPoints(data.points || 0);
-        } catch (error) {
-          console.error("Error fetching points:", error);
-        }
-      };
-      fetchPoints();*/
-
       return;
     }
 
-    // 로그인하지 않은 상태일 때만 텔레그램 위젯 스크립트를 추가
+    // Telegram 로그인 성공 시 호출되는 함수를 전역으로 등록
     window.onTelegramAuth = onTelegramAuth;
 
     const script = document.createElement("script");
@@ -86,7 +66,7 @@ export default function TelegramLoginButton() {
     return (
       <div className="login-completed-box">
         <button
-          className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
+          className="bg-[rgba(84,169,235,1.0)] text-base rounded-full text-white py-2 px-4"
           onClick={handlePopup}
         >
           {session.user.username} ({points.toLocaleString()}P)
@@ -111,3 +91,23 @@ export default function TelegramLoginButton() {
   // 로그인하지 않은 상태일 때는 위젯 스크립트가 붙을 컨테이너 렌더링
   return <div ref={containerRef} />;
 }
+
+
+/*const fetchPoints = async () => {
+        try {
+          const response = await fetch(
+            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
+              session.user.username
+            )}`
+          );
+          if (!response.ok) {
+            throw new Error("포인트를 가져오는데 실패했습니다.");
+          }
+          const data = await response.json();
+          console.log("meme-quest-point-check response:", data);
+          setPoints(data.points || 0);
+        } catch (error) {
+          console.error("Error fetching points:", error);
+        }
+      };
+      fetchPoints();*/
