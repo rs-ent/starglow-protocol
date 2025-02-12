@@ -16,7 +16,8 @@ export default function TodaySong({ poll_id, songIdx = "0" }) {
   const optionsData = poll.options_shorten || poll.options;
   let options = optionsData.split(";");
 
-  let optionsTest = ["YesYesYes", "NoWay", "Noooo"];
+  console.log("title: ", title);
+  console.log("options: ", options);
 
   const img = poll.img;
 
