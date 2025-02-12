@@ -69,7 +69,7 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
     }
 }
 
-export async function clickAccessButton(deviceInfo = {}) {
+export async function clickAccessButton(deviceInfo = {}, type = "toMiniApp") {
     try {
         const docRef = doc(db, "acessButton", "accessButton");
 
@@ -108,6 +108,7 @@ export async function clickAccessButton(deviceInfo = {}) {
             geographic.country,
             geographic.region,
             geographic.city,
+            type,
         ];
         await appendLogButton(rowData);
 

@@ -47,9 +47,6 @@ export default function Store() {
       telegramId: telegramId,
       additionalPoints: addPoints
     });
-    console.log("telegramId:", telegramId);
-    console.log("additionalPoints:", addPoints);
-    console.log("additionalPoints Type", typeof addPoints);
     console.log("changePoints response:", data);
   };
 

@@ -8,14 +8,14 @@ function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
 }
 
-export default function Submitted({ poll_id, title, options, endDate , t }) {
+export default function Submitted({ poll_id, title, options, endDate, t }) {
 
     const shareText = `🌟 STARGLOW K-POP Poll 🚀\n\n` +
-      `"${title}"\n` +
-      `-----------------------\n` +
-      `${options.map((opt, index) => `⚪ ${opt}`).join("\n")}\n\n` +
-      `What do you Think? 🤔` + 
-      `Tap the link and vote ryt now!`;
+        `"${title}"\n` +
+        `-----------------------\n` +
+        `${options.map((opt, index) => `⚪ ${opt}`).join("\n")}\n\n` +
+        `What do you Think? 🤔` +
+        `Tap the link and vote ryt now!`;
     const shareUrl = `https://starglow-protocol.vercel.app/polls/${poll_id}`;
 
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
@@ -33,7 +33,7 @@ export default function Submitted({ poll_id, title, options, endDate , t }) {
     const handleShare = useCallback(async () => {
         try {
             await navigator.clipboard.writeText(shareUrl);
-    
+
             if (navigator.share) {
                 await navigator.share({
                     title: '',
@@ -47,6 +47,32 @@ export default function Submitted({ poll_id, title, options, endDate , t }) {
             console.error('Sharing failed', error);
         }
     }, [poll_id]);
+
+    const handleAccessClick = async () => {
+        let ipData = { ip: "unknown" };
+        try {
+            const res = await fetch("https://api.ipify.org?format=json");
+            ipData = await res.json();
+
+        } catch (err) {
+            console.error("Failed", err);
+        } finally {
+            const deviceInfo = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                deviceMemory: navigator.deviceMemory,
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                devicePixelRatio: window.devicePixelRatio,
+                ipAddress: ipData.ip,
+            };
+
+            const type = "toPollList";
+            clickAccessButton(deviceInfo, type);
+        }
+    };
 
     return (
         <div className="m-4 p-2 flex flex-col min-h-screen items-center justify-center">
@@ -67,7 +93,7 @@ export default function Submitted({ poll_id, title, options, endDate , t }) {
                 className="button-base mt-16"
                 style={{ display: 'flex', alignItems: 'center' }}
             >
-                <Image 
+                <Image
                     src='/ui/share-icon.png'
                     alt='share-icon'
                     width={19}
@@ -80,8 +106,9 @@ export default function Submitted({ poll_id, title, options, endDate , t }) {
                 href="/polls"
                 rel="noreferrer"
                 className="button-base mt-4"
+                onClick={handleAccessClick}
             >
-                <Image 
+                <Image
                     src='/ui/search-icon.png'
                     alt='search-icon'
                     width={17}
@@ -96,7 +123,7 @@ export default function Submitted({ poll_id, title, options, endDate , t }) {
                 rel="noreferrer"
                 className="button-black mt-4 mb-16"
             >
-                <Image 
+                <Image
                     src='/ui/x-icon.png'
                     alt='search-icon'
                     width={15}

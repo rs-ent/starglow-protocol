@@ -77,7 +77,8 @@ export default function PollList({ pollResults }) {
                 ipAddress: ipData.ip,
             };    
             
-            clickAccessButton(deviceInfo);
+            const type = "toMiniApp";
+            clickAccessButton(deviceInfo, type);
         }
     }
 
