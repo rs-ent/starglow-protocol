@@ -13,7 +13,7 @@ const Header = dynamic(() => import("../components/Header"), { ssr: false });
 export default function Store() {
   return (
     <div className="bg-gray-400">
-      test
+      <TelegramLoginButton />
     </div>
   )
 }
