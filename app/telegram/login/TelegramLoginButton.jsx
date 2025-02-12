@@ -13,6 +13,10 @@ export default function TelegramLoginButton() {
 
   // Telegram 로그인 성공 시 호출되는 콜백 함수
   const onTelegramAuth = (user) => {
+    if (!user) {
+      console.error("Telegram user data is undefined.");
+      return;
+    }
     console.log("Telegram user:", user);
     signIn("credentials", {
       telegramUser: JSON.stringify(user),
