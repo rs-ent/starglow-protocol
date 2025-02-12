@@ -31,6 +31,7 @@ export default function Store() {
   }, [session]);
 
   const handlePurchase = async () => {
+    console.log("telegramUser:", telegramUser);
     if (!telegramUser || !telegramUser.username) {
       alert("구매를 진행하려면 먼저 Telegram 로그인을 해주세요.");
       return;
