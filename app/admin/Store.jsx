@@ -117,42 +117,44 @@ export default function Store() {
               </button>
             </div>
 
-            <div className="bg-gray-900 bg-opacity-75 p-8 rounded shadow-lg w-full md:w-1/2 mt-20">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                <label htmlFor="ticketCount" className="mr-3 text-lg font-main">
-                  Telegram ID:
-                </label>
-                <input
-                  type="string"
-                  id="testerId"
-                  name="testerId"
-                  value={testerId}
-                  onChange={(e) => setTesterId(Number(e.target.value))}
-                  className="w-36 border border-gray-300 rounded p-2 text-center text-black"
-                />
+            {process.env.NEXT_PUBLIC_BASE_URL === 'http://localhost:3000' && (
+              <div className="bg-gray-900 bg-opacity-75 p-8 rounded shadow-lg w-full md:w-1/2 mt-20">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <label htmlFor="ticketCount" className="mr-3 text-lg font-main">
+                      Telegram ID:
+                    </label>
+                    <input
+                      type="string"
+                      id="testerId"
+                      name="testerId"
+                      value={testerId}
+                      onChange={(e) => setTesterId(Number(e.target.value))}
+                      className="w-36 border border-gray-300 rounded p-2 text-center text-black"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="ticketCount" className="mr-3 text-lg font-main">
+                      Additional Points:
+                    </label>
+                    <input
+                      type="number"
+                      id="tester"
+                      name="tester"
+                      value={tester}
+                      onChange={(e) => setTester(Number(e.target.value))}
+                      className="w-32 border border-gray-300 rounded p-2 text-center text-black"
+                    />
+                  </div>
                 </div>
-                <div>
-                <label htmlFor="ticketCount" className="mr-3 text-lg font-main">
-                  Additional Points:
-                </label>
-                <input
-                  type="number"
-                  id="tester"
-                  name="tester"
-                  value={tester}
-                  onChange={(e) => setTester(Number(e.target.value))}
-                  className="w-32 border border-gray-300 rounded p-2 text-center text-black"
-                />
-                </div>
+                <button
+                  onClick={handleTester}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded font-main"
+                >
+                  Change Points
+                </button>
               </div>
-              <button
-                onClick={handleTester}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded font-main"
-              >
-                Change Points
-              </button>
-            </div>
+            )}
           </div>
         </div>
       </div>
