@@ -179,7 +179,7 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
                                 height={19}
                                 className="mr-3 drop-shadow-md"
                             />
-                            <h1 className="text-lg drop-shadow-md text-add-outline-1 text-[rgba(255,255,255,0.95)]">
+                            <h1 className="text-lg drop-shadow-md text-add-outline-1 text-[rgba(255,255,255,0.95)] break-all whitespace-pre-line">
                                 {option}
                             </h1>
                         </div>
