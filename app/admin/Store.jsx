@@ -15,6 +15,8 @@ export default function Store() {
   const { data: session } = useSession();
   const [telegramUser, setTelegramUser] = useState(null);
   const [ticketCount, setTicketCount] = useState(1);
+  const [tester, setTester] = useState(0);
+  const [testerId, setTesterId] = useState('7582540534');
   const votingTicketPrice = 100;
 
   useEffect(() => {
@@ -39,12 +41,27 @@ export default function Store() {
       return;
     }
 
+    const telegramId = telegramUser.id;
+    const addPoints = -votingTicketPrice * ticketCount;
     const data = await changePoints({
       telegramId: telegramUser.id,
-      additionalPoints: -votingTicketPrice * ticketCount
+      additionalPoints: addPoints
     });
+    console.log("telegramId:", telegramId);
+    console.log("additionalPoints:", addPoints);
+    console.log("additionalPoints Type", typeof addPoints);
     console.log("changePoints response:", data);
   };
+
+  const handleTester = async () => {
+    const data = await changePoints({
+      telegramId: testerId,
+      additionalPoints: tester
+    });
+    console.log('testerId:', testerId);
+    console.log('tester:', tester);
+    console.log("changePoints response:", data);
+  }
 
   return (
     <>
@@ -100,6 +117,43 @@ export default function Store() {
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded font-main"
               >
                 Purchase Now
+              </button>
+            </div>
+
+            <div className="bg-gray-900 bg-opacity-75 p-8 rounded shadow-lg w-full md:w-1/2 mt-20">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                <label htmlFor="ticketCount" className="mr-3 text-lg font-main">
+                  Telegram ID:
+                </label>
+                <input
+                  type="string"
+                  id="testerId"
+                  name="testerId"
+                  value={testerId}
+                  onChange={(e) => setTesterId(Number(e.target.value))}
+                  className="w-36 border border-gray-300 rounded p-2 text-center text-black"
+                />
+                </div>
+                <div>
+                <label htmlFor="ticketCount" className="mr-3 text-lg font-main">
+                  Additional Points:
+                </label>
+                <input
+                  type="number"
+                  id="tester"
+                  name="tester"
+                  value={tester}
+                  onChange={(e) => setTester(Number(e.target.value))}
+                  className="w-32 border border-gray-300 rounded p-2 text-center text-black"
+                />
+                </div>
+              </div>
+              <button
+                onClick={handleTester}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded font-main"
+              >
+                Change Points
               </button>
             </div>
           </div>
