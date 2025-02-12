@@ -44,7 +44,7 @@ export default function Store() {
     const telegramId = telegramUser.id + '';
     const addPoints = -votingTicketPrice * ticketCount;
     const data = await changePoints({
-      telegramId: telegramUser.id,
+      telegramId: telegramId,
       additionalPoints: addPoints
     });
     console.log("telegramId:", telegramId);
