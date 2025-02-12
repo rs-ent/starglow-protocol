@@ -6,7 +6,9 @@ export const fetchPoints = async ({telegramId}) => {
             )}`
         );
         if (!response.ok) {
-            throw new Error("Failed to fetch points.", response);
+            const error = new Error("Failed to fetch points.");
+            error.response = response;
+            throw error;
         }
         const data = await response.json();
         console.log("meme-quest-point-check response:", data);
@@ -27,7 +29,9 @@ export const changePoints = async ({telegramId, additionalPoints}) => {
             body: JSON.stringify({telegramId, points: additionalPoints}),
         });
         if (!response.ok) {
-            throw new Error("Failed to change points.");
+            const error = new Error("Failed to change points.");
+            error.response = response;
+            throw error;
         }
         const data = await response.json();
         console.log("meme-quest-point-change response:", data);

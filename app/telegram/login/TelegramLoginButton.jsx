@@ -40,9 +40,7 @@ export default function TelegramLoginButton() {
       }  
 
       const getPoints = async () => {
-        console.log("session.user", session.user);
-        console.log("session.user.id", session.user.id);
-        const pt = await fetchPoints(session.user.id);
+        const pt = await fetchPoints({ telegramId: session.user.id });
         setPoints(pt);
       };
       getPoints();
