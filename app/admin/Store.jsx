@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import Footer from "../components/Footer";
 import TelegramLoginButton from "../telegram/login/TelegramLoginButton";
+import { fetchPoints, changePoints } from "../scripts/meme-quest-points";
 
 // Header를 클라이언트 사이드에서 동적으로 로딩합니다.
 const Header = dynamic(() => import("../components/Header"), { ssr: false });
@@ -14,6 +15,7 @@ export default function Store() {
   const { data: session } = useSession();
   const [telegramUser, setTelegramUser] = useState(null);
   const [ticketCount, setTicketCount] = useState(1);
+  const votingTicketPrice = 100;
 
   useEffect(() => {
     // session이 존재하고 telegramUser 값이 있을 경우에만 파싱합니다.
@@ -36,6 +38,9 @@ export default function Store() {
       alert("구매를 진행하려면 먼저 Telegram 로그인을 해주세요.");
       return;
     }
+
+    const data = await changePoints({ telegramId: telegramUser.id, additionalPoints: -votingTicketPrice * ticketCount });
+    console.log("changePoints response:", data);
   };
 
   return (
@@ -68,7 +73,7 @@ export default function Store() {
             {/* Voting Ticket 구매 섹션 */}
             <div className="bg-gray-900 bg-opacity-75 p-8 rounded shadow-lg w-full md:w-1/2">
               <h2 className="text-3xl font-semibold mb-6 text-center">
-                Voting Ticket
+                Voting Ticket ({votingTicketPrice}P)
               </h2>
               <p className="mb-6 text-center">
                 Purchase your Voting Ticket to participate in K-POP POLLS!

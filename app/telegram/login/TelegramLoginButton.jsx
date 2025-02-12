@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import TelegramLogoutButton from "./TelegramLogoutButton";
+import { fetchPoints } from "../../scripts/meme-quest-points";
 
 export default function TelegramLoginButton() {
   const containerRef = useRef(null);
@@ -10,7 +11,6 @@ export default function TelegramLoginButton() {
   const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
   const [points, setPoints] = useState(0);
-  const [telegramUser, setTelegramUser] = useState(null);
 
   // Telegram 로그인 성공 시 호출되는 콜백 함수
   const onTelegramAuth = (user) => {
@@ -37,27 +37,13 @@ export default function TelegramLoginButton() {
       if (scriptRef.current && scriptRef.current.parentNode) {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
         scriptRef.current = null;
-      }
+      }  
 
-      const fetchPoints = async () => {
-        try {
-          const response = await fetch(
-            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
-              session.user.id
-            )}`
-          );
-          if (!response.ok) {
-            throw new Error("포인트를 가져오는데 실패했습니다.");
-          }
-          const data = await response.json();
-          console.log("meme-quest-point-check response:", data);
-          setPoints(data.points || 0);
-        } catch (error) {
-          console.error("Error fetching points:", error);
-        }
+      const getPoints = async () => {
+        const pt = await fetchPoints(session.user.id);
+        setPoints(pt);
       };
-      fetchPoints();
-
+      getPoints();
       return;
     }
 
