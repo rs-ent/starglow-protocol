@@ -33,7 +33,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
 
     const handleShare = useCallback(async () => {
         try {
-            handleAccessClick('toShare');
+            await handleAccessClick('toShare');
             await navigator.clipboard.writeText(shareUrl);
 
             if (navigator.share) {
@@ -51,8 +51,6 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
     }, [poll_id]);
 
     const handleAccessClick = async (type, event) => {
-        event.preventDefault();
-
         let ipData = { ip: "unknown" };
         try {
             const res = await fetch("https://api.ipify.org?format=json");
