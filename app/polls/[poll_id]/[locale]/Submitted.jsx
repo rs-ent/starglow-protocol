@@ -33,7 +33,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
 
     const handleShare = useCallback(async () => {
         try {
-            await handleAccessClick('toShare');
+            handleAccessClick('toShare');
             await navigator.clipboard.writeText(shareUrl);
 
             if (navigator.share) {
