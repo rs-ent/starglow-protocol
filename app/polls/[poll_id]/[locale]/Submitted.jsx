@@ -9,6 +9,39 @@ function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
 }
 
+const copyToClipboard = async (text) => {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        try {
+            await navigator.clipboard.writeText(text);
+            return;
+        } catch (err) {
+            console.warn('Async Clipboard API 실패, fallback 실행', err);
+        }
+    }
+    // fallback: execCommand('copy')
+    fallbackCopyToClipboard(text);
+};
+
+const fallbackCopyToClipboard = (text) => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    // 화면에 보이지 않도록 스타일링
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        const successful = document.execCommand('copy');
+        if (!successful) {
+            console.error('Fallback 복사 실패');
+        }
+    } catch (err) {
+        console.error('Fallback 복사 중 에러 발생', err);
+    }
+    document.body.removeChild(textarea);
+};
+
 export default function Submitted({ poll_id, title, options, endDate, t }) {
 
     const shareText = `🌟 STARGLOW K-POP Poll 🚀\n\n` +
@@ -33,22 +66,28 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
 
     const handleShare = useCallback(async () => {
         try {
-            handleAccessClick('toShare');
-            await navigator.clipboard.writeText(shareUrl);
-
-            if (navigator.share) {
-                await navigator.share({
-                    title: '',
-                    text: shareText,
-                    url: shareUrl,
-                });
-            } else {
-                alert('The Link has been Copied to Clipboard!');
-            }
+          // 공유 액세스 로깅: 사용자 제스처 체인을 끊지 않으려면 fire-and-forget 방식으로 호출
+          handleAccessClick('toShare');
+      
+          // 링크를 클립보드에 복사 (Clipboard API 또는 fallback)
+          await copyToClipboard(shareUrl);
+      
+          // Share API 사용 (지원되는 경우)
+          if (navigator.share && typeof navigator.share === 'function') {
+            await navigator.share({
+              title: '', // 필요에 따라 제목 추가
+              text: shareText,
+              url: shareUrl,
+            });
+          } else {
+            // Share API 미지원 시 사용자에게 알림
+            alert('The link has been copied to your clipboard! Share it with your friends!');
+          }
         } catch (error) {
-            console.error('Sharing failed', error);
+          console.error('공유 실행 실패', error);
+          alert('Sharing failed. Please try again.');
         }
-    }, [poll_id]);
+      }, [poll_id, shareText, shareUrl]);
 
     const handleAccessClick = async (type, event) => {
         let ipData = { ip: "unknown" };
