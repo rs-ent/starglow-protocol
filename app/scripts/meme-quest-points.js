@@ -6,7 +6,7 @@ export const fetchPoints = async ({telegramId}) => {
             )}`
         );
         if (!response.ok) {
-            throw new Error("Failed to fetch points.");
+            throw new Error("Failed to fetch points.", response);
         }
         const data = await response.json();
         console.log("meme-quest-point-check response:", data);
