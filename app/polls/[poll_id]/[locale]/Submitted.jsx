@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Countdown from './Countdown';
 import { useCallback } from 'react';
+import { clickAccessButton } from "../../../firebase/fetch";
 
 function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
@@ -43,12 +44,14 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
             } else {
                 alert('The Link has been Copied to Clipboard!');
             }
+
+            handleAccessClick('toShare');
         } catch (error) {
             console.error('Sharing failed', error);
         }
     }, [poll_id]);
 
-    const handleAccessClick = async () => {
+    const handleAccessClick = async (type) => {
         let ipData = { ip: "unknown" };
         try {
             const res = await fetch("https://api.ipify.org?format=json");
@@ -69,7 +72,6 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
                 ipAddress: ipData.ip,
             };
 
-            const type = "toPollList";
             clickAccessButton(deviceInfo, type);
         }
     };
@@ -106,7 +108,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
                 href="/polls"
                 rel="noreferrer"
                 className="button-base mt-4"
-                onClick={handleAccessClick}
+                onClick={handleAccessClick('toPollList')}
             >
                 <Image
                     src='/ui/search-icon.png'
@@ -122,6 +124,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
                 target="_blank"
                 rel="noreferrer"
                 className="button-black mt-4 mb-16"
+                onClick={handleAccessClick('toX')}
             >
                 <Image
                     src='/ui/x-icon.png'
