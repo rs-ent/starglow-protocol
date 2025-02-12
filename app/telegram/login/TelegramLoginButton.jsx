@@ -39,7 +39,7 @@ export default function TelegramLoginButton() {
     script.setAttribute("data-size", "large");
     script.setAttribute("data-userpic", "true");
     script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)"); // 필요 시 "onTelegramAuth"로 변경 가능
+    script.setAttribute("data-onauth", "onTelegramAuth"); // 필요 시 "onTelegramAuth"로 변경 가능
     script.async = true;
 
     if (containerRef.current) {
