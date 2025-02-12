@@ -33,6 +33,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
 
     const handleShare = useCallback(async () => {
         try {
+            handleAccessClick('toShare');
             await navigator.clipboard.writeText(shareUrl);
 
             if (navigator.share) {
@@ -44,19 +45,18 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
             } else {
                 alert('The Link has been Copied to Clipboard!');
             }
-
-            handleAccessClick('toShare');
         } catch (error) {
             console.error('Sharing failed', error);
         }
     }, [poll_id]);
 
-    const handleAccessClick = async (type) => {
+    const handleAccessClick = async (type, event) => {
+        event.preventDefault();
+
         let ipData = { ip: "unknown" };
         try {
             const res = await fetch("https://api.ipify.org?format=json");
             ipData = await res.json();
-
         } catch (err) {
             console.error("Failed", err);
         } finally {
@@ -73,6 +73,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
             };
 
             clickAccessButton(deviceInfo, type);
+
         }
     };
 
@@ -108,7 +109,7 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
                 href="/polls"
                 rel="noreferrer"
                 className="button-base mt-4"
-                onClick={handleAccessClick('toPollList')}
+                onClick={(e) => handleAccessClick('toPollList', e)}
             >
                 <Image
                     src='/ui/search-icon.png'
@@ -124,11 +125,11 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
                 target="_blank"
                 rel="noreferrer"
                 className="button-black mt-4 mb-16"
-                onClick={handleAccessClick('toX')}
+                onClick={(e) => handleAccessClick('toX', e)}
             >
                 <Image
                     src='/ui/x-icon.png'
-                    alt='search-icon'
+                    alt='x-icon'
                     width={15}
                     height={15}
                     className="mr-2"
