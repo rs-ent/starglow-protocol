@@ -39,7 +39,10 @@ export default function Store() {
       return;
     }
 
-    const data = await changePoints({ telegramId: telegramUser.id, additionalPoints: -votingTicketPrice * ticketCount });
+    const data = await changePoints({
+      telegramId: telegramUser.id,
+      additionalPoints: -votingTicketPrice * ticketCount
+    });
     console.log("changePoints response:", data);
   };
 

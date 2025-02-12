@@ -1,4 +1,4 @@
-export const fetchPoints = async ({telegramId}) => {
+export const fetchPoints = async ({ telegramId }) => {
     try {
         const response = await fetch(
             `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
@@ -19,14 +19,15 @@ export const fetchPoints = async ({telegramId}) => {
     }
 };
 
-export const changePoints = async ({telegramId, additionalPoints}) => {
+export const changePoints = async ({ telegramId, additionalPoints }) => {
     try {
         const response = await fetch("/api/meme-quest-point-change", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({telegramId, points: additionalPoints}),
+            // API 라우트에서 요구하는 구조대로 { telegramId, points }로 전달합니다.
+            body: JSON.stringify({ telegramId, points: additionalPoints }),
         });
         if (!response.ok) {
             const error = new Error("Failed to change points.");
@@ -38,6 +39,6 @@ export const changePoints = async ({telegramId, additionalPoints}) => {
         return data;
     } catch (error) {
         console.error("Error changing points:", error);
-        return {error: error.message};
+        return { error: error.message };
     }
 };
