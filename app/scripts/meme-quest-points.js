@@ -1,8 +1,9 @@
 export const fetchPoints = async ({telegramId}) => {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
         const response = await fetch(
-            `${baseUrl}/api/meme-quest-point-check?telegramId=${encodeURIComponent(telegramId)}`
+            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
+                telegramId
+            )}`
         );
         if (!response.ok) {
             throw new Error("Failed to fetch points.", response);
@@ -18,8 +19,7 @@ export const fetchPoints = async ({telegramId}) => {
 
 export const changePoints = async ({telegramId, additionalPoints}) => {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-        const response = await fetch(`${baseUrl}/api/meme-quest-point-change`, {
+        const response = await fetch("/api/meme-quest-point-change", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
