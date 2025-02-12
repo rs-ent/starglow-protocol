@@ -12,7 +12,8 @@ export default function TodaySong({ poll_id, songIdx = "0" }) {
     return <div></div>;
   }
 
-  const title = poll.title_shorten || poll.title;
+  let title = poll.title_shorten || poll.title;
+  title = title.replace(/，/g, ",");
   const optionsData = poll.options_shorten || poll.options;
   let options = optionsData.split(";");
 
