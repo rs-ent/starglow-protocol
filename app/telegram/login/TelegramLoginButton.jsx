@@ -6,29 +6,19 @@ import TelegramLogoutButton from "./TelegramLogoutButton";
 
 export default function TelegramLoginButton() {
   const containerRef = useRef(null);
-  const scriptRef = useRef(null);
+  const scriptRef = useRef(null); // 스크립트 요소를 저장하기 위한 ref
   const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
-  const [points, setPoints] = useState(0);
 
   // Telegram 로그인 성공 시 호출되는 콜백 함수
   const onTelegramAuth = (user) => {
-    if (user) {
-      try {
-        console.log("Telegram user:", user);
-        signIn("credentials", {
-          telegramUser: JSON.stringify(user),
-          redirect: true,
-        });
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-      }
-    } else {
-      console.error("Telegram user data is undefined.");
-      return;
-    }
+    console.log("Telegram user:", user);
+    // NextAuth Credentials Provider를 통해 로그인 시도 (리다이렉트 없이)
+    signIn("credentials", {
+      telegramUser: JSON.stringify(user),
+      redirect: true,
+    });
   };
-  
 
   useEffect(() => {
     // 로그인 상태라면 이미 스크립트가 있다면 제거하고 새로 추가하지 않음.
@@ -37,11 +27,10 @@ export default function TelegramLoginButton() {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
         scriptRef.current = null;
       }
-
       return;
     }
 
-    // Telegram 로그인 성공 시 호출되는 함수를 전역으로 등록
+    // 로그인하지 않은 상태일 때만 텔레그램 위젯 스크립트를 추가
     window.onTelegramAuth = onTelegramAuth;
 
     const script = document.createElement("script");
@@ -50,7 +39,7 @@ export default function TelegramLoginButton() {
     script.setAttribute("data-size", "large");
     script.setAttribute("data-userpic", "true");
     script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)");
+    script.setAttribute("data-onauth", "onTelegramAuth(user)"); // 필요 시 "onTelegramAuth"로 변경 가능
     script.async = true;
 
     if (containerRef.current) {
@@ -58,6 +47,7 @@ export default function TelegramLoginButton() {
       scriptRef.current = script;
     }
 
+    // Cleanup: 스크립트와 전역 콜백 제거
     return () => {
       if (scriptRef.current && scriptRef.current.parentNode) {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
@@ -76,10 +66,10 @@ export default function TelegramLoginButton() {
     return (
       <div className="login-completed-box">
         <button
-          className="bg-[rgba(84,169,235,1.0)] text-base rounded-full text-white py-2 px-4"
+          className="bg-[#54a9eb] text-base rounded-full text-white py-2 px-4"
           onClick={handlePopup}
         >
-          {session.user.username} ({points.toLocaleString()}P)
+          {session.user.username}
         </button>
         {popupOpened && (
           <div
@@ -101,23 +91,3 @@ export default function TelegramLoginButton() {
   // 로그인하지 않은 상태일 때는 위젯 스크립트가 붙을 컨테이너 렌더링
   return <div ref={containerRef} />;
 }
-
-
-/*const fetchPoints = async () => {
-        try {
-          const response = await fetch(
-            `/api/meme-quest-point-check?telegramId=${encodeURIComponent(
-              session.user.username
-            )}`
-          );
-          if (!response.ok) {
-            throw new Error("포인트를 가져오는데 실패했습니다.");
-          }
-          const data = await response.json();
-          console.log("meme-quest-point-check response:", data);
-          setPoints(data.points || 0);
-        } catch (error) {
-          console.error("Error fetching points:", error);
-        }
-      };
-      fetchPoints();*/
