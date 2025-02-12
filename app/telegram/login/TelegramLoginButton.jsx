@@ -6,7 +6,7 @@ import TelegramLogoutButton from "./TelegramLogoutButton";
 
 export default function TelegramLoginButton() {
   const containerRef = useRef(null);
-  const scriptRef = useRef(null); // 스크립트 요소를 저장하기 위한 ref
+  const scriptRef = useRef(null);
   const { data: session } = useSession();
   const [popupOpened, setPopupOpened] = useState(false);
   const [points, setPoints] = useState(0);
