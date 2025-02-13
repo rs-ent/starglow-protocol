@@ -125,8 +125,7 @@ ${randomReOpen}
 ${randomFinale}
 http://starglow.pro/start
 
-${hashTags.join(" ")}
-${pollTitleHashTag}
+${hashTags.join(" ")} ${pollTitleHashTag}
 #KPOP #POLL #VOTE #VOTING #WEB3 #RWA #KpopRWA`;
 
   return message;
