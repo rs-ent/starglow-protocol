@@ -52,7 +52,7 @@ export default function Store() {
 
   const handleTester = async () => {
     const data = await changePoints({
-      telegramId: testerId,
+      telegramId: testerId + '',
       additionalPoints: tester
     });
     console.log('testerId:', testerId);
