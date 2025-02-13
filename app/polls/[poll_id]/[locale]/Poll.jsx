@@ -185,8 +185,6 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
                         </div>
                     ))}
                 </div>
-
-                
             </div>
             <button
                 className={`

@@ -1,87 +1,108 @@
+function convertHashTag(str) {
+  // 알파벳, 숫자가 아닌 문자들을 기준으로 단어 분리
+  const words = str.split(/[^a-zA-Z0-9]+/);
+
+  // 빈 문자열 제거 및 각 단어의 첫 글자만 대문자로 변환
+  const formattedWords = words
+    .filter(word => word.length > 0)
+    .map(word => word[0].toUpperCase() + word.slice(1).toLowerCase());
+
+  // 해시태그 생성
+  return '#' + formattedWords.join('');
+}
+
 export function CreateAnnouncementText(poll) {
   const pollTitle = poll.title;
+  const pollTitleShorten = pollTitle.title_shorten || '';
+  const pollTitleHashTag = pollTitleShorten ? convertHashTag(pollTitleShorten) : '';
   const pollOptions = poll.options.split(";");
   const songs = poll.song_title.split(";");
 
+  const hashTags = songs.map(function (song) {
+    const artist = song.split(" - ")[0];
+    const title = song.split(" - ")[1];
+    return convertHashTag(artist) + " " + convertHashTag(song);
+  });
+
   const randomReOpens = [
-    "Awesome news – the poll is open again! We’re excited to hear your updated thoughts on the Starglow Mini App.",
-    "Hey there, the poll’s been reopened. Take a moment to share your latest insights on the Starglow Mini App.",
-    "The poll is live again! We’d love to get your feedback—head over to the Starglow Mini App when you can.",
-    "Our poll is back up, and we’d really appreciate hearing from you again. Visit the Starglow Mini App and cast your vote!",
-    "Great news—if you missed voting earlier, the poll is open again. Drop by the Starglow Mini App and let us know what you think.",
-    "It’s reopening time! The poll is available once more on the Starglow Mini App. Your opinion matters, so please join in.",
-    "Your chance to share your thoughts is back. The poll has been reopened on the Starglow Mini App—come vote again!",
-    "We’re reopening the poll—hop in to the Starglow Mini App and share your perspective.",
-    "Reopened and ready for your input! Visit the Starglow Mini App to cast your vote and have your say.",
-    "Good news! The poll is live again. We’d love to hear your updated opinion on the Starglow Mini App.",
-    "The poll is back, and we can’t wait to hear more from you. Log in to the Starglow Mini App and vote at your convenience.",
-    "Missed your chance before? No worries—the poll is open again. Join us on the Starglow Mini App to share your thoughts.",
-    "It’s time to vote again! The poll has reopened on the Starglow Mini App, and we’re eager for your feedback.",
-    "Your voice matters, and the poll is now open again. Head to the Starglow Mini App and let us know what you think.",
-    "We’re excited to announce the poll is reopened. If you have more to say, the Starglow Mini App is waiting for your input.",
-    "Time for a comeback—the poll is open again. Please visit the Starglow Mini App and share your perspective.",
-    "We’re back to collecting your opinions! The poll has reopened on the Starglow Mini App, so feel free to vote again.",
-    "Your feedback drives us, and the poll is now open once more. Log into the Starglow Mini App and cast your vote.",
-    "The poll is live again—don’t miss the chance to update your opinion on the Starglow Mini App.",
-    "Our voting window is open again! We’d be delighted if you could join us on the Starglow Mini App and share your thoughts.",
-    "The poll’s been reactivated! Stop by the Starglow Mini App to update your vote and help shape the conversation.",
-    "Good to have you back! The poll is open again on the Starglow Mini App, and we truly value your perspective.",
-    "We’ve reopened the poll, and we’d love to hear what’s new with you. Check out the Starglow Mini App and cast your vote again.",
-    "Time to update your opinion—the poll is now open again. Join us on the Starglow Mini App for another round of feedback.",
-    "We’re reopening the poll for fresh insights. Visit the Starglow Mini App and share your updated views.",
-    "It’s your chance to weigh in once more—the poll is open again on the Starglow Mini App. Your feedback is important!",
-    "We’re inviting you back to vote—the poll is live again on the Starglow Mini App. We can’t wait to hear your thoughts.",
-    "The poll is open again, and your input is always welcome. Please head over to the Starglow Mini App and share your perspective.",
-    "If you’ve got more to say, now’s your chance—the poll has been reopened on the Starglow Mini App. We look forward to your vote.",
-    "The poll is back in action! Your continued feedback is crucial, so join us on the Starglow Mini App and cast your vote again.",
+    "If you missed voting earlier, now's your chance to have your say— the poll is open again!",
+    "Didn't get a chance to vote before? There's still time— join in, the poll is open again!",
+    "Missed your chance to vote? We're giving you another opportunity— cast your vote now that the poll is open again!",
+    "For anyone who skipped voting, it's not too late— take part as the poll is open again!",
+    "If you didn't get a chance to vote earlier, worry not— your chance has come as the poll is open again!",
+    "No vote yet? The poll is open again—make sure to have your say!",
+    "If you haven't voted yet, seize the moment—the poll is open again!",
+    "Didn't cast your vote earlier? Here's your second chance—participate now that the poll is open again!",
+    "Missed your vote? Don't worry—the poll is open again, ready for your input!",
+    "If you haven't had your say yet, now's the time—get involved as the poll is open again!",
+    "Didn't get around to voting? Now's your chance—join in, the poll is open again!",
+    "If you skipped voting before, you're in luck—the poll is open again for you to make your voice heard!",
+    "For those who missed their chance to vote, now is the time—cast your vote while the poll is open again!",
+    "Didn't manage to vote earlier? Your opportunity is here—take part as the poll is open again!",
+    "If your vote is still pending, now is your moment—get in, the poll is open again!",
+    "No worries if you missed voting before—another chance is here as the poll is open again!",
+    "If you haven't had the chance to share your opinion, now's the time—jump in while the poll is open again!",
+    "Didn't vote before? Now you can catch up— the poll is open again!",
+    "If you haven't cast your vote, here's your reminder—it's open again and waiting for you!",
+    "Missed out on voting? Don't miss this chance—get involved, the poll is open again!",
+    "If you haven't voted yet, the poll is open again—please take a moment to share your opinion.",
+    "Didn't get a chance to vote earlier? The poll is open again for you to share your thoughts.",
+    "If you missed casting your vote, the poll is open again. Your input is welcome.",
+    "Missed your chance to vote before? The poll is open again—feel free to participate.",
+    "For those who haven't voted yet, the poll is open again. We invite you to share your perspective.",
+    "If you skipped voting earlier, now is a good time—the poll is open again.",
+    "If you didn't get around to voting, the poll is open again for your feedback.",
+    "No worries if you missed voting earlier; the poll is open again and we value your input.",
+    "Didn't vote before? The poll is open again, and we welcome your participation.",
+    "If your vote is still pending, please note that the poll is open again."
   ];
 
   const randomFinales = [
-    "Open up the Starglow mini app and let us know! We're waiting for your opinion about it.\n\nJoin Starglow 😀",
-    "Explore the Starglow mini app and share your thoughts with us! We can’t wait to hear from you.\n\nJoin Starglow 😃",
-    "Dive into the Starglow mini app and tell us what you think! Your feedback is important to us.\n\nJoin Starglow 😄",
-    "Try out the Starglow mini app and drop us your comments! We are eager to learn from you.\n\nJoin Starglow 😁",
-    "Fire up the Starglow mini app and share your thoughts! We're excited to hear your feedback.\n\nJoin Starglow 😆",
-    "Experience the magic of the Starglow mini app – your feedback lights up our day!\n\nJoin Starglow 😊",
-    "Step into the world of Starglow and share your thoughts – we value every opinion!\n\nJoin Starglow 🙂",
-    "Explore the Starglow mini app and let your voice be heard – your feedback is our inspiration.\n\nJoin Starglow 🥰",
-    "Dive into the Starglow mini app and tell us what you love most – we can’t wait to hear from you!\n\nJoin Starglow 😘",
-    "Give the Starglow mini app a try and share your experience with us – every thought counts.\n\nJoin Starglow 😙",
-    "Uncover the hidden gems of the Starglow mini app and drop us your feedback – we’re excited to listen!\n\nJoin Starglow 😋",
-    "Join us in exploring the Starglow mini app and share your perspective – your opinion matters.\n\nJoin Starglow 😝",
-    "Check out the new features in the Starglow mini app and let us know what you think – your voice drives us!\n\nJoin Starglow 🤪",
-    "Experience the ease of using the Starglow mini app and drop your thoughts – every feedback makes a difference.\n\nJoin Starglow 🥳",
-    "Take a moment to explore the Starglow mini app and share your experience – we're eager to hear from you.\n\nJoin Starglow 🤗",
-    "Step in and try the Starglow mini app – your honest opinion can spark innovation!\n\nJoin Starglow 😀",
-    "Explore, engage, and let us know your thoughts on the Starglow mini app – every feedback is appreciated.\n\nJoin Starglow 😃",
-    "Discover the possibilities with the Starglow mini app and tell us what you think – your insights matter.\n\nJoin Starglow 😄",
-    "Give the Starglow mini app a spin and share your impressions – we're all ears for your feedback.\n\nJoin Starglow 😁",
-    "Engage with the Starglow mini app today and let us know your thoughts – your feedback is our fuel.\n\nJoin Starglow 😆",
-    "Experience innovation with the Starglow mini app and drop your feedback – your input makes us better.\n\nJoin Starglow 😆",
-    "Try the Starglow mini app now and tell us your thoughts – every opinion counts.\n\nJoin Starglow 🙂",
-    "Open the Starglow mini app and share your experience – your feedback brightens our path forward.\n\nJoin Starglow 😆",
-    "Discover a new world in the Starglow mini app and let us know what you think – your voice matters.\n\nJoin Starglow 😘",
-    "Check out the latest in the Starglow mini app and drop us a comment – we value your feedback.\n\nJoin Starglow 😆",
-    "Take a tour of the Starglow mini app and tell us your favorite parts – your opinion guides us!\n\nJoin Starglow 😘",
-    "Explore the exciting features of the Starglow mini app and share your insights – every detail counts.\n\nJoin Starglow 😆",
-    "Dive into the features of the Starglow mini app and drop your thoughts – your feedback inspires us!\n\nJoin Starglow 😘",
-    "Experience the future with the Starglow mini app and let us know what you think – your feedback is key.\n\nJoin Starglow 😆",
-    "Step into innovation with the Starglow mini app and share your experience – every opinion shapes our journey.\n\nJoin Starglow 😘",
-    "Open the Starglow mini app and give us your take on it – your insights make all the difference.\n\nJoin Starglow 😆",
-    "Explore the intuitive design of the Starglow mini app and share your thoughts – we're eager for your feedback.\n\nJoin Starglow 😆",
-    "Give the Starglow mini app a try and let us know your impressions – your feedback powers our progress.\n\nJoin Starglow 😆",
-    "Experience the simplicity of the Starglow mini app and share your experience – your feedback is invaluable.\n\nJoin Starglow 😁",
-    "Take the opportunity to try the Starglow mini app and drop your thoughts – we’re excited to hear from you!\n\nJoin Starglow 😆",
-    "Step into the experience of the Starglow mini app and let us know your views – every comment counts.\n\nJoin Starglow 😊",
-    "Engage with the innovative Starglow mini app and share what you think – your opinion drives us forward.\n\nJoin Starglow 😘",
-    "Explore the creative side of the Starglow mini app and give us your feedback – we’re listening!\n\nJoin Starglow 😆",
-    "Check out the Starglow mini app and tell us your thoughts – your feedback sparks our innovation.\n\nJoin Starglow 😁",
-    "Open up the Starglow mini app and share your genuine opinion – every feedback helps us grow.\n\nJoin Starglow 😆",
-    "Discover the benefits of the Starglow mini app and drop us your insights – your thoughts matter.\n\nJoin Starglow 🤪",
-    "Experience a new way of connecting with the Starglow mini app and share your experience – your feedback inspires change.\n\nJoin Starglow 😆",
-    "Take a look at the Starglow mini app and let us know your thoughts – your feedback lights our way.\n\nJoin Starglow 😆",
-    "Embrace the innovation in the Starglow mini app and drop a comment – we value every opinion.\n\nJoin Starglow 😁",
-    "Try out the Starglow mini app and share your honest feedback – your insights drive our creativity.\n\nJoin Starglow 🤪",
+    "Open Starglow and share your feedback. Join #Starglow 😀",
+    "Explore Starglow and share your thoughts. Join #Starglow 😃",
+    "Try out Starglow and let us know what you think. Your feedback matters. Join #Starglow 😄",
+    "Try out Starglow and share your comments. We value your input. Join #Starglow 😁",
+    "Launch Starglow and share your thoughts. We're looking forward to your feedback. Join #Starglow 😆",
+    "Experience Starglow and share your feedback – your input is appreciated. Join #Starglow 😊",
+    "Explore Starglow and share your thoughts – we value your opinion. Join #Starglow 🙂",
+    "Explore Starglow and share your voice – we appreciate your feedback. Join #Starglow 🥰",
+    "Try Starglow and let us know what you love. We look forward to your input. Join #Starglow 😘",
+    "Give Starglow a try and share your experience – every opinion matters. Join #Starglow 😙",
+    "Discover Starglow and share your feedback – we welcome your input. Join #Starglow 😋",
+    "Explore Starglow and share your perspective – your opinion matters. Join #Starglow 😝",
+    "Check out the new features in Starglow and tell us what you think – your feedback helps us improve. Join #Starglow 🤪",
+    "Experience using Starglow and share your thoughts – every piece of feedback makes a difference. Join #Starglow 🥳",
+    "Take a moment to explore Starglow and share your experience – we look forward to your feedback. Join #Starglow 🤗",
+    "Try Starglow and share your honest opinion – your feedback helps us improve. Join #Starglow 😀",
+    "Explore Starglow and share your thoughts – we appreciate your feedback. Join #Starglow 😃",
+    "Discover what Starglow offers and let us know your thoughts – your insights matter. Join #Starglow 😄",
+    "Try Starglow and share your impressions – we welcome your feedback. Join #Starglow 😁",
+    "Try Starglow today and let us know your thoughts – your feedback helps us improve. Join #Starglow 😆",
+    "Experience Starglow and share your feedback – your input helps us improve. Join #Starglow 😆",
+    "Try Starglow now and share your thoughts – every opinion counts. Join #Starglow 🙂",
+    "Open Starglow and share your experience – your feedback guides us. Join #Starglow 😆",
+    "Discover what Starglow has to offer and share your thoughts – your voice matters. Join #Starglow 😘",
+    "Check out the latest in Starglow and leave a comment – we value your feedback. Join #Starglow 😆",
+    "Take a tour of Starglow and let us know your favorite features – your opinion guides us. Join #Starglow 😘",
+    "Explore the features of Starglow and share your insights – every detail counts. Join #Starglow 😆",
+    "Review the features of Starglow and share your thoughts – your feedback helps us improve. Join #Starglow 😘",
+    "Experience Starglow and let us know what you think – your feedback is important. Join #Starglow 😆",
+    "Explore Starglow and share your experience – every opinion helps us improve. Join #Starglow 😘",
+    "Open Starglow and give us your feedback – your insights make a difference. Join #Starglow 😆",
+    "Explore the design of Starglow and share your thoughts – we welcome your feedback. Join #Starglow 😆",
+    "Try Starglow and share your impressions – your feedback helps us progress. Join #Starglow 😆",
+    "Experience Starglow and share your experience – your feedback is valuable. Join #Starglow 😁",
+    "Take a moment to try Starglow and share your thoughts – we look forward to your feedback. Join #Starglow 😆",
+    "Try Starglow and share your views – every comment counts. Join #Starglow 😊",
+    "Try Starglow and share what you think – your opinion helps us improve. Join #Starglow 😘",
+    "Explore Starglow and share your feedback – we’re listening. Join #Starglow 😆",
+    "Check out Starglow and share your thoughts – your feedback encourages us. Join #Starglow 😁",
+    "Open Starglow and share your genuine opinion – each piece of feedback helps us grow. Join #Starglow 😆",
+    "Discover the benefits of Starglow and share your insights – your thoughts matter. Join #Starglow 🤪",
+    "Experience Starglow and share your experience – your feedback helps us improve. Join #Starglow 😆",
+    "Take a look at Starglow and share your thoughts – your feedback guides us. Join #Starglow 😆",
+    "Experience Starglow and drop a comment – we value your opinion. Join #Starglow 😁",
+    "Try Starglow and share your honest feedback – your insights help us improve. Join #Starglow 🤪",
   ];
 
   const randomReOpen =
@@ -102,7 +123,11 @@ export function CreateAnnouncementText(poll) {
 
 ${randomReOpen}
 ${randomFinale}
-http://starglow.pro/start`;
+http://starglow.pro/start
+
+${hashTags.join(" ")}
+${pollTitleHashTag}
+#KPOP #POLL #VOTE #VOTING #WEB3 #RWA #KpopRWA`;
 
   return message;
 }
