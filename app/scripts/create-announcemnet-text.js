@@ -21,7 +21,7 @@ export function CreateAnnouncementText(poll) {
   const hashTags = songs.map(function (song) {
     const artist = song.split(" - ")[0];
     const title = song.split(" - ")[1];
-    return convertHashTag(artist) + " " + convertHashTag(song);
+    return convertHashTag(artist) + " " + convertHashTag(title) + " " + convertHashTag(song);
   });
 
   const randomReOpens = [
