@@ -1,18 +1,50 @@
-"use client";
+import LocaleNavigator from "./LocaleNavigator";
+import { getSheetsData } from "../../scripts/google-sheets-data";
 
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+export async function generateMetadata({ params }) {
+    const { poll_id } = params;
+    const pollData = await getSheetsData();
+    const poll = pollData?.[poll_id];
 
-export default function PollHome() {
-    const { poll_id } = useParams();
-    const router = useRouter();
+    const title = poll?.title
+        ? `[POLL #${poll_id}] ${poll.title}`
+        : `Starglow K-POP Poll #${poll_id}`;
 
-    useEffect(() => {
-        let locale = "en";
-        if (navigator.language.toLowerCase().startsWith("ko")) {
-            locale = "ko";
-        }
-        router.replace(`/polls/${poll_id}/${locale}`);
-        
-    }, [poll_id, router]);
+    const description = poll?.options
+        ? `#${poll.options.split(';').join(' #')}`
+        : "Participate in our K-POP Poll!";
+
+    const image = poll?.poll_announce_img || poll?.img || '/images/link_image.webp';
+
+    return {
+        title: title,
+        description: description,
+        openGraph: {
+            title: title,
+            description: description,
+            url: `https://starglow-protocol.vercel.app/polls/${poll_id}`,
+            images: [
+                {
+                    url: image,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
+            siteName: "Starglow Protocol",
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: title,
+            description: description,
+            images: [image],
+        },
+    };
+}
+
+export default async function PollHome({ params }) {
+    const { poll_id } = await params;
+
+    return <LocaleNavigator poll_id={poll_id} />;
 };

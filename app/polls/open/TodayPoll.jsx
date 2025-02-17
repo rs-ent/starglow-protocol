@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { DataContext } from "../../context/PollData";
 import { Textfit } from "react-textfit";
 
-export default function TodaySong({ poll_id, songIdx = "0" }) {
-  const pollData = useContext(DataContext);
-  const poll = pollData?.[poll_id];
+export default function TodayPoll({ poll, poll_id }) {
 
   if (!poll_id || !poll || !poll.title) {
     return <div></div>;

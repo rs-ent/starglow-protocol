@@ -3,13 +3,11 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { DataContext } from "../../context/PollData";
 
-export default function TodaySong ({ poll_id, songIdx = '0' }) {
-    const pollData = useContext(DataContext);
-    const poll = pollData?.[poll_id];
-    
+export default function TodaySong ({ poll, poll_id, songIdx = '0' }) {
     if (!poll_id || !poll || !poll.title){
         return <div></div>
     };
+    
     const song = poll.song_title.split(';')[songIdx];
     const img = poll.song_img.split(';')[songIdx];
 

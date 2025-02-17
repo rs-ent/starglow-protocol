@@ -14,7 +14,7 @@ function parseAsKST(dateStrWithoutTZ) {
     return new Date(dateStrWithoutTZ.replace(" ", "T") + ":00+09:00");
 }
 
-export default function Poll({ poll_id, t, overrideToday = null, overrideStart = null, overrideEnd = null, overrideVoted = false, preview = false }) {
+export default function Poll({ poll, poll_id, t, overrideToday = null, overrideStart = null, overrideEnd = null, overrideVoted = false, preview = false }) {
     const router = useRouter();
 
     const [voted, setVoted] = useState(false);
@@ -25,8 +25,6 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [blink, setBlink] = useState(false);
 
-    const pollData = useContext(DataContext);
-    const poll = pollData?.[poll_id];
     if (!poll_id || !poll || !poll.title){
         router.replace('/polls');
         return <div></div>
@@ -66,7 +64,6 @@ export default function Poll({ poll_id, t, overrideToday = null, overrideStart =
             : parseAsKST(poll.start);
 
         if (today < startDate) {
-            if(!preview) router.replace('/polls');
             setLoading(true);
         }
 

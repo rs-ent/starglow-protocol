@@ -30,10 +30,7 @@ function toLocalInputString(date) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-export default function PollAdmin({ poll_id, result }) {
-  const pollData = useContext(DataContext);
-  const poll = pollData?.[poll_id];
-
+export default function PollAdmin({ poll, poll_id, result }) {
   // 항상 호출되는 훅을 위해 validPoll 변수 사용
   const validPoll = poll && poll.title;
 
