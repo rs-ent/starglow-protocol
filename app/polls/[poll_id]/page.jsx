@@ -15,6 +15,7 @@ export async function generateMetadata({ params }) {
         : "Participate in our K-POP Poll!";
 
     const image = poll?.poll_announce_img || poll?.img || '/images/link_image.webp';
+    console.log("Image: ", image);
 
     return {
         title: title,

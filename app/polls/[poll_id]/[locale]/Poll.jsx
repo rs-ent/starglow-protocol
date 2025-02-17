@@ -2,7 +2,6 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { DataContext } from "../../../context/PollData";
 import { submitVote } from "../../../firebase/fetch";
 import Image from "next/image";
 import Countdown from './Countdown';
@@ -58,12 +57,14 @@ export default function Poll({ poll, poll_id, t, overrideToday = null, overrideS
         const today = overrideToday
             ? new Date(overrideToday)
             : new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+
+        const openOffset = new Date(today.getTime() + 30 * 60 * 1000);
         
         const startDate = overrideStart
             ? new Date(overrideStart)
             : parseAsKST(poll.start);
 
-        if (today < startDate) {
+        if (openOffset < startDate) {
             setLoading(true);
         }
 
@@ -90,7 +91,7 @@ export default function Poll({ poll, poll_id, t, overrideToday = null, overrideS
         }
     }
 
-    if (loading) {
+    if (loading && !preview) {
         return <div></div>
     }
 

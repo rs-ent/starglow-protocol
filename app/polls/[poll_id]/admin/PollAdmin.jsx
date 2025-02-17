@@ -335,6 +335,7 @@ export default function PollAdmin({ poll, poll_id, result }) {
         {viewMode === "poll" ? (
           <main className="flex-grow max-w-[480px] mx-auto min-h-dvh overflow-x-hidden bg-[url('/poll-bg.png')] bg-top bg-no-repeat bg-fixed bg-black bg-blend-multiply bg-opacity-15 shadow-xl">
             <Poll
+              poll={poll}
               poll_id={poll_id}
               t={t}
               overrideToday={adminToday}
