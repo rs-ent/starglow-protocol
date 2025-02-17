@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
             card: "summary_large_image",
             title: title,
             description: description,
-            images: [image],
+            images: image,
         },
     };
 }
