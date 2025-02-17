@@ -7,8 +7,8 @@ export async function generateMetadata({ params }) {
     const poll = pollData?.[poll_id];
 
     const title = poll?.title
-        ? `[POLL #${poll_id}] ${poll.title}`
-        : `Starglow K-POP Poll #${poll_id}`;
+        ? `[POLL #${poll_id.replace('p', '')}] ${poll.title}`
+        : `Starglow K-POP Poll #${poll_id.replace('p', '')}`;
 
     const description = poll?.options
         ? `#${poll.options.split(';').join(' #')}`
