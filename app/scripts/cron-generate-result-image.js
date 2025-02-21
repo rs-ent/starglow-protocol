@@ -11,7 +11,7 @@ export async function runCronGenerateResultImage() {
       const sheets = getSheetsClient();
       const readRes = await sheets.spreadsheets.values.get({
         spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
-        range: "Poll List!A:R", // 시트 범위에 맞춰 수정
+        range: "Poll List!A:Z", // 시트 범위에 맞춰 수정
       });
       const rows = readRes.data.values;
       if (!rows || rows.length < 2) {
