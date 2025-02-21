@@ -1,7 +1,7 @@
 // app\scripts\cron-generate-today-song.js
 
 import admin from "firebase-admin";
-import { getSheetsClient } from "../google-sheets/getSheetsClient";
+import { getSheetsData } from "./google-sheets-data";
 import { createTodayPollImg } from "./create-today-poll-image";
 import { CreateAnnouncementText } from "./create-announcemnet-text";
 import { updateTodayPoll } from "./update-today-poll-only";
@@ -21,59 +21,33 @@ export async function runCronGeneratePollImage() {
             });
         }
 
-        const sheets = getSheetsClient();
-        const readRes = await sheets.spreadsheets.values.get({
-            spreadsheetId: "1ZRL_ifqMs35BHOgYMxY59xUTb-l5r2HdCnI1GTneni4",
-            range: "Poll List!A:Z", // 시트 범위에 맞춰 수정
-        });
-        const rows = readRes.data.values;
-        if (!rows || rows.length < 2) {
-            console.log("No data or just header in sheet");
-            return { success: true, processed: 0 };
-        }
-
-        // (C) 헤더에서 end / poll_id 열 인덱스 찾기
-        const header = rows[0];
-        const endIndex = header.indexOf("end");
-        const pollIdIndex = header.indexOf("poll_id");
-        const pollTitleIndex = header.indexOf("title");
-        const pollOptionIndex = header.indexOf("options_shorten");
-        const pollImgIndex = header.indexOf("poll_announce_img");
-        if (endIndex === -1 || pollIdIndex === -1) {
-            console.log("No 'end' or 'poll_id' column found in header");
-            return { success: true, processed: 0 };
-        }
+        const sheetsData = await getSheetsData();
+        const rows = sheetsData;
 
         let targetIndex = 0;
         const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
         let latestEndDate = new Date();
         latestEndDate.setFullYear(now.getFullYear() + 20);
-        for (let i = 1; i < rows.length; i++) {
-            const row = rows[i];
+        Object.values(rows).forEach((row) => {
             // end, pollId 가져오기
-            const endValue = row[endIndex];
-            const pollId = row[pollIdIndex];
-            if (!endValue || !pollId) continue;
+            const endValue = row.end;
+            const pollId = row.poll_id;
 
             // 날짜 비교
             const endDate = new Date(endValue.trim());
-            if (isNaN(endDate.getTime())) {
-                // endValue가 날짜로 파싱 안 될 경우 스킵
-                continue;
-            }
 
-            const pollTitle = row[pollTitleIndex];
-            const pollOption = row[pollOptionIndex].split(";");
-            const pollImg = row[pollImgIndex];
+            const pollTitle = row.title;
+            const pollOption = row.options.split(";");
+            const pollImg = row.poll_announce_img;
 
             if (now < endDate && endDate < latestEndDate && pollTitle && pollOption.length > 1 && !pollImg) {
                 latestEndDate = endDate;
-                targetIndex = i;
+                targetIndex = pollId;
             }
-        }
+        });
 
         const row = rows[targetIndex];
-        const pollId = row[pollIdIndex];
+        const pollId = row.poll_id;
         const buffer = await createTodayPollImg(pollId);
         if (!buffer) {
             throw new Error("Failed to create poll image");
@@ -90,11 +64,7 @@ export async function runCronGeneratePollImage() {
         const url = `https://storage.googleapis.com/${bucket.name
             }/${encodeURIComponent(filename)}`;
 
-        const rowObject = {};
-        header.forEach((key, index) => {
-            rowObject[key] = row[index];
-        });
-        const message = CreateAnnouncementText(rowObject);
+        const message = CreateAnnouncementText(row);
 
         const result = await updateTodayPoll(pollId, url, message);
         return { success: true, result };
