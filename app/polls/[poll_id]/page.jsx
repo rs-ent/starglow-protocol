@@ -7,15 +7,19 @@ export async function generateMetadata({ params }) {
     const poll = pollData?.[poll_id];
 
     const title = poll?.title
-        ? `[POLL #${poll_id.replace('p', '')}] ${poll.title}`
-        : `Starglow K-POP Poll #${poll_id.replace('p', '')}`;
+        ? `[POLL #${poll_id.slice(1)}] ${poll.title}`
+        : `Starglow K-POP Poll #${poll_id.slice(1)}`;
 
     const description = poll?.options
         ? `#${poll.options.split(';').join(' #')}`
         : "Participate in our K-POP Poll!";
 
-    const image = poll?.poll_announce_img || poll?.img || '/images/link_image.webp';
-    console.log("Image: ", image);
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://starglow-protocol.vercel.app';
+    let image = poll?.poll_announce_img || poll?.img || '/images/link_image.jpg';
+
+    if (image.startsWith('/')) {
+        image = baseUrl + image;
+    }
 
     return {
         title: title,
@@ -23,7 +27,7 @@ export async function generateMetadata({ params }) {
         openGraph: {
             title: title,
             description: description,
-            url: `https://starglow-protocol.vercel.app/polls/${poll_id}`,
+            url: `${baseUrl}/polls/${poll_id}`,
             images: [
                 {
                     url: image,
@@ -39,10 +43,11 @@ export async function generateMetadata({ params }) {
             card: "summary_large_image",
             title: title,
             description: description,
-            images: [image],
+            images: image,
         },
     };
 }
+
 
 export default async function PollHome({ params }) {
     const { poll_id } = await params;
