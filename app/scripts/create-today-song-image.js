@@ -31,11 +31,13 @@ export async function createTodaySongImg(pollId, songIdx) {
     const targetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/polls/open?pollId=${pollId}&type=song&songIdx=${songIdx}`;
     console.log(targetUrl);
     await page.goto(targetUrl, { waitUntil: "networkidle0" });
+    await page.waitForSelector(".today-song-wrapper", { timeout: 10000 });
     await page.evaluate(() => {
         document.body.style.background = "transparent";
     });
 
     // 3) 특정 DOM 요소 스크린샷
+
     const element = await page.$(".today-song-wrapper");
     if (!element) {
         throw new Error("Element .today-song-wrapper not found");

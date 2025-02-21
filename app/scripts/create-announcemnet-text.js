@@ -12,8 +12,9 @@ function convertHashTag(str) {
 }
 
 export function CreateAnnouncementText(poll) {
+  console.log(poll);
   const pollTitle = poll.title;
-  const pollTitleShorten = pollTitle.title_shorten || '';
+  const pollTitleShorten = poll.title_shorten || '';
   const pollTitleHashTag = pollTitleShorten ? convertHashTag(pollTitleShorten) : '';
   const pollOptions = poll.options.split(";");
   const songs = poll.song_title.split(";");
@@ -58,51 +59,51 @@ export function CreateAnnouncementText(poll) {
   ];
 
   const randomFinales = [
-    "Open Starglow and share your feedback. Join #Starglow 😀",
-    "Explore Starglow and share your thoughts. Join #Starglow 😃",
-    "Try out Starglow and let us know what you think. Your feedback matters. Join #Starglow 😄",
-    "Try out Starglow and share your comments. We value your input. Join #Starglow 😁",
-    "Launch Starglow and share your thoughts. We're looking forward to your feedback. Join #Starglow 😆",
-    "Experience Starglow and share your feedback – your input is appreciated. Join #Starglow 😊",
-    "Explore Starglow and share your thoughts – we value your opinion. Join #Starglow 🙂",
-    "Explore Starglow and share your voice – we appreciate your feedback. Join #Starglow 🥰",
-    "Try Starglow and let us know what you love. We look forward to your input. Join #Starglow 😘",
-    "Give Starglow a try and share your experience – every opinion matters. Join #Starglow 😙",
-    "Discover Starglow and share your feedback – we welcome your input. Join #Starglow 😋",
-    "Explore Starglow and share your perspective – your opinion matters. Join #Starglow 😝",
-    "Check out the new features in Starglow and tell us what you think – your feedback helps us improve. Join #Starglow 🤪",
-    "Experience using Starglow and share your thoughts – every piece of feedback makes a difference. Join #Starglow 🥳",
-    "Take a moment to explore Starglow and share your experience – we look forward to your feedback. Join #Starglow 🤗",
-    "Try Starglow and share your honest opinion – your feedback helps us improve. Join #Starglow 😀",
-    "Explore Starglow and share your thoughts – we appreciate your feedback. Join #Starglow 😃",
-    "Discover what Starglow offers and let us know your thoughts – your insights matter. Join #Starglow 😄",
-    "Try Starglow and share your impressions – we welcome your feedback. Join #Starglow 😁",
-    "Try Starglow today and let us know your thoughts – your feedback helps us improve. Join #Starglow 😆",
-    "Experience Starglow and share your feedback – your input helps us improve. Join #Starglow 😆",
-    "Try Starglow now and share your thoughts – every opinion counts. Join #Starglow 🙂",
-    "Open Starglow and share your experience – your feedback guides us. Join #Starglow 😆",
-    "Discover what Starglow has to offer and share your thoughts – your voice matters. Join #Starglow 😘",
-    "Check out the latest in Starglow and leave a comment – we value your feedback. Join #Starglow 😆",
-    "Take a tour of Starglow and let us know your favorite features – your opinion guides us. Join #Starglow 😘",
-    "Explore the features of Starglow and share your insights – every detail counts. Join #Starglow 😆",
-    "Review the features of Starglow and share your thoughts – your feedback helps us improve. Join #Starglow 😘",
-    "Experience Starglow and let us know what you think – your feedback is important. Join #Starglow 😆",
-    "Explore Starglow and share your experience – every opinion helps us improve. Join #Starglow 😘",
-    "Open Starglow and give us your feedback – your insights make a difference. Join #Starglow 😆",
-    "Explore the design of Starglow and share your thoughts – we welcome your feedback. Join #Starglow 😆",
-    "Try Starglow and share your impressions – your feedback helps us progress. Join #Starglow 😆",
-    "Experience Starglow and share your experience – your feedback is valuable. Join #Starglow 😁",
-    "Take a moment to try Starglow and share your thoughts – we look forward to your feedback. Join #Starglow 😆",
-    "Try Starglow and share your views – every comment counts. Join #Starglow 😊",
-    "Try Starglow and share what you think – your opinion helps us improve. Join #Starglow 😘",
-    "Explore Starglow and share your feedback – we’re listening. Join #Starglow 😆",
-    "Check out Starglow and share your thoughts – your feedback encourages us. Join #Starglow 😁",
-    "Open Starglow and share your genuine opinion – each piece of feedback helps us grow. Join #Starglow 😆",
-    "Discover the benefits of Starglow and share your insights – your thoughts matter. Join #Starglow 🤪",
-    "Experience Starglow and share your experience – your feedback helps us improve. Join #Starglow 😆",
-    "Take a look at Starglow and share your thoughts – your feedback guides us. Join #Starglow 😆",
-    "Experience Starglow and drop a comment – we value your opinion. Join #Starglow 😁",
-    "Try Starglow and share your honest feedback – your insights help us improve. Join #Starglow 🤪",
+    "Open Starglow and share your feedback.\n\nJoin #Starglow 😀",
+    "Explore Starglow and share your thoughts.\n\nJoin #Starglow 😃",
+    "Try out Starglow and let us know what you think. Your feedback matters.\n\nJoin #Starglow 😄",
+    "Try out Starglow and share your comments. We value your input.\n\nJoin #Starglow 😁",
+    "Launch Starglow and share your thoughts. We're looking forward to your feedback.\n\nJoin #Starglow 😆",
+    "Experience Starglow and share your feedback – your input is appreciated.\n\nJoin #Starglow 😊",
+    "Explore Starglow and share your thoughts – we value your opinion.\n\nJoin #Starglow 🙂",
+    "Explore Starglow and share your voice – we appreciate your feedback.\n\nJoin #Starglow 🥰",
+    "Try Starglow and let us know what you love. We look forward to your input.\n\nJoin #Starglow 😘",
+    "Give Starglow a try and share your experience – every opinion matters.\n\nJoin #Starglow 😙",
+    "Discover Starglow and share your feedback – we welcome your input.\n\nJoin #Starglow 😋",
+    "Explore Starglow and share your perspective – your opinion matters.\n\nJoin #Starglow 😝",
+    "Check out the new features in Starglow and tell us what you think – your feedback helps us improve.\n\nJoin #Starglow 🤪",
+    "Experience using Starglow and share your thoughts – every piece of feedback makes a difference.\n\nJoin #Starglow 🥳",
+    "Take a moment to explore Starglow and share your experience – we look forward to your feedback.\n\nJoin #Starglow 🤗",
+    "Try Starglow and share your honest opinion – your feedback helps us improve.\n\nJoin #Starglow 😀",
+    "Explore Starglow and share your thoughts – we appreciate your feedback.\n\nJoin #Starglow 😃",
+    "Discover what Starglow offers and let us know your thoughts – your insights matter.\n\nJoin #Starglow 😄",
+    "Try Starglow and share your impressions – we welcome your feedback.\n\nJoin #Starglow 😁",
+    "Try Starglow today and let us know your thoughts – your feedback helps us improve.\n\nJoin #Starglow 😆",
+    "Experience Starglow and share your feedback – your input helps us improve.\n\nJoin #Starglow 😆",
+    "Try Starglow now and share your thoughts – every opinion counts.\n\nJoin #Starglow 🙂",
+    "Open Starglow and share your experience – your feedback guides us.\n\nJoin #Starglow 😆",
+    "Discover what Starglow has to offer and share your thoughts – your voice matters.\n\nJoin #Starglow 😘",
+    "Check out the latest in Starglow and leave a comment – we value your feedback.\n\nJoin #Starglow 😆",
+    "Take a tour of Starglow and let us know your favorite features – your opinion guides us.\n\nJoin #Starglow 😘",
+    "Explore the features of Starglow and share your insights – every detail counts.\n\nJoin #Starglow 😆",
+    "Review the features of Starglow and share your thoughts – your feedback helps us improve.\n\nJoin #Starglow 😘",
+    "Experience Starglow and let us know what you think – your feedback is important.\n\nJoin #Starglow 😆",
+    "Explore Starglow and share your experience – every opinion helps us improve.\n\nJoin #Starglow 😘",
+    "Open Starglow and give us your feedback – your insights make a difference.\n\nJoin #Starglow 😆",
+    "Explore the design of Starglow and share your thoughts – we welcome your feedback.\n\nJoin #Starglow 😆",
+    "Try Starglow and share your impressions – your feedback helps us progress.\n\nJoin #Starglow 😆",
+    "Experience Starglow and share your experience – your feedback is valuable.\n\nJoin #Starglow 😁",
+    "Take a moment to try Starglow and share your thoughts – we look forward to your feedback.\n\nJoin #Starglow 😆",
+    "Try Starglow and share your views – every comment counts.\n\nJoin #Starglow 😊",
+    "Try Starglow and share what you think – your opinion helps us improve.\n\nJoin #Starglow 😘",
+    "Explore Starglow and share your feedback – we’re listening.\n\nJoin #Starglow 😆",
+    "Check out Starglow and share your thoughts – your feedback encourages us.\n\nJoin #Starglow 😁",
+    "Open Starglow and share your genuine opinion – each piece of feedback helps us grow.\n\nJoin #Starglow 😆",
+    "Discover the benefits of Starglow and share your insights – your thoughts matter.\n\nJoin #Starglow 🤪",
+    "Experience Starglow and share your experience – your feedback helps us improve.\n\nJoin #Starglow 😆",
+    "Take a look at Starglow and share your thoughts – your feedback guides us.\n\nJoin #Starglow 😆",
+    "Experience Starglow and drop a comment – we value your opinion.\n\nJoin #Starglow 😁",
+    "Try Starglow and share your honest feedback – your insights help us improve.\n\nJoin #Starglow 🤪",
   ];
 
   const randomReOpen =
@@ -121,12 +122,12 @@ export function CreateAnnouncementText(poll) {
 [${pollTitle}]
 ⚪️ ${pollOptions.join("\n⚪️ ")}
 
+${hashTags.join(" ")} ${pollTitleHashTag}
+#KPOP #POLL #VOTE #VOTING #WEB3 #RWA #KpopRWA #StarglowVoting
+
 ${randomReOpen}
 ${randomFinale}
-http://starglow.pro/start
-
-${hashTags.join(" ")} ${pollTitleHashTag}
-#KPOP #POLL #VOTE #VOTING #WEB3 #RWA #KpopRWA`;
+http://starglow.pro/start`;
 
   return message;
 }

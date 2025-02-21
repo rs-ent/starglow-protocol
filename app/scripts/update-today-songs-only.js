@@ -55,5 +55,5 @@ export async function updateTodaySongs(pollId, songsUrl) {
     },
   });
 
-  return { songsUrl };
+  return { pollId, songsUrl };
 }

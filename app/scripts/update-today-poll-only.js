@@ -2,7 +2,7 @@
 
 import { getSheetsClient } from "../google-sheets/getSheetsClient";
 
-export async function updateTodayPoll(pollId, pollUrl) {
+export async function updateTodayPoll(pollId, pollUrl, message) {
   if (!pollId || !pollUrl) {
     throw new Error("Missing pollId or songsUrl");
   }
@@ -30,20 +30,30 @@ export async function updateTodayPoll(pollId, pollUrl) {
     throw new Error(`No row found for pollId: ${pollId}`);
   }
 
-  // (3) result_img 열 인덱스
+  // (3) poll_announce_img && announce_today 열 인덱스
   const imgCol = rows[0].findIndex((col) => col === "poll_announce_img");
   if (imgCol === -1) {
-    throw new Error(`No "song_announce_img" header found in row[0].`);
+    throw new Error(`No "poll_announce_img" header found in row[0].`);
+  }
+
+  const msgCol = rows[0].findIndex((col) => col === "announce_today");
+  if (msgCol === -1) {
+    throw new Error(`No "announce_today" header found in row[0].`);
   }
 
   // (4) 열 인덱스를 A~Z로 (26열 미만 가정)
   const imgColStr = String.fromCharCode(65 + imgCol);
+  const msgColStr = String.fromCharCode(65 + msgCol);
 
   // (5) 실제 시트 상의 행 번호 = rowIndex + 1 (헤더가 1행)
   const updateData = [
     {
       range: `Poll List!${imgColStr}${rowIndex + 1}`,
       values: [[pollUrl]],
+    },
+    {
+      range: `Poll List!${msgColStr}${rowIndex + 1}`,
+      values: [[message]],
     },
   ];
 
@@ -55,5 +65,5 @@ export async function updateTodayPoll(pollId, pollUrl) {
     },
   });
 
-  return { songsUrl };
+  return { pollId, pollUrl, message };
 }

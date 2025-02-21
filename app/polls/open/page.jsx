@@ -15,12 +15,12 @@ export default async function PollResult ({ searchParams }) {
         <>
             { type === 'poll' ? (
                 <div className="flex items-center justify-center min-h-screen">
-                    <TodayPoll poll_id={pollId} poll={poll}/>
+                    <TodayPoll poll={poll} poll_id={pollId} />
                 </div>
             ) : 
             (
                 <div className="flex items-center justify-center min-h-screen">
-                    <TodaySong poll_id={pollId} songIdx={parseInt(songIdx, 10)} poll={poll}/>
+                    <TodaySong poll={poll} poll_id={pollId} songIdx={parseInt(songIdx, 10)} />
                 </div>
             )}
         </>
