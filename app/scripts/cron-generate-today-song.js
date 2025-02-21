@@ -93,8 +93,8 @@ export async function runCronGenerateSongImages() {
         urls.push(url);
 
         const songsUrl = urls.join(";");
-        await updateTodaySongs(pollId, songsUrl);
-        return { success: true, updatedPollId: pollId, updatedUrl: songsUrl };
+        const result = await updateTodaySongs(pollId, songsUrl);
+        return { success: true, result };
     } catch (err) {
         console.error("runCronGenerateResultImage Error:", err);
         return { success: false, error: err.message };
