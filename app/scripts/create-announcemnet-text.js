@@ -4,25 +4,34 @@ function convertHashTag(str) {
 
   // 빈 문자열 제거 및 각 단어의 첫 글자만 대문자로 변환
   const formattedWords = words
-    .filter(word => word.length > 0)
-    .map(word => word[0].toUpperCase() + word.slice(1).toLowerCase());
+    .filter((word) => word.length > 0)
+    .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase());
 
   // 해시태그 생성
-  return '#' + formattedWords.join('');
+  return "#" + formattedWords.join("");
 }
 
 export function CreateAnnouncementText(poll) {
   console.log(poll);
   const pollTitle = poll.title;
-  const pollTitleShorten = poll.title_shorten || '';
-  const pollTitleHashTag = pollTitleShorten ? convertHashTag(pollTitleShorten) : '';
+  const pollTitleShorten = poll.title_shorten || "";
+  const pollTitleHashTag = pollTitleShorten
+    ? convertHashTag(pollTitleShorten)
+    : "";
   const pollOptions = poll.options.split(";");
   const songs = poll.song_title.split(";");
 
   const hashTags = songs.map(function (song) {
-    const artist = song.split(" - ")[0];
-    const title = song.split(" - ")[1];
-    return convertHashTag(artist) + " " + convertHashTag(title) + " " + convertHashTag(song);
+    const parts = song.split(/\s*-\s*/);
+    const artist = parts[0];
+    const title = parts[1] || "";
+    return (
+      convertHashTag(artist) +
+      " " +
+      convertHashTag(title) +
+      " " +
+      convertHashTag(song)
+    );
   });
 
   const randomReOpens = [
@@ -55,7 +64,7 @@ export function CreateAnnouncementText(poll) {
     "If you didn't get around to voting, the poll is open again for your feedback.",
     "No worries if you missed voting earlier; the poll is open again and we value your input.",
     "Didn't vote before? The poll is open again, and we welcome your participation.",
-    "If your vote is still pending, please note that the poll is open again."
+    "If your vote is still pending, please note that the poll is open again.",
   ];
 
   const randomFinales = [
