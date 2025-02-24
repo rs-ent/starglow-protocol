@@ -52,7 +52,7 @@ export async function runCronGenerateSongImages() {
         urls = urls.concat(existingImg);
 
         const buffer = await createTodaySongImg(pollId, existingImg.length);
-        const filename = `today-song/song_${pollId}_${existingImg.length}.png`;
+        const filename = `today-song/song_${pollId}_${existingImg.length}_${Date.now()}.png`;
         const bucket = admin.storage().bucket();
         await bucket.file(filename).save(buffer, {
             contentType: "image/png",

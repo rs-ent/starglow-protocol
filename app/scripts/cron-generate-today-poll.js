@@ -52,7 +52,7 @@ export async function runCronGeneratePollImage() {
         if (!buffer) {
             throw new Error("Failed to create poll image");
         }
-        const filename = `today-poll/poll_${pollId}.png`;
+        const filename = `today-poll/poll_${pollId}_${Date.now()}.png`;
         const bucket = admin.storage().bucket();
         await bucket.file(filename).save(buffer, {
             contentType: "image/png",
