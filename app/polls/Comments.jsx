@@ -184,7 +184,7 @@ function Comments({
           return (
             <div
               key={comment.id}
-              className={`comment-item mt-2 max-w-[70%] w-fit ${
+              className={`comment-item mt-2 max-w-[80%] w-fit ${
                 isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
               }`}
             >
@@ -225,7 +225,7 @@ function Comments({
                     }`}
                   >
                     <div
-                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[65%] ${
+                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[75%] ${
                         isMyComment
                           ? "bg-[rgba(100,180,100,0.8)] text-right"
                           : "bg-[rgba(56,100,168,0.8)]"
