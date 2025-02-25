@@ -184,7 +184,7 @@ function Comments({
           return (
             <div
               key={comment.id}
-              className={`comment-item mt-2 max-w-[65%] w-fit ${
+              className={`comment-item mt-2 max-w-[70%] w-fit ${
                 isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
               }`}
             >
@@ -194,7 +194,7 @@ function Comments({
                     type="text"
                     value={editingCommentText}
                     onChange={(e) => setEditingCommentText(e.target.value)}
-                    className="py-1 px-4 bg-[rgba(56,100,168,0.8)] rounded-[20px] break-all font-main text-xs"
+                    className="py-1 px-4 bg-[rgba(56,100,168,0.8)] rounded-[20px] break-words font-main text-xs"
                   />
                   <div className="flex justify-end mt-1">
                     <button
@@ -225,7 +225,7 @@ function Comments({
                     }`}
                   >
                     <div
-                      className={`py-2 px-4 rounded-[1rem] break-all font-main text-[0.7rem] ${
+                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[65%] ${
                         isMyComment
                           ? "bg-[rgba(100,180,100,0.8)] text-right"
                           : "bg-[rgba(56,100,168,0.8)]"

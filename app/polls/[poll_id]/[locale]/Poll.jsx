@@ -96,6 +96,7 @@ export default function Poll({
     if (timeLeft > 0) {
       return (
         <Submitted
+          poll={poll}
           poll_id={poll_id}
           title={poll.title}
           options={options}

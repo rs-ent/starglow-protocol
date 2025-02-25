@@ -46,7 +46,14 @@ const fallbackCopyToClipboard = (text) => {
   document.body.removeChild(textarea);
 };
 
-export default function Submitted({ poll_id, title, options, endDate, t }) {
+export default function Submitted({
+  poll,
+  poll_id,
+  title,
+  options,
+  endDate,
+  t,
+}) {
   const shareText =
     `🌟 STARGLOW K-POP Poll 🚀\n\n` +
     `"${title}"\n` +
@@ -178,6 +185,10 @@ export default function Submitted({ poll_id, title, options, endDate, t }) {
         />
         {t["poll"]["followStarglow"]}
       </a>
+
+      <div className="overflow-hidden rounded-xl w-full h-[300px] mb-4">
+        <Comments poll={poll} />
+      </div>
 
       <div className="mt-auto flex justify-center mb-4">
         <Image
