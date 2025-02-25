@@ -38,7 +38,11 @@ export function maskIp(ip) {
   return visible.concat(masked).join(".");
 }
 
-function Comments({ poll = { poll_id: "global" } }) {
+function Comments({
+  poll = { poll_id: "global" },
+  needCloseButton = false,
+  onCloseComments,
+}) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [myIp, setMyIp] = useState("");
@@ -156,7 +160,18 @@ function Comments({ poll = { poll_id: "global" } }) {
     comment.ip === myIp && getTimeDiff(comment.createdAt) <= 7200000;
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-[rgba(0,0,15,0.8)] to-[rgba(0,0,5,0.6)] rounded-xl h-full backdrop-blur-md">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="flex flex-col bg-gradient-to-br from-[rgba(0,0,15,0.8)] to-[rgba(0,0,5,0.6)] rounded-xl h-full backdrop-blur-sm"
+    >
+      {needCloseButton && (
+        <button
+          onClick={onCloseComments}
+          className="absolute top-0 text-white text-sm px-2 py-1 rounded"
+        >
+          ×
+        </button>
+      )}
       {/* 댓글 목록 영역 */}
       <div
         ref={containerRef}
@@ -255,7 +270,7 @@ function Comments({ poll = { poll_id: "global" } }) {
         })}
       </div>
       {/* 댓글 입력 영역 */}
-      <div className="flex bg-[var(--background-muted)] p-2 min-h-[60px] w-full items-center">
+      <div className="flex bg-[var(--background-muted)] p-2 w-full items-center">
         <input
           type="text"
           value={newComment}
@@ -266,7 +281,7 @@ function Comments({ poll = { poll_id: "global" } }) {
             }
           }}
           placeholder="Write a message..."
-          className="flex-1 bg-transparent rounded-full text-[rgba(255,255,255,0.85)] outline-none font-main"
+          className="flex-1 min-w-0 bg-transparent rounded-full text-[rgba(255,255,255,0.85)] outline-none font-main"
         />
         <button ref={sendButtonRef} onClick={addComment} className="ml-2">
           <Image
