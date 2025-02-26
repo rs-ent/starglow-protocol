@@ -56,6 +56,7 @@ function Comments({
   const containerRef = useRef(null);
   const initialLoad = useRef(true);
   const sendButtonRef = useRef(null);
+  const timerRef = useRef(null);
   const poll_id = poll.poll_id;
 
   // 상위에서 단 하나의 Interval로 현재 시간을 업데이트
@@ -185,6 +186,15 @@ function Comments({
     if (x + 70 >= parent.width) x -= 70;
     if (y + 70 >= parent.height) y -= 70;
     setContextMenu({ comment, x: x, y: y });
+    clearTimeout(timerRef.current);
+  };
+
+  const handleTouchStart = (e, comment) => {
+    e.preventDefault();
+    e.stopPropagation();
+    timerRef.current = setTimeout(() => {
+      handleContextMenu(e, comment);
+    }, 600);
   };
 
   return (
@@ -213,6 +223,10 @@ function Comments({
             <div
               key={comment.id}
               onContextMenu={(e) => isMyComment && handleContextMenu(e, comment)}
+              onTouchStart={(e) => isMyComment && handleTouchStart(e, comment)}
+              onTouchEnd={() => clearTimeout(timerRef.current)}
+              onTouchCancel={() => clearTimeout(timerRef.current)}
+              onTouchMove={() => clearTimeout(timerRef.current)}
               className={`comment-item mt-2 max-w-[80%] w-fit ${isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
                 }`}
             >
