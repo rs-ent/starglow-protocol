@@ -236,18 +236,18 @@ function Comments({
                     type="text"
                     value={editingCommentText}
                     onChange={(e) => setEditingCommentText(e.target.value)}
-                    className="py-1 px-4 bg-[rgba(56,100,168,0.8)] rounded-[20px] break-words font-main text-xs"
+                    className="py-2 px-4 bg-[rgba(56,100,168,0.8)] rounded-[20px] break-words font-main text-xs text-[0.75rem]"
                   />
                   <div className="flex justify-end mt-1">
                     <button
                       onClick={() => saveEdit(comment.id)}
-                      className="text-[0.5rem] text-blue-300 mr-2"
+                      className="text-[0.65rem] text-blue-300 mr-3"
                     >
                       Save
                     </button>
                     <button
                       onClick={cancelEditing}
-                      className="text-[0.5rem] text-red-300"
+                      className="text-[0.65rem] text-red-300"
                     >
                       Cancel
                     </button>
