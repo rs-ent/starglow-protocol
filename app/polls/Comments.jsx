@@ -223,7 +223,7 @@ function Comments({
             <div
               key={comment.id}
               onContextMenu={(e) => isMyComment && handleContextMenu(e, comment)}
-              onTouchStart={(e) => isMyComment && handleTouchStart(e, comment)}
+              onTouchStart={(e) => isMyComment && contextMenu.comment.id !== comment.id && handleTouchStart(e, comment)}
               onTouchEnd={() => clearTimeout(timerRef.current)}
               onTouchCancel={() => clearTimeout(timerRef.current)}
               onTouchMove={() => clearTimeout(timerRef.current)}
