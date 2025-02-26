@@ -88,7 +88,13 @@ function Comments({
       const data = snapshot.val();
       const commentsList = data
         ? Object.keys(data).map((key) => ({ id: key, ...data[key] }))
-        : [{ id: "placeholder", text: "Leave your comment!", sub: poll.title || "" }];
+        : [
+            {
+              id: "placeholder",
+              text: "Leave your comment!",
+              sub: poll.title || "",
+            },
+          ];
       commentsList.sort((a, b) => a.createdAt - b.createdAt);
       setComments(commentsList);
     });
@@ -181,10 +187,21 @@ function Comments({
     e.preventDefault();
     e.stopPropagation();
     const parent = containerRef.current.getBoundingClientRect();
-    let x = e.clientX - parent.left;
-    let y = e.clientY - parent.top;
-    if (x + 70 >= parent.width) x -= 70;
-    if (y + 70 >= parent.height) y -= 70;
+
+    const xStandard = e.clientX - parent.left;
+    const yStandard = e.clientY - parent.top;
+
+    const boxWidth = 75;
+    const boxHeight = 75;
+
+    let xAlpha = 0;
+    let yAlpha = 0;
+    if (xStandard + boxWidth >= parent.width) xAlpha = boxWidth;
+    if (yStandard + boxHeight >= parent.height) yAlpha = boxHeight;
+
+    const x = xStandard - xAlpha;
+    const y = yStandard - yAlpha;
+
     setContextMenu({ comment, x: x, y: y });
     clearTimeout(timerRef.current);
   };
@@ -222,13 +239,20 @@ function Comments({
           return (
             <div
               key={comment.id}
-              onContextMenu={(e) => isMyComment && handleContextMenu(e, comment)}
-              onTouchStart={(e) => isMyComment && contextMenu.comment.id !== comment.id && handleTouchStart(e, comment)}
+              onContextMenu={(e) =>
+                isMyComment && handleContextMenu(e, comment)
+              }
+              onTouchStart={(e) =>
+                isMyComment &&
+                contextMenu.comment.id !== comment.id &&
+                handleTouchStart(e, comment)
+              }
               onTouchEnd={() => clearTimeout(timerRef.current)}
               onTouchCancel={() => clearTimeout(timerRef.current)}
               onTouchMove={() => clearTimeout(timerRef.current)}
-              className={`comment-item mt-2 max-w-[80%] w-fit ${isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
-                }`}
+              className={`comment-item mt-2 max-w-[80%] w-fit ${
+                isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
+              }`}
             >
               {editingCommentId === comment.id ? (
                 <div className="flex flex-col">
@@ -262,14 +286,16 @@ function Comments({
                     </div>
                   )}*/}
                   <div
-                    className={`flex items-end gap-1 ${isMyComment ? "flex-row-reverse" : "flex-row"
-                      }`}
+                    className={`flex items-end gap-1 ${
+                      isMyComment ? "flex-row-reverse" : "flex-row"
+                    }`}
                   >
                     <div
-                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[77%] ${isMyComment
-                        ? "bg-[rgba(100,180,100,0.8)] text-right"
-                        : "bg-[rgba(56,100,168,0.8)]"
-                        }`}
+                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[77%] ${
+                        isMyComment
+                          ? "bg-[rgba(100,180,100,0.8)] text-right"
+                          : "bg-[rgba(56,100,168,0.8)]"
+                      }`}
                     >
                       {comment.sub && (
                         <div className="text-[0.5rem] italic">
