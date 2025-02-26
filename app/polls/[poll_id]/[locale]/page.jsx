@@ -3,7 +3,7 @@ import LocaleFile from "./LocaleFile";
 import { getSheetsData } from "../../../scripts/google-sheets-data";
 
 export async function generateMetadata({ params }) {
-    const { poll_id, locale } = params;
+    const { poll_id, locale } = await params;
     const pollData = await getSheetsData();
     const poll = pollData?.[poll_id];
 

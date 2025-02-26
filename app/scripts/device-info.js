@@ -20,46 +20,53 @@ export function getPlatform(deviceInfo) {
 
 export async function getGeographic(ipAddress) {
     if (!ipAddress || ipAddress === "unknown") {
-        return {
-            country: "Unknown",
-            region: "Unknown",
-            city: "Unknown",
-            postal: "Unknown",
-            latitude: "Unknown",
-            longitude: "Unknown",
-        };
-    }
-
-    let geoInfo = {
+      return {
         country: "Unknown",
         region: "Unknown",
         city: "Unknown",
         postal: "Unknown",
         latitude: "Unknown",
         longitude: "Unknown",
-    };
-
-    try {
-        const response = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-        const data = await response.json();
-
-        if (data.error) {
-            console.error("Error from ipapi:", data.reason);
-            return geoInfo;
-        }
-
-        geoInfo = {
-            country: data.country_name || "Unknown",
-            region: data.region || "Unknown",
-            city: data.city || "Unknown",
-            postal: data.postal || "Unknown",
-            latitude: data.latitude || "Unknown",
-            longitude: data.longitude || "Unknown",
-        };
-
-        return geoInfo;
-    } catch (error) {
-        console.error("Error fetching geographic info:", error);
-        return geoInfo;
+      };
     }
-}
+  
+    let geoInfo = {
+      country: "Unknown",
+      region: "Unknown",
+      city: "Unknown",
+      postal: "Unknown",
+      latitude: "Unknown",
+      longitude: "Unknown",
+    };
+  
+    try {
+      const response = await fetch(`https://ipapi.co/${ipAddress}/json/`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error from ipapi (non-OK response):", errorText);
+        return geoInfo;
+      }
+      
+      const data = await response.json();
+  
+      if (data.error) {
+        console.error("Error from ipapi:", data.reason);
+        return geoInfo;
+      }
+  
+      geoInfo = {
+        country: data.country_name || "Unknown",
+        region: data.region || "Unknown",
+        city: data.city || "Unknown",
+        postal: data.postal || "Unknown",
+        latitude: data.latitude || "Unknown",
+        longitude: data.longitude || "Unknown",
+      };
+  
+      return geoInfo;
+    } catch (error) {
+      console.error("Error fetching geographic info:", error);
+      return geoInfo;
+    }
+  }
+  

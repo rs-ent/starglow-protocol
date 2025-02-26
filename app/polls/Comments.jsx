@@ -13,6 +13,7 @@ import {
 } from "firebase/database";
 import { database } from "../firebase/firestore-voting";
 import Image from "next/image";
+import { getGeographic } from "../scripts/device-info";
 
 // 커스텀 상대 시간 함수 (또는 별도로 import)
 export function customFormatDistance(diff) {
@@ -50,6 +51,8 @@ function Comments({
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingCommentText, setEditingCommentText] = useState("");
   const [now, setNow] = useState(Date.now());
+  const [contextMenu, setContextMenu] = useState(null);
+
   const containerRef = useRef(null);
   const initialLoad = useRef(true);
   const sendButtonRef = useRef(null);
@@ -84,8 +87,7 @@ function Comments({
       const data = snapshot.val();
       const commentsList = data
         ? Object.keys(data).map((key) => ({ id: key, ...data[key] }))
-        : [{ text: "Leave your comment!", sub: poll.title || "" }];
-      // createdAt 기준 오름차순 정렬 (오래된 것부터 최신 순)
+        : [{ id: "placeholder", text: "Leave your comment!", sub: poll.title || "" }];
       commentsList.sort((a, b) => a.createdAt - b.createdAt);
       setComments(commentsList);
     });
@@ -111,14 +113,28 @@ function Comments({
   };
 
   // 댓글 추가 (등록 후 자동 스크롤)
-  const addComment = () => {
+  const addComment = async () => {
     if (!newComment.trim()) return;
+
+    /*let geo = {};
+    try {
+      const res = await fetch(`/api/get-geograhpic?ip=${myIp}`);
+      if (!res.ok) {
+        console.error("Error fetching geo data for ip:", myIp, await res.text());
+      } else {
+        geo = await res.json();
+      }
+    } catch (error) {
+      console.error("Error fetching geo data:", error);
+    }*/
+
     const comment = {
       text: newComment,
       createdAt: Date.now(),
       ip: myIp,
       poll_id: poll_id,
     };
+
     push(ref(database, "comments"), comment);
     setNewComment("");
     setTimeout(() => {
@@ -159,23 +175,35 @@ function Comments({
   const canDelete = (comment) =>
     comment.ip === myIp && getTimeDiff(comment.createdAt) <= 7200000;
 
+  // 오른쪽 클릭(데스크톱) 핸들러
+  const handleContextMenu = (e, comment) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const parent = containerRef.current.getBoundingClientRect();
+    let x = e.clientX - parent.left;
+    let y = e.clientY - parent.top;
+    if (x + 70 >= parent.width) x -= 70;
+    if (y + 70 >= parent.height) y -= 70;
+    setContextMenu({ comment, x: x, y: y });
+  };
+
   return (
     <div
-      onClick={(e) => e.stopPropagation()}
-      className="flex flex-col bg-gradient-to-br from-[rgba(0,0,15,0.8)] to-[rgba(0,0,5,0.6)] rounded-xl h-full backdrop-blur-sm"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      className="relative flex flex-col bg-gradient-to-br from-[rgba(0,0,15,0.8)] to-[rgba(0,0,5,0.6)] rounded-xl h-full backdrop-blur-sm"
     >
-      {needCloseButton && (
-        <button
-          onClick={onCloseComments}
-          className="absolute top-0 text-white text-sm px-2 py-1 rounded"
-        >
-          ×
-        </button>
-      )}
       {/* 댓글 목록 영역 */}
       <div
         ref={containerRef}
         onScroll={handleScroll}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (needCloseButton && e.target === e.currentTarget) {
+            onCloseComments();
+          }
+        }}
         className="flex flex-col gap-3 flex-1 overflow-auto py-3"
       >
         {comments.map((comment) => {
@@ -184,9 +212,9 @@ function Comments({
           return (
             <div
               key={comment.id}
-              className={`comment-item mt-2 max-w-[80%] w-fit ${
-                isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
-              }`}
+              onContextMenu={(e) => isMyComment && handleContextMenu(e, comment)}
+              className={`comment-item mt-2 max-w-[80%] w-fit ${isMyComment ? "ml-auto mr-4" : "mr-auto ml-4"
+                }`}
             >
               {editingCommentId === comment.id ? (
                 <div className="flex flex-col">
@@ -213,23 +241,21 @@ function Comments({
                 </div>
               ) : (
                 <>
-                  {/* 내 댓글인 경우 ip 표시는 생략 */}
+                  {/* 내 댓글인 경우 ip 표시는 생략 
                   {!isMyComment && (
                     <div className="text-[0.45rem] text-[rgba(255,255,255,0.5)] mb-0.5 text-left">
-                      {comment.ip && <span>{maskIp(comment.ip)}:</span>}
+                      {comment.geo && comment.geo !== "Unknown" && <span>{maskIp(comment.geo)}:</span>}
                     </div>
-                  )}
+                  )}*/}
                   <div
-                    className={`flex items-end gap-1 ${
-                      isMyComment ? "flex-row-reverse" : "flex-row"
-                    }`}
+                    className={`flex items-end gap-1 ${isMyComment ? "flex-row-reverse" : "flex-row"
+                      }`}
                   >
                     <div
-                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[75%] ${
-                        isMyComment
-                          ? "bg-[rgba(100,180,100,0.8)] text-right"
-                          : "bg-[rgba(56,100,168,0.8)]"
-                      }`}
+                      className={`py-2 px-4 rounded-[1rem] break-words font-main text-[0.7rem] max-w-[77%] ${isMyComment
+                        ? "bg-[rgba(100,180,100,0.8)] text-right"
+                        : "bg-[rgba(56,100,168,0.8)]"
+                        }`}
                     >
                       {comment.sub && (
                         <div className="text-[0.5rem] italic">
@@ -243,26 +269,6 @@ function Comments({
                         customFormatDistance(getTimeDiff(comment.createdAt))}
                     </div>
                   </div>
-                  {isMyComment && (
-                    <div className="ml-2 mt-0.5 flex gap-2 justify-end">
-                      {canEdit(comment) && (
-                        <button
-                          onClick={() => startEditing(comment)}
-                          className="text-[0.5rem] text-[rgba(200,200,255,0.6)]"
-                        >
-                          Edit
-                        </button>
-                      )}
-                      {canDelete(comment) && (
-                        <button
-                          onClick={() => handleDelete(comment.id)}
-                          className="text-[0.5rem] text-[rgba(255,200,200,0.6)]"
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </div>
-                  )}
                 </>
               )}
             </div>
@@ -280,7 +286,7 @@ function Comments({
               addComment();
             }
           }}
-          placeholder="Write a message..."
+          placeholder="Write a comment..."
           className="flex-1 min-w-0 bg-transparent rounded-full text-[rgba(255,255,255,0.85)] outline-none font-main"
         />
         <button ref={sendButtonRef} onClick={addComment} className="ml-2">
@@ -293,6 +299,42 @@ function Comments({
           />
         </button>
       </div>
+
+      {/* 팝업(컨텍스트 메뉴) 렌더링 */}
+      {contextMenu && (
+        <div
+          onClick={() => setContextMenu(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center" // 배경 오버레이 스타일 예시
+        >
+          <div
+            className="absolute z-50"
+            style={{ top: contextMenu.y, left: contextMenu.x }}
+          >
+            <div className="bg-[rgba(30,30,30,0.9)] text-white grid grid-cols-1 rounded shadow-md backdrop-blur-sm">
+              <button
+                onClick={() => {
+                  startEditing(contextMenu.comment);
+                  setContextMenu(null);
+                }}
+                className="block px-4 py-2 hover:bg-[rgba(55,65,81,0) text-xs disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[rgba(55,65,81,0)]"
+                disabled={!canEdit(contextMenu.comment)}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => {
+                  handleDelete(contextMenu.comment.id);
+                  setContextMenu(null);
+                }}
+                className="block px-4 py-2 hover:bg-[rgba(55,65,81,0) text-xs disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[rgba(55,65,81,0)]"
+                disabled={!canDelete(contextMenu.comment)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
