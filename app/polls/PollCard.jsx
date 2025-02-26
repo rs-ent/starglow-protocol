@@ -11,7 +11,7 @@ export function formatDate(str) {
   return `${mm}/${dd}/${yy}`;
 }
 
-export default function PollCard({ poll, result }) {
+export default function PollCard({ poll, result, enableComments = true }) {
   const [showComments, setShowComments] = useState(false);
   const options = poll.options.split(";");
   let voteResult = {};
@@ -54,15 +54,17 @@ export default function PollCard({ poll, result }) {
             end={poll.end}
           />
         </div>
-        <div
-          className="text-center font-main text-[0.7rem] text-gradient cursor-pointer mt-4 hover:text-[0.75rem] transition-all duration-150"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowComments(true);
-          }}
-        >
-          leave comments
-        </div>
+        {enableComments && (
+          <div
+            className="text-center font-main text-[0.7rem] text-gradient cursor-pointer mt-4 hover:text-[0.75rem] transition-all duration-150"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowComments(true);
+            }}
+          >
+            leave comments
+          </div>
+        )}
       </div>
 
       {showComments && (
