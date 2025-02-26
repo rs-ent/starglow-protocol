@@ -1,5 +1,6 @@
 import "./globals.css";
 import Providers from "./context/Providers";
+import Script from "next/script";
 
 export const metadata = {
   title: "Starglow Protocol",
