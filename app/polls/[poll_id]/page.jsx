@@ -4,23 +4,24 @@ import sharp from 'sharp';
 import fs from 'fs/promises';
 import path from 'path';
 
-// 이미지 최적화 함수: 1200×630 크기로 자르고, JPEG 80% 품질로 압축
-async function optimizeImage(inputPath, outputPath) {
+async function optimizeImageFromBuffer(buffer, outputPath) {
     try {
-        await sharp(inputPath)
-            .resize(1200, 630, {
-                fit: 'cover', // 이미지 중심 기준 자르기
-            })
-            .jpeg({ quality: 80 })
-            .toFile(outputPath);
-
-        console.log('이미지 최적화 완료:', outputPath);
-        return outputPath;
+      await sharp(buffer)
+        .resize(1200, 630, {
+          fit: 'cover', // 이미지 중심 기준 자르기
+        })
+        .jpeg({ quality: 80 })
+        .toFile(outputPath);
+  
+      console.log('이미지 최적화 완료 (Buffer):', outputPath);
+      return outputPath;
     } catch (error) {
-        console.error('이미지 최적화 중 오류 발생:', error);
-        return inputPath;
+      console.error('이미지 최적화 중 오류 발생 (Buffer):', error);
+      throw error;
     }
-}
+  }
+  
+
 export async function generateMetadata({ params }) {
     const { poll_id } = params;
     const pollData = await getSheetsData();
