@@ -179,11 +179,8 @@ export async function updateResultImgURL(pollId, finalURL, pollData) {
         embellishArr[Math.floor(Math.random() * embellishArr.length)];
       const randCallToAction =
         callToActionArr[Math.floor(Math.random() * callToActionArr.length)];
-      const hashtagOptions =
-        pollData?.options_shorten?.split(";") ||
-        pollData?.options?.split(";") ||
-        [];
-      const hashTags = hashtagOptions.map((tag) => convertHashTag(tag));
+
+      const hashTags = optionsValue.map((tag) => convertHashTag(tag));
       announcementText = `🎉VOTE ENDED!🎉
 ${randEmbellish}
 
@@ -194,7 +191,7 @@ ${randEmbellish}
 
 ${resultLines}
 
-#${hashTags.join(" #")}
+${hashTags.join(" ")}
 
 ${randCallToAction}`;
 
