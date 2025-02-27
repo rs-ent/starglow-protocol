@@ -38,9 +38,18 @@ export default function PollList({ pollResults }) {
                 const startDate = parseAsKST(poll.start);
                 const endDate = parseAsKST(poll.end);
 
-                if (startDate > today && poll.show_scheduled === 'TRUE') scheduled.push(poll);
-                else if (startDate <= today && today <= endDate) onGoing.push(poll);
-                else if (today > endDate) ended.push(poll);
+                if (startDate > today && poll.show_scheduled === 'TRUE'){
+                    poll.enableComments = false;
+                    scheduled.push(poll);
+                }
+                else if (startDate <= today && today <= endDate) {
+                    poll.enableComments = true;
+                    onGoing.push(poll);
+                }
+                else if (today > endDate) {
+                    poll.enableComments = true;
+                    ended.push(poll);
+                }
             }
         });
 
@@ -245,6 +254,7 @@ function LoadMoreList({ polls, pollResults, handlePollClick, isBlur }) {
                         <PollCard
                             poll={poll}
                             result={pollResults.find((p) => p.id === poll.poll_id)}
+                            enableComments={poll.enableComments}
                         />
                     </div>
                 ))}
@@ -291,6 +301,7 @@ function MobileCarousel({ polls, pollResults, handlePollClick, isBlur }) {
                         <PollCard
                             poll={poll}
                             result={pollResults.find((p) => p.id === poll.poll_id)}
+                            enableComments={poll.enableComments}
                         />
                     </div>
                 </div>
