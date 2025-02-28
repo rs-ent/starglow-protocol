@@ -8,23 +8,23 @@ export async function pickMarketingTargetPoll() {
         new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
     );
 
-    if (today.getHours() === 0){
-        console.log('It is 12am');
+    if (today.getHours() === 23){
+        console.log('It is 11pm');
 
         const filter = Object.values(pollList).filter((poll) => {
             const endValue = poll.end;
             const endDate = new Date(endValue.trim());
-            const endDateYear = endDate.getFullYear();
-            const endDateMonth = endDate.getMonth();
-            const endDateDate = endDate.getDate();
+            const endDateBeforeTwoDays = new Date(endDate);
+            endDateBeforeTwoDays.setDate(endDate.getDate() - 2);
+
             const todayYear = today.getFullYear();
             const todayMonth = today.getMonth();
             const todayDate = today.getDate();
             return (
-                endDateYear === todayYear &&
-                endDateMonth === todayMonth &&
-                endDateDate === todayDate
-            );
+                endDateBeforeTwoDays.getFullYear() === todayYear &&
+                endDateBeforeTwoDays.getMonth() === todayMonth &&
+                endDateBeforeTwoDays.getDate() === todayDate
+            )
         });
 
         if (filter.length > 0) {
@@ -32,48 +32,21 @@ export async function pickMarketingTargetPoll() {
             const msg = CreateMarketingText(poll, true, false);
             return {poll, msg};
         }
-    } else if (today.getHours() === 5) {
-        console.log('It is 5am');
-        const filter = Object.values(pollList).filter((poll) => {
-            const endValue = poll.end;
-            const endDate = new Date(endValue.trim());
-            const endDateBeforeTwoDays = new Date(endDate);
-            endDateBeforeTwoDays.setDate(endDate.getDate() - 3);
-    
-            const todayYear = today.getFullYear();
-            const todayMonth = today.getMonth();
-            const todayDate = today.getDate();
-    
-            return (
-                endDateBeforeTwoDays.getFullYear() === todayYear &&
-                endDateBeforeTwoDays.getMonth() === todayMonth &&
-                endDateBeforeTwoDays.getDate() === todayDate
-            );
-        });
-
-        if (filter.length > 0) {
-            const poll = filter[0];
-            const msg = CreateMarketingText(poll, false, true);
-            return {poll, msg};
-        }
-    } else if (today.getHours() === 12) {
-        console.log('It is 12pm');
+    } else if (today.getHours() === 9) {
+        console.log('It is 9am');
         const filter = Object.values(pollList).filter((poll) => {
             console.log('poll:', poll);
             const endValue = poll.end;
             const endDate = new Date(endValue.trim());
-            const endDateBeforeTwoDays = new Date(endDate);
-            endDateBeforeTwoDays.setDate(endDate.getDate() - 7);
-            console.log('endDateBeforeTwoDays:', endDateBeforeTwoDays);
     
             const todayYear = today.getFullYear();
             const todayMonth = today.getMonth();
             const todayDate = today.getDate();
     
             return (
-                endDateBeforeTwoDays.getFullYear() === todayYear &&
-                endDateBeforeTwoDays.getMonth() === todayMonth &&
-                endDateBeforeTwoDays.getDate() === todayDate
+                endDate.getFullYear() === todayYear &&
+                endDate.getMonth() === todayMonth &&
+                endDate.getDate() === todayDate
             );
         });
 
@@ -81,7 +54,7 @@ export async function pickMarketingTargetPoll() {
 
         if (filter.length > 0) {
             const poll = filter[0];
-            const msg = CreateMarketingText(poll, false, true);
+            const msg = CreateMarketingText(poll, true, false);
             return {poll, msg};
         }
     }
