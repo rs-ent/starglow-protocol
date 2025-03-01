@@ -131,7 +131,7 @@ export function CreateAnnouncementText(poll) {
 [${pollTitle}]
 ⚪️ ${pollOptions.join("\n⚪️ ")}
 
-#KPOP #POLL #VOTE #VOTING #WEB3 #RWA #KpopRWA
+#KPOP #POLL #VOTING #WEB3 #RWA
 
 ${randomReOpen}
 ${randomFinale}
