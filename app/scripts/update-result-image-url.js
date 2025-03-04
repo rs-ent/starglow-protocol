@@ -143,36 +143,36 @@ export async function updateResultImgURL(pollId, finalURL, pollData) {
       ];
 
       const callToActionArr = [
-        "🎁 Share your opinion on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Hop into Starglow to make your voice heard 📣\nhttp://starglow.pro/start",
-        "🎁 Starglow is open—join the fun 📣\nhttp://starglow.pro/start",
-        "🎁 Speak up on Starglow—tell us your thoughts 📣\nhttp://starglow.pro/start",
+        "🎁 Share your opinion on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Hop into #Starglow to make your voice heard 📣\nhttp://starglow.pro/start",
+        "🎁 #Starglow is open—join the fun 📣\nhttp://starglow.pro/start",
+        "🎁 Speak up on #Starglow tell us your thoughts 📣\nhttp://starglow.pro/start",
         "🎁 Jump in! We appreciate your viewpoint 📣\nhttp://starglow.pro/start",
-        "🎁 Another poll awaits—head over to Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Join the Starglow community—every vote counts 📣\nhttp://starglow.pro/start",
-        "🎁 We want your feedback! Check Starglow now 📣\nhttp://starglow.pro/start",
-        "🎁 A new question is live on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Keep the conversation going—visit Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Help shape future polls! Head to Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Let’s keep polling—join Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Join us on Starglow—your thoughts matter 📣\nhttp://starglow.pro/start",
-        "🎁 Ready to vote again? Starglow is waiting 📣\nhttp://starglow.pro/start",
-        "🎁 Make your mark on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Keep polling! Starglow has more questions 📣\nhttp://starglow.pro/start",
-        "🎁 See what’s new on Starglow—have your say 📣\nhttp://starglow.pro/start",
-        "🎁 Join the talk—Starglow is your platform 📣\nhttp://starglow.pro/start",
-        "🎁 We’re listening—tell us on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Share your ideas—Starglow awaits 📣\nhttp://starglow.pro/start",
-        "🎁 Your voice counts—jump into Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Keep the momentum—Starglow wants your take 📣\nhttp://starglow.pro/start",
-        "🎁 Another poll is live—find it on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 More voting fun awaits—check Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Starglow is calling—don’t miss out 📣\nhttp://starglow.pro/start",
-        "🎁 More polls soon—stay tuned on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Step up and vote on Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Keep going—join Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 One poll ends, more to come—Starglow 📣\nhttp://starglow.pro/start",
-        "🎁 Make your next choice on Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Another poll awaits—head over to #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Join the #Starglow community — every vote counts 📣\nhttp://starglow.pro/start",
+        "🎁 We want your feedback! Check #Starglow now 📣\nhttp://starglow.pro/start",
+        "🎁 A new question is live on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Keep the conversation going—visit #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Help shape future polls! Head to #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Let’s keep polling — join #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Join us on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Ready to vote again? #Starglow is waiting 📣\nhttp://starglow.pro/start",
+        "🎁 Make your mark on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Keep polling! #Starglow has more questions 📣\nhttp://starglow.pro/start",
+        "🎁 See what’s new on #Starglow — have your say 📣\nhttp://starglow.pro/start",
+        "🎁 Join the talk — #Starglow is your platform 📣\nhttp://starglow.pro/start",
+        "🎁 We’re listening — tell us on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Share your ideas #Starglow awaits 📣\nhttp://starglow.pro/start",
+        "🎁 Your voice counts—jump into #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Keep the momentum #Starglow wants your take 📣\nhttp://starglow.pro/start",
+        "🎁 Another poll is live—find it on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 More voting fun awaits—check #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 #Starglow is calling—don’t miss out 📣\nhttp://starglow.pro/start",
+        "🎁 More polls soon—stay tuned on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Step up and vote on #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Keep going—join #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 One poll ends, more to come #Starglow 📣\nhttp://starglow.pro/start",
+        "🎁 Make your next choice on #Starglow 📣\nhttp://starglow.pro/start",
       ];
 
       const randEmbellish =
@@ -191,7 +191,7 @@ ${randEmbellish}
 
 ${resultLines}
 
-${hashTags.join(" ")}
+#KPOP #POLL #VOTING #WEB3 #RWA
 
 ${randCallToAction}`;
 
