@@ -1,6 +1,8 @@
 import "./globals.css";
 import Providers from "./context/Providers";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
   title: "Starglow Protocol",
@@ -10,13 +12,13 @@ export const metadata = {
     // 다크 모드: favicon.svg 사용 (또는 favicon.ico로 대체 가능)
     icon: [
       {
-        url: "/favicon/favicon-96x96.png",
+        url: "/favicon/icon.png",
         media: "(prefers-color-scheme: light)",
         sizes: "96x96",
         type: "image/png",
       },
       {
-        url: "/favicon/favicon.svg",
+        url: "/favicon/icon.svg",
         media: "(prefers-color-scheme: dark)",
         type: "image/svg+xml",
       },
@@ -83,6 +85,8 @@ export default function RootLayout({ children }) {
           ></iframe>
         </noscript>
         <Providers>{children}</Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
