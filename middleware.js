@@ -8,7 +8,7 @@ export function middleware(request) {
         return NextResponse.redirect('https://starglow.io/docs', 301);
     }
 
-    if (url.hostname === 'miniapp.starglow.io') {
+    if (url.hostname === 'miniapp.starglow.io' || url.hostname === 'mapp.starglow.io') {
         return NextResponse.redirect('https://starglow.io/start', 301);
     }
 
