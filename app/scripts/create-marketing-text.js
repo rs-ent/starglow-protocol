@@ -132,7 +132,7 @@ export function CreateMarketingText(
 #KPOP #POLL #VOTING #WEB3 #RWA
   
 ${finale}
-https://starglow-protocol.vercel.app/polls/${pollId}`;
+https://starglow.io/polls/${pollId}`;
 
   return message;
 }

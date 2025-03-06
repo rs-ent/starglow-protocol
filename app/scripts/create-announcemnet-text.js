@@ -135,7 +135,7 @@ export function CreateAnnouncementText(poll) {
 
 ${randomReOpen}
 ${randomFinale}
-http://starglow.pro/start`;
+https://starglow.io/start`;
 
   return message;
 }
