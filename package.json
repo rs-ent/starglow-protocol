@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mysten/dapp-kit": "^0.14.50",
+    "@mysten/sui": "^1.22.0",
+    "@mysten/sui.js": "^0.54.1",
+    "@mysten/zklogin": "^0.8.1",
     "@sparticuz/chromium": "^132.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",
@@ -20,6 +24,7 @@
     "firebase-admin": "^13.0.2",
     "googleapis": "^144.0.0",
     "gsap": "^3.12.7",
+    "jwt-decode": "^4.0.0",
     "next": "15.1.2",
     "next-auth": "^4.24.11",
     "next-intl": "^3.26.3",
@@ -28,8 +33,6 @@
     "puppeteer-core": "^24.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-fittext": "^1.0.0",
-    "react-fitty": "^1.0.1",
     "react-measure": "^2.5.2",
     "react-slick": "^0.30.3",
     "react-textfit": "^1.1.1",
@@ -37,9 +40,11 @@
     "recharts": "^2.15.0",
     "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
+    "sonner": "^2.0.1",
     "twitter-api-v2": "^1.19.0",
     "uuid": "^11.0.5",
-    "vercel": "^41.0.2"
+    "vercel": "^41.0.2",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "postcss": "^8",
