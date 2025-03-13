@@ -1,18 +1,23 @@
 /// app\oauth\GoogleOAuth.jsx
 
-"use client";
-
-import { useEffect } from "react";
-import Image from 'next/image';
-
-export default function GoogleOAuth() {
+export default function GoogleOAuth({ nonce }) {
 
     const handleGoogleLogin = () => {
+        if (!nonce) {
+            console.error("No nonce provided for Google OAuth login");
+            return;
+        }
+
         const clientId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID;
-        const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI);
+        const redirectUriValue = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI;
+        if (!clientId || !redirectUriValue) {
+            console.error("Google OAuth client ID or redirect URI not found in environment variables");
+            return;
+        }
+
+        const redirectUri = encodeURIComponent(redirectUriValue);
         const scope = encodeURIComponent("openid email profile");
         const responseType = "id_token";
-        const nonce = "random_nonce_string";
 
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&nonce=${nonce}`;
 
@@ -23,7 +28,7 @@ export default function GoogleOAuth() {
 
         window.open(
             authUrl,
-            "GoogleOAuth",
+            "_blank",
             `width=${popupWidth},height=${popupHeight},left=${left},top=${top}`
         );
     };

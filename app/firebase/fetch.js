@@ -1,14 +1,14 @@
 import { db, storage } from "./firestore-voting";
 import {
-  doc,
-  collection,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  increment,
-  addDoc,
-  serverTimestamp,
+    doc,
+    collection,
+    getDoc,
+    getDocs,
+    setDoc,
+    updateDoc,
+    increment,
+    addDoc,
+    serverTimestamp,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -39,7 +39,7 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
 
         const logDocRef = doc(db, "polls", pollId, "logs", ipAddress);
         await setDoc(
-            logDocRef, 
+            logDocRef,
             {
                 selectedOption: option,
                 device: refinedDeviceInfo,
@@ -48,8 +48,8 @@ export async function submitVote(pollId, option, deviceInfo = {}) {
                 timestamp: serverTimestamp(),
             },
             { merge: true }
-        );        
-        
+        );
+
         const rowData = [
             pollId,
             option,
@@ -91,7 +91,7 @@ export async function clickAccessButton(deviceInfo = {}, type = "toMiniApp") {
 
         const logDocRef = doc(db, "accessButton", "accessButton", "logs", ipAddress);
         await setDoc(
-            logDocRef, 
+            logDocRef,
             {
                 device: refinedDeviceInfo,
                 timestamp: serverTimestamp(),
@@ -99,8 +99,8 @@ export async function clickAccessButton(deviceInfo = {}, type = "toMiniApp") {
                 geographic: geographic,
             },
             { merge: true }
-        );        
-        
+        );
+
         const rowData = [
             ipAddress,
             deviceInfo.language,
@@ -154,27 +154,27 @@ export async function getPollsResults() {
     try {
         const pollsColRef = collection(db, "polls");
         const snapshot = await getDocs(pollsColRef);
-    
+
         const polls = await Promise.all(
             snapshot.docs.map(async (pollDoc) => {
                 const pollId = pollDoc.id;
                 const pollData = pollDoc.data() || {};
-        
+
                 // Fetch logs subcollection for this poll
                 const logsColRef = collection(db, "polls", pollId, "logs");
                 const logsSnapshot = await getDocs(logsColRef);
-        
+
                 const logs = logsSnapshot.docs.map((doc) => {
                     const data = doc.data();
                     return {
-                      id: doc.id,
-                      ...data,
-                      timestamp: data.timestamp 
-                        ? data.timestamp.toMillis() // or toDate() or toISOString()
-                        : null
+                        id: doc.id,
+                        ...data,
+                        timestamp: data.timestamp
+                            ? data.timestamp.toMillis() // or toDate() or toISOString()
+                            : null
                     };
                 });
-        
+
                 return {
                     id: pollId,
                     ...pollData,
@@ -182,7 +182,7 @@ export async function getPollsResults() {
                 };
             })
         );
-    
+
         return polls;
     } catch (error) {
         console.error("getAllPolls Error:", error);
@@ -194,19 +194,22 @@ export const uploadFiles = (files, path = "uploads/", onProgress) => {
     if (!Array.isArray(files) || files.length === 0) {
         return Promise.reject(new Error("No files provided for upload."));
     }
-  
-    const uploadPromises = files.map((file, index) => {
+
+    // UUID를 각 파일별로 미리 생성해서 매핑
+    const filesWithIds = files.map(file => ({ file, id: uuidv4() }));
+
+    const uploadPromises = filesWithIds.map(({ file, id }) => {
         return new Promise((resolve, reject) => {
             const sanitizedPath = path.endsWith("/") ? path : `${path}/`;
-            const uniqueName = `${uuidv4()}_${file.name}`;
+            const uniqueName = `${id}_${file.name}`;
             const fileRef = ref(storage, `${sanitizedPath}${uniqueName}`);
             const uploadTask = uploadBytesResumable(fileRef, file);
-    
+
             uploadTask.on(
                 "state_changed",
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    if (onProgress) onProgress(index, progress); // 파일별 진행률 콜백 호출
+                    if (onProgress) onProgress(id, progress); // UUID 기반으로 진행률 콜백 호출
                 },
                 (error) => {
                     console.error("Upload failed for file:", file.name, error);
@@ -214,18 +217,18 @@ export const uploadFiles = (files, path = "uploads/", onProgress) => {
                 },
                 async () => {
                     try {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    console.log(`File available at: ${downloadURL}`);
-                    resolve({ fileName: file.name, downloadURL });
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        console.log(`File available at: ${downloadURL}`);
+                        resolve({ id, fileName: file.name, downloadURL });
                     } catch (error) {
-                    console.error("Error getting download URL for file:", file.name, error);
-                    reject(error);
+                        console.error("Error getting download URL for file:", file.name, error);
+                        reject(error);
                     }
                 }
             );
         });
     });
-  
+
     return Promise.all(uploadPromises);
 };
 

@@ -4,35 +4,34 @@
 
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { generateRandomness } from "@mysten/sui/zklogin";
 import { getUserData, setUserData } from "../../../firebase/common";
+import { encoding } from "../../../scripts/encryption";
 
 export default function GoogleOAuthCallback() {
 
     useEffect(() => {
-        const urlHash = window.location.hash.substring(1);
-        const params = new URLSearchParams(urlHash);
+        const params = new URLSearchParams(window.location.hash.substring(1));
         const idToken = params.get("id_token");
-
-        if (idToken) {
-            (async () => {
-                const decoded = jwtDecode(idToken);
-                const userId = decoded.sub;
-                const loginMethod = "google";
-
-                let userData = await getUserData(userId, loginMethod);
-                console.log("Imported User Data: ", userData);
-                if (!userData.salt) {
-                    const userSalt = BigInt('0x' + crypto.randomUUID().replace(/-/g, '')).toString();
-                    userData = await setUserData(userId, loginMethod, userSalt);
-                    console.log("New User Data: ", userData);
-                }
-                
-                userData["idToken"] = idToken;
-                window.opener.postMessage({ userData }, window.location.origin);
-                window.close();
-
-            })();
+        if (!idToken) {
+            console.error("No id_token found in callback");
+            return;
         }
+        const decodedJwt = jwtDecode(idToken);
+        const userId = decodedJwt.sub;
+
+        (async () => {
+            let userData = await getUserData(userId, "google");
+            
+            if (!userData || !userData.salt) {
+                const userSalt = generateRandomness().toString();
+                userData = await setUserData(userId, 'google', userSalt);
+            }
+            userData.idToken = idToken;
+            const encryptedUserData = encoding(JSON.stringify(userData));
+            localStorage.setItem("userData", encryptedUserData);
+            window.close();
+        })();
     }, []);
 
     return (
