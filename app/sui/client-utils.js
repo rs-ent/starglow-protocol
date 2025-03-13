@@ -13,28 +13,17 @@ export async function getMaxEpoch() {
     return Number(systemState.epoch) + 5;
 }
 
-export function getUserAddress() {
+export function getUserAddressWithUserData() {
     const encodedUserData = localStorage.getItem("userData");
     const userData = encodedUserData ? JSON.parse(decoding(encodedUserData)) : null;
     const idToken = userData ? userData.idToken : null;
     const salt = userData ? userData.salt : null;
-    if (!userData) {
-        console.error("User data is missing");
-        return null;
+    if (!userData || !idToken || !salt) {
+        return {address: {}, user: {}};
     }
-
-    if (!idToken) {
-        console.error("ID Token is missing");
-        return null;
-    }
-
-    if (!salt) {
-        console.error("Salt is missing");
-        return null;
-    }
-
+    
     const address = jwtToAddress(idToken, salt);
-    return address;
+    return {address, user: userData};
 }
 
 
