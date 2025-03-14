@@ -1,8 +1,7 @@
 /// app\firebase\user-data.js
 
-import { collection, query, where, doc, getDocs, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, doc, getDoc, getDocs, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firestore-voting';
-import { update } from 'firebase/database';
 
 export async function getUserData(userId, loginMethod) {
     try {
@@ -16,6 +15,26 @@ export async function getUserData(userId, loginMethod) {
                 docId: userDoc.id,
                 ...userDoc.data(),
             }
+            return userData;
+        } else {
+            console.log("No such user found!");
+            return {};
+        }
+    } catch (e) {
+        console.error(e);
+        return {};
+    }
+}
+
+export async function getUserDataByDocId(docId) {
+    try {
+        const userDocRef = doc(db, "users", docId);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+            const userData = {
+                docId: userDoc.id,
+                ...userDoc.data(),
+            };
             return userData;
         } else {
             console.log("No such user found!");

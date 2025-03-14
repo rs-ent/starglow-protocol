@@ -22,6 +22,7 @@ export async function generateMetadata({ params }) {
     }
 
     return {
+        metadataBase: new URL(baseUrl),
         title: title,
         description: description,
         openGraph: {

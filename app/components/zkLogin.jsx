@@ -3,15 +3,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { generateNonce, generateRandomness } from '@mysten/sui/zklogin';
-import { getUserAddressWithUserData, getMaxEpoch } from "../sui/client-utils";
-import { encoding } from "../scripts/encryption";
+import { getUserAddressWithUserData } from "../sui/client-utils";
 import { LogIn, LogOut, Settings } from 'lucide-react';
-import Image from 'next/image';
-import GoogleOAuth from "../oauth/GoogleOAuth";
+import { useRouter } from 'next/navigation';
+import ZkLoginModal from "./zkLoginModal";
 
 export default function ZkLogin() {
+    const router = useRouter();
     const [suiAddress, setSuiAddress] = useState(null);
     const [userData, setUserData] = useState({});
     const [showPopup, setShowPopup] = useState(false);
@@ -21,30 +19,13 @@ export default function ZkLogin() {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const handleLoginClick = async () => {
-        setLoading(true);
-        try {
-            const ephemeralKeypair = new Ed25519Keypair();
-            const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
-            const ephemeralSecretKey = ephemeralKeypair.getSecretKey();
-            const randomness = generateRandomness();
-            const maxEpoch = await getMaxEpoch();
-            const generatedNonce = generateNonce(ephemeralPublicKey, maxEpoch, randomness);
+    const handleLogout = async () => {
+        const res = await fetch("/api/session-storage/user/logout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
 
-            sessionStorage.setItem('ephemeralSecret', encoding(ephemeralSecretKey));
-            sessionStorage.setItem("randomness", randomness);
-            sessionStorage.setItem("maxEpoch", maxEpoch);
-            sessionStorage.setItem("nonce", generatedNonce);
-
-            setNonce(generatedNonce);
-        } catch (error) {
-            console.error("Error while generating nonce: ", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleLogout = () => {
         setSuiAddress(null);
         setUserData({});
         sessionStorage.clear();
@@ -64,14 +45,22 @@ export default function ZkLogin() {
             setUserData(user);
         }
 
-        const handleStorageChange = (event) => {
+        const handleStorageChange = async (event) => {
             if (event.key === "userData") {
                 const { address, user } = getUserAddressWithUserData();
-                console.log("User data: ", user);
                 if (address) {
-                    setSuiAddress(address);
-                    setUserData(user);
-                    setShowPopup(false);
+                    user.suiAddress = address;
+                    const res = await fetch("/api/session-storage/user", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ userData: user }),
+                    });
+                    const data = await res.json();
+                    if (data.message) {
+                        setSuiAddress(address);
+                        setUserData(user);
+                        setShowPopup(false);
+                    }
                 }
             }
         };
@@ -84,7 +73,7 @@ export default function ZkLogin() {
 
     return (
         <div>
-            {suiAddress ? (
+            {suiAddress && userData?.name ? (
                 <div className="relative inline-block" ref={menuRef}>
                     <div
                         className="flex items-center gap-2 px-2 py-2 rounded-xl w-[200px]
@@ -108,7 +97,7 @@ export default function ZkLogin() {
                                 className="w-full px-3 py-2 flex items-center gap-3 hover:bg-[#2a4054] rounded-[0.8rem]"
                                 onClick={() => {
                                     setMenuOpen(false);
-                                    // Setting 클릭 시 처리할 로직 추가
+                                    router.push(`/user`);
                                 }}
                             >
                                 <Settings size={16} />
@@ -128,7 +117,6 @@ export default function ZkLogin() {
                 <button
                     onClick={() => {
                         setShowPopup(true);
-                        handleLoginClick();
                     }}
                     className="
                         flex items-center gap-2 px-5 py-2 rounded-xl
@@ -143,37 +131,18 @@ export default function ZkLogin() {
 
             {showPopup && (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-[rgba(25,50,71,0.7)] rounded-lg shadow-lg p-10 w-[400px] relative backdrop-blur-md">
-                        <button
-                            className="absolute top-2 right-2 text-gray-500 hover:text-white"
-                            onClick={() => {
-                                setShowPopup(false);
-                                sessionStorage.removeItem("nonce");
-                            }}
-                        >
-                            ✕
-                        </button>
-
-                        <div className="flex flex-col items-center">
-                            <Image
-                                src="/sgt_logo.png"
-                                alt="Sui Logo"
-                                width={350}
-                                height={250}
-                            />
-
-                            <div className="w-full border-t border-t-[3px] border-[rgba(255,255,255,0.1)] mt-1 mb-10" />
-
-                            <GoogleOAuth nonce={nonce} />
-                        </div>
-                    </div>
+                    <ZkLoginModal
+                        isModal={true}
+                        onClose={() => {
+                            setShowPopup(false);
+                        }}
+                    />
 
                     {/* 배경 클릭 시 팝업 닫기 */}
                     <div
                         className="fixed inset-0 bg-black bg-opacity-50 z-[-1]"
                         onClick={() => {
                             setShowPopup(false);
-                            sessionStorage.removeItem("nonce");
                         }}
                     />
                 </div>
