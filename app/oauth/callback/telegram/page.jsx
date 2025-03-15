@@ -2,10 +2,10 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function TelegramAuthCallback() {
+function TelegramAuthHandler() {
     const params = useSearchParams();
     const router = useRouter();
 
@@ -28,15 +28,24 @@ export default function TelegramAuthCallback() {
         .then(res => res.json())
         .then(result => {
             if (result.success) {
-                router.push("/integration-success");
+                router.push("/user");
             } else {
-                router.push("/integration-failed");
+                router.push("/");
             }
         });
     }, [params, router]);
 
     return (
-        <div className="bg-black">
+        <div className="bg-black flex justify-center items-center h-screen">
+            <p className="text-white">Processing Telegram integration...</p>
         </div>
+    );
+}
+
+export default function TelegramAuthCallback() {
+    return (
+        <Suspense fallback={<div className="bg-black flex justify-center items-center h-screen"><p className="text-white">Loading...</p></div>}>
+            <TelegramAuthHandler />
+        </Suspense>
     );
 }
