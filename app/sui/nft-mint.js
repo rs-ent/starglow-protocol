@@ -3,8 +3,9 @@
 import suiClient from './suiClient';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { getUserAddressWithUserData, generateZkProof } from './client-utils';
+import { generateZkProof } from './client-utils';
 import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
+import { getSessionUserData } from '../scripts/user';
 import { decoding } from '../scripts/encryption';
 
 export async function mintNFT(formData) {
@@ -14,9 +15,10 @@ export async function mintNFT(formData) {
         const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
         const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
 
-        const { loginAddress, userData } = getUserAddressWithUserData();
+        const userData = await getSessionUserData();
+        const loginAddress = userData.suiAddress;
         if (!loginAddress) {
-            console.error("Could not get login address");
+            console.error("Could not get sui address");
             return;
         }
 

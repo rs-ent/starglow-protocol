@@ -4,28 +4,13 @@
 
 import suiClient from './suiClient';
 import { decoding } from '../scripts/encryption';
-import { jwtToAddress, getExtendedEphemeralPublicKey, getZkLoginSignature, genAddressSeed } from "@mysten/sui/zklogin";
+import { getExtendedEphemeralPublicKey } from "@mysten/sui/zklogin";
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode";
 
 export async function getMaxEpoch() {
     const systemState = await suiClient.getLatestSuiSystemState();
     return Number(systemState.epoch) + 5;
 }
-
-export function getUserAddressWithUserData() {
-    const encodedUserData = localStorage.getItem("userData");
-    const userData = encodedUserData ? JSON.parse(decoding(encodedUserData)) : null;
-    const idToken = userData ? userData.idToken : null;
-    const salt = userData ? userData.salt : null;
-    if (!userData || !idToken || !salt) {
-        return {address: {}, user: {}};
-    }
-    
-    const address = jwtToAddress(idToken, salt);
-    return {address, user: userData};
-}
-
 
 export async function generateZkProof(txBlock, { ephemeralPublicKey, userData, randomness, maxEpoch }) {
     if (!userData || !userData.idToken || !userData.salt) {

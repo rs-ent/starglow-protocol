@@ -60,6 +60,7 @@ export async function POST(req) {
             photo_url: telegramData.photo_url || null,
             auth_date: telegramData.auth_date || null,
             linked_at: new Date().toISOString(),
+            deprecated: false,
         }
     });
 

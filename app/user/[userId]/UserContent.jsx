@@ -21,7 +21,7 @@ export default function UserContent({ contentType = "", userData = {}, owner = f
   }, [contentType]);
 
   return (
-    <main className="flex-1 p-6">
+    <main className="flex-1 p-6 bg-[rgba(255,255,255,0.03)]">
       {content}
     </main>
   );

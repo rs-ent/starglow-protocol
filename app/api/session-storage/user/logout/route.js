@@ -15,5 +15,5 @@ export async function POST(req) {
     const cookieStore = await cookies();
     const session = await getIronSession(cookieStore, sessionOptions);
     await session.destroy();
-    return NextResponse.json({ message: "User logged out" });
+    return NextResponse.json({ success: true, message: "User logged out" });
 }

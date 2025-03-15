@@ -3,9 +3,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getUserAddressWithUserData } from "../sui/client-utils";
 import { LogIn, LogOut, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { getSessionUserData, getEncryptedLocalUserData, logout } from "../scripts/user";
 import ZkLoginModal from "./zkLoginModal";
 
 export default function ZkLogin() {
@@ -20,47 +20,32 @@ export default function ZkLogin() {
     const menuRef = useRef(null);
 
     const handleLogout = async () => {
-        const res = await fetch("/api/session-storage/user/logout", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-
-        setSuiAddress(null);
-        setUserData({});
-        sessionStorage.clear();
-        setMenuOpen(false);
-    };
-
-    const handleClickOutside = (event) => {
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
+        const res = await logout();
+        if (res) {
+            setSuiAddress(null);
+            setUserData({});
             setMenuOpen(false);
         }
     };
 
     useEffect(() => {
-        const { address, user } = getUserAddressWithUserData();
-        if (address && user) {
-            setSuiAddress(address);
-            setUserData(user);
+        const checkInitialUserData = async () => {
+            const user = await getSessionUserData();
+            if (user) {
+                setSuiAddress(user.suiAddress);
+                setUserData(user);
+            }
         }
+        checkInitialUserData();
 
         const handleStorageChange = async (event) => {
             if (event.key === "userData") {
-                const { address, user } = getUserAddressWithUserData();
-                if (address) {
-                    user.suiAddress = address;
-                    const res = await fetch("/api/session-storage/user", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ userData: user }),
-                    });
-                    const data = await res.json();
-                    if (data.message) {
-                        setSuiAddress(address);
-                        setUserData(user);
-                        setShowPopup(false);
-                    }
+                const user = await getEncryptedLocalUserData();
+                const suiAddress = user.suiAddress;
+                if (suiAddress) {
+                    setSuiAddress(suiAddress);
+                    setUserData(user);
+                    setShowPopup(false);
                 }
             }
         };
@@ -92,7 +77,7 @@ export default function ZkLogin() {
                     </div>
 
                     {menuOpen && (
-                        <div className="absolute w-[200px] left-0 mt-2 w-36 bg-[#193247] text-[#d9e0e6] rounded-[1.0rem] shadow-lg z-50 p-2">
+                        <div className="absolute w-[200px] left-0 mt-2 bg-[#193247] text-[#d9e0e6] rounded-[1.0rem] shadow-lg z-50 p-2">
                             <button
                                 className="w-full px-3 py-2 flex items-center gap-3 hover:bg-[#2a4054] rounded-[0.8rem]"
                                 onClick={() => {
