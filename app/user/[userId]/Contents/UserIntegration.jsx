@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { updateUserData } from "../../../firebase/user-data";
 import Image from "next/image";
 
 export default function UserIntegration({ userData = {}, owner = false }) {
     const telegramWrapper = useRef(null);
+    const [telegramDeprecated, setTelegramDeprecated] = useState(false);
 
     useEffect(() => {
         // Telegram 위젯 로드 중복 방지
@@ -26,13 +27,12 @@ export default function UserIntegration({ userData = {}, owner = false }) {
     }, [telegramWrapper]);
 
     const handleTelegramUnlink = async () => {
-        const updatedTelegramData = {
-            ...userData.telegram,
-            deprecated: true,
-            deprecated_at: new Date().toISOString(),
-        };
-
-        await updateUserData({ telegram: updatedTelegramData });
+        setTelegramDeprecated(true);
+        const updatedTelegramData = userData.telegram;
+        updatedTelegramData.deprecated = true;
+        updatedTelegramData.deprecated_at = new Date().toISOString();
+        userData.telegram = updatedTelegramData;
+        await updateUserData(userData.docId, userData);
     };
 
     return (
@@ -48,7 +48,7 @@ export default function UserIntegration({ userData = {}, owner = false }) {
                     <h2 className="text-xl font-bold text-[var(--text-primary)]">Telegram</h2>
                 </div>
 
-                {!userData.telegram?.deprecated ? (
+                {!userData.telegram?.deprecated && !telegramDeprecated ? (
                     <div className="flex gap-4 items-center">
                     <div className="text-right">
                         <p className="text-[var(--text-primary)]">{userData.telegram.first_name} {userData.telegram.last_name}</p>
