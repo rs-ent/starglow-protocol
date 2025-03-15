@@ -38,7 +38,7 @@ export default function PollList({ pollResults }) {
                 const startDate = parseAsKST(poll.start);
                 const endDate = parseAsKST(poll.end);
 
-                if (startDate > today && poll.show_scheduled === 'TRUE'){
+                if (startDate > today && poll.show_scheduled === 'TRUE') {
                     poll.enableComments = false;
                     scheduled.push(poll);
                 }
@@ -73,7 +73,7 @@ export default function PollList({ pollResults }) {
 
         } catch (err) {
             console.error("Failed", err);
-        } finally{
+        } finally {
             const deviceInfo = {
                 userAgent: navigator.userAgent,
                 language: navigator.language,
@@ -84,8 +84,8 @@ export default function PollList({ pollResults }) {
                 screenHeight: window.screen.height,
                 devicePixelRatio: window.devicePixelRatio,
                 ipAddress: ipData.ip,
-            };    
-            
+            };
+
             const type = "toMiniApp";
             clickAccessButton(deviceInfo, type);
         }
@@ -100,7 +100,7 @@ export default function PollList({ pollResults }) {
             {/* 배경 및 최상단 영역 */}
             <div
                 className="
-                bg-[url('/poll-bg-dt.png')] bg-top bg-no-repeat bg-fixed
+                bg-[url('/poll-bg-dt.png')] bg-top bg-no-repeat bg-fixed bg-cover
                 bg-black bg-blend-multiply bg-opacity-15
                 items-center justify-center pb-64
                 "
@@ -143,7 +143,7 @@ export default function PollList({ pollResults }) {
                 </div>
 
                 {/* 탭별 컨텐츠 */}
-                <div className="px-[10vw] pb-3 min-h-screen">
+                <div className="pb-3 min-h-screen mx-auto flex flex-col items-center w-full px-4">
                     {activeTab === TABS.ONGOING && (
                         <>
                             <h1 className="text-2xl text-white mb-4">ONGOING</h1>
@@ -291,22 +291,27 @@ function MobileCarousel({ polls, pollResults, handlePollClick, isBlur }) {
     };
 
     return (
-        <Slider {...settings} className="text-white">
-            {polls.map((poll) => (
-                <div key={poll.poll_id}>
+        <div className="w-full justify-center px-1">
+            <Slider {...settings} className="text-white">
+                {polls.map((poll) => (
                     <div
-                        onClick={handlePollClick}
-                        className={`p-4 cursor-pointer ${isBlur ? "blur-md" : ""}`}
+                        key={poll.poll_id}
+                        className="slider-item"
                     >
-                        <PollCard
-                            poll={poll}
-                            result={pollResults.find((p) => p.id === poll.poll_id)}
-                            enableComments={poll.enableComments}
-                        />
+                        <div
+                            onClick={() => handlePollClick(poll.poll_id)}
+                            className={`p-4 cursor-pointer mx-auto ${isBlur ? "blur-md" : ""}`}
+                        >
+                            <PollCard
+                                poll={poll}
+                                result={pollResults.find((p) => p.id === poll.poll_id)}
+                                enableComments={poll.enableComments}
+                            />
+                        </div>
                     </div>
-                </div>
-            ))}
-        </Slider>
+                ))}
+            </Slider>
+        </div>
     );
 }
 

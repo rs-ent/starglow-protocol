@@ -9,20 +9,22 @@ export default function UserPageClient({ userData = {}, owner = false }) {
   const [content, setContent] = useState('profile');
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <div className="container mx-auto w-[60%]">
-        <UserHeader userData={userData} owner={owner} />
-        <div className="flex">
-          <UserSidebar
-            userData={userData}
-            owner={owner}
-            onSectionClick={(contentType) => setContent(contentType)}
-          />
-          <UserContent
-            contentType={content}
-            userData={userData}
-            owner={owner}
-          />
+    <div className="bg-[url('/poll-bg.png')] bg-top bg-no-repeat bg-fixed bg-cover">
+      <div className="min-h-screen w-full text-[var(--foreground)] bg-[rgba(0,0,0,0.8)] bg-blend-overlay">
+        <div className="justify-center">
+          <UserHeader userData={userData} owner={owner} />
+          <div className="flex w-[60%] mx-auto">
+            <UserSidebar
+              userData={userData}
+              owner={owner}
+              onSectionClick={(contentType) => setContent(contentType)}
+            />
+            <UserContent
+              contentType={content}
+              userData={userData}
+              owner={owner}
+            />
+          </div>
         </div>
       </div>
     </div>

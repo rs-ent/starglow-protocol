@@ -2,7 +2,7 @@
 
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchPoints } from "../../scripts/meme-quest-points";
 
 export default function UserHeader({ userData = {}, owner = false }) {
@@ -21,7 +21,7 @@ export default function UserHeader({ userData = {}, owner = false }) {
   }, [userData]);
 
   return (
-    <header className="w-full h-[150px] bg-[var(--background-second)] py-6 px-4 flex items-center justify-between border-b border-[var(--border-mid)]">
+    <header className="w-full h-[150px] bg-[var(--background-second)] py-12 px-[22%] flex items-center justify-between border-b border-[rgba(255,255,255,0.1)]">
       <div className="flex items-center gap-4">
         {/* 프로필 이미지 */}
         <img
@@ -43,7 +43,7 @@ export default function UserHeader({ userData = {}, owner = false }) {
           ) : (
             <div className="bg-gradient-to-br from-[rgba(255,255,255,0.8)] to-[rgba(0,0,0,0.8)] p-[1px] rounded-full">
               <div className="bg-[rgba(50,50,50,0.95)] px-3 py-2 rounded-full">
-                <h1 className="text-[rgba(255,255,255,0.9)] text-base text-center text-gradient">{points.toLocaleString()} Points</h1>
+                <h1 className="text-[rgba(255,255,255,0.9)] text-[1.0rem] text-center text-gradient">{points.toLocaleString()} Points</h1>
               </div>
             </div>
           )}

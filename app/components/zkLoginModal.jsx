@@ -48,7 +48,7 @@ export default function ZkLoginModal({ isModal = true, onClose }) {
                     height={250}
                 />
 
-                <div className="w-full border-t border-t-[3px] border-[rgba(255,255,255,0.1)] mt-1 mb-10" />
+                <div className="w-full border-t-[3px] border-[rgba(255,255,255,0.1)] mt-1 mb-10" />
 
                 <GoogleOAuth nonce={nonce} />
             </div>
