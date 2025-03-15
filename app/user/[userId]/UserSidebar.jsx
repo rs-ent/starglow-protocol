@@ -12,7 +12,6 @@ export default function UserSidebar({ userData = {}, owner = false, onSectionCli
 
   const handleSelect = (section) => {
     setContent(section);
-    console.log("section", section);
     onSectionClick(section);
   };
 

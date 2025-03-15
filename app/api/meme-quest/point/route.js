@@ -12,7 +12,7 @@ export async function POST(req) {
             );
         }
 
-        const ADMIN_SECRET = process.env.NEXT_PUBLIC_MEMEQUEST_SECRET;
+        const ADMIN_SECRET = process.env.MEMEQUEST_SECRET;
         const apiUrl = 'https://api.meme-quest.xyz/starglow/points';
 
         const apiResponse = await fetch(apiUrl, {
@@ -45,7 +45,7 @@ export async function GET(req) {
         );
     }
 
-    const ADMIN_SECRET = process.env.NEXT_PUBLIC_MEMEQUEST_SECRET;
+    const ADMIN_SECRET = process.env.MEMEQUEST_SECRET;
     const apiUrl = `https://api.meme-quest.xyz/starglow/points?telegramId=${encodeURIComponent(telegramId)}`;
 
     try {

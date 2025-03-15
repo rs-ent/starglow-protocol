@@ -11,8 +11,6 @@ export default function UserContent({ contentType = "", userData = {}, owner = f
   const [content, setContent] = useState(<div></div>);
 
   useEffect(() => {
-    console.log("contentType", contentType);
-
     if (contentType === "integration") {
       setContent(<UserIntegration userData={userData} owner={owner} />);
     } else {
