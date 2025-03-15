@@ -2,19 +2,23 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUserAddressWithUserData } from "../sui/client-utils";
 import ZkLoginModal from "../components/zkLoginModal";
+import Spinner from "../components/Spinner";
 
 export default function UserPending() {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const handleStorageChange = async (event) => {
             if (event.key === "userData") {
+                setLoading(true);
                 const { address, user } = getUserAddressWithUserData();
                 if (user.docId) {
+                    
                     user.suiAddress = address;
                     const res = await fetch("/api/session-storage/user", {
                         method: "POST",
@@ -24,6 +28,7 @@ export default function UserPending() {
                     const data = await res.json();
                     if(data.message) {
                         router.push(`/user/${user.docId}`);
+                        setLoading(false);
                     }
                 }
             }
@@ -37,6 +42,9 @@ export default function UserPending() {
 
     return (
         <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[rgba(5,23,38,1)] to-[rgba(15,20,11,1)]">
+            {/* Loading spinner */}
+            {loading && <Spinner />}
+
             <ZkLoginModal
                 isModal={false}
             />

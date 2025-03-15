@@ -1,7 +1,15 @@
 /// app\firebase\user-data.js
 
-import { collection, query, where, doc, getDoc, getDocs, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from './firestore-voting';
+
+const timestampToString = (timestamp) => {
+    if (timestamp instanceof Timestamp) {
+        return timestamp.toDate().toISOString();
+    }
+    return null;
+};
+
 
 export async function getUserData(userId, loginMethod) {
     try {
@@ -11,9 +19,13 @@ export async function getUserData(userId, loginMethod) {
 
         if (!querySnapshot.empty) {
             const userDoc = querySnapshot.docs[0];
+            const data = userDoc.data();
+
             const userData = {
                 docId: userDoc.id,
                 ...userDoc.data(),
+                createdAt: timestampToString(data.createdAt),
+                latestLogin: timestampToString(data.latestLogin),
             }
             return userData;
         } else {
@@ -31,9 +43,13 @@ export async function getUserDataByDocId(docId) {
         const userDocRef = doc(db, "users", docId);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
+            const data = userDoc.data();
+
             const userData = {
                 docId: userDoc.id,
                 ...userDoc.data(),
+                createdAt: timestampToString(data.createdAt),
+                latestLogin: timestampToString(data.latestLogin),
             };
             return userData;
         } else {

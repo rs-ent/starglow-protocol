@@ -2,10 +2,19 @@
 
 "use client";
 
-export default function UserSidebar({ userData = {}, owner = false }) {
+import { useRouter } from "next/navigation";
 
-  const handleClick = (section) => {
-    console.log(`Navigating to ${section}`);
+export default function UserSidebar({ userData = {}, owner = false, onSectionClick }) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const res = await fetch("/api/session-storage/user/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    sessionStorage.clear();
+    router.push('/');
   }
 
   return (
@@ -13,7 +22,7 @@ export default function UserSidebar({ userData = {}, owner = false }) {
       <ul className="fixed w-40 space-y-4">
         <li>
           <a
-            onClick={() => handleClick('profile')}
+            onClick={() => onSectionClick('profile')}
             role="button"
             className="block px-3 py-2 rounded hover:bg-[rgba(255,255,255,0.1)] transition-all cursor-pointer"
           >
@@ -22,7 +31,7 @@ export default function UserSidebar({ userData = {}, owner = false }) {
         </li>
         <li>
           <a
-            onClick={() => handleClick('integration')}
+            onClick={() => onSectionClick('integration')}
             role="button"
             className="block px-3 py-2 rounded hover:bg-[rgba(255,255,255,0.1)] transition-all cursor-pointer"
           >
@@ -31,7 +40,7 @@ export default function UserSidebar({ userData = {}, owner = false }) {
         </li>
         <li>
           <a
-            onClick={() => handleClick('settings')}
+            onClick={() => onSectionClick('settings')}
             role="button"
             className="block px-3 py-2 rounded hover:bg-[rgba(255,255,255,0.1)] transition-all cursor-pointer"
           >
@@ -40,11 +49,20 @@ export default function UserSidebar({ userData = {}, owner = false }) {
         </li>
         <li>
           <a
-            onClick={() => handleClick('activity')}
+            onClick={() => onSectionClick('activity')}
             role="button"
             className="block px-3 py-2 rounded hover:bg-[rgba(255,255,255,0.1)] transition-all cursor-pointer"
           >
             Activity
+          </a>
+        </li>
+        <li>
+          <a
+            onClick={() => handleLogout()}
+            role="button"
+            className="block px-3 py-2 text-[rgba(255,50,50,1)] rounded hover:bg-[rgba(255,255,255,0.1)] transition-all cursor-pointer"
+          >
+            Logout
           </a>
         </li>
       </ul>
