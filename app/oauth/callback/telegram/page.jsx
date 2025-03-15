@@ -25,13 +25,22 @@ function TelegramAuthHandler() {
             body: JSON.stringify({ telegramData }),
             headers: { "Content-Type": "application/json" },
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error: ${res.status}`);
+            }
+            return res.json();
+        })
         .then(result => {
             if (result.success) {
                 router.push("/user");
             } else {
                 router.push("/");
             }
+        })
+        .catch(error => {
+            console.error("Telegram integration failed:", error);
+            router.push("/");
         });
     }, [params, router]);
 
@@ -44,7 +53,11 @@ function TelegramAuthHandler() {
 
 export default function TelegramAuthCallback() {
     return (
-        <Suspense fallback={<div className="bg-black flex justify-center items-center h-screen"><p className="text-white">Loading...</p></div>}>
+        <Suspense fallback={
+            <div className="bg-black flex justify-center items-center h-screen">
+                <p className="text-white">Loading...</p>
+            </div>
+        }>
             <TelegramAuthHandler />
         </Suspense>
     );

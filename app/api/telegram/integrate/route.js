@@ -17,6 +17,16 @@ export async function POST(req) {
     const { telegramData } = await req.json();
 
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    if (!TELEGRAM_BOT_TOKEN) {
+        return Response.json({ success: false, message: 'Server configuration error' }, { status: 500 });
+    }
+
+    const cookieStore = await cookies();
+    const session = await getIronSession(cookieStore, sessionOptions);
+    const activeUser = session.user;
+    if (!activeUser || !activeUser.docId) {
+        return Response.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
 
     const dataCheckString = Object.keys(telegramData)
         .filter(key => telegramData[key] && key !== "hash")
@@ -40,19 +50,15 @@ export async function POST(req) {
         return Response.json({ success: false, message: "Auth Date expired or Invalid data" });
     }
 
-    const cookieStore = await cookies();
-    const session = await getIronSession(cookieStore, sessionOptions);
-    const activeUser = session.user;
     const userDocId = activeUser.docId;
-    
     await updateUserData(userDocId, {
         telegram: {
             telegram_id: telegramData.id,
-            username: telegramData.username,
-            first_name: telegramData.first_name,
-            last_name: telegramData.last_name,
+            username: telegramData.username || '',
+            first_name: telegramData.first_name || '',
+            last_name: telegramData.last_name || '',
             photo_url: telegramData.photo_url || null,
-            auth_date: telegramData.auth_date,
+            auth_date: telegramData.auth_date || null,
             linked_at: new Date().toISOString(),
         }
     });

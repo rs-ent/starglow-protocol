@@ -6,6 +6,11 @@ export default function UserIntegration({ userData = {}, owner = false }) {
     const telegramWrapper = useRef(null);
 
     useEffect(() => {
+        // Telegram 위젯 로드 중복 방지
+        if (!telegramWrapper.current || telegramWrapper.current.childNodes.length > 0) {
+            return;
+        }
+
         const script = document.createElement("script");
         script.src = "https://telegram.org/js/telegram-widget.js?22";
         script.async = true;
@@ -15,9 +20,8 @@ export default function UserIntegration({ userData = {}, owner = false }) {
         script.setAttribute("data-request-access", "write");
         script.setAttribute("data-auth-url", `${window.location.origin}/oauth/callback/telegram`);
 
-        telegramWrapper.current.innerHTML = "";
         telegramWrapper.current.appendChild(script);
-    }, []);
+    }, [telegramWrapper]);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
@@ -27,7 +31,6 @@ export default function UserIntegration({ userData = {}, owner = false }) {
             <div className="flex gap-4 items-center mt-8 rounded-lg border border-[var(--border-mid)] p-4">
                 <h2 className="text-xl font-bold text-[var(--text-primary)]">Telegram</h2>
 
-                {/* Telegram 위젯 정상 로드 */}
                 <div ref={telegramWrapper} />
             </div>
         </div>
