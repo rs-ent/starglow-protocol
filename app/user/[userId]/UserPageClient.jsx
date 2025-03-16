@@ -13,7 +13,7 @@ export default function UserPageClient({ userData = {}, owner = false }) {
       <div className="min-h-screen w-full text-[var(--foreground)] bg-[rgba(0,0,0,0.8)] bg-blend-overlay">
         <div className="justify-center">
           <UserHeader userData={userData} owner={owner} />
-          <div className="flex w-[60%] mx-auto">
+          <div className="flex mx-auto">
             <UserSidebar
               userData={userData}
               owner={owner}

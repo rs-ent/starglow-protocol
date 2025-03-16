@@ -3,6 +3,7 @@ import Providers from "./context/Providers";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Toaster } from "sonner";
 
 export const metadata = {
   title: "Starglow Protocol",
@@ -84,7 +85,10 @@ export default function RootLayout({ children }) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Toaster position="top-right" />
+          {children}
+        </Providers>
         <Analytics />
         <SpeedInsights />
       </body>

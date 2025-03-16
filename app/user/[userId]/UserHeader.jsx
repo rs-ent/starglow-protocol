@@ -4,13 +4,15 @@
 
 import { useEffect, useState } from "react";
 import { fetchPoints } from "../../scripts/meme-quest-points";
+import { Copy } from "lucide-react";
+import toaster from "../../toaster/toast";
 
 export default function UserHeader({ userData = {}, owner = false }) {
 
   const [points, setPoints] = useState(0);
   useEffect(() => {
     const fetchUserPoints = async () => {
-      if(userData.telegram?.telegram_id) {
+      if (userData.telegram?.telegram_id) {
         const userPoints = await fetchPoints({ telegramId: userData.telegram.telegram_id });
         setPoints(userPoints);
       } else {
@@ -20,8 +22,17 @@ export default function UserHeader({ userData = {}, owner = false }) {
     fetchUserPoints();
   }, [userData]);
 
+  const handleAddressCopy = () => {
+    navigator.clipboard.writeText(userData.suiAddress);
+    toaster({
+      message: "Copied to clipboard!",
+      duration: 1500,
+      type: "info",
+    })
+  }
+
   return (
-    <header className="w-full h-[150px] bg-[var(--background-second)] py-12 px-[22%] flex items-center justify-between border-b border-[rgba(255,255,255,0.1)]">
+    <header className="w-full h-[150px] bg-[var(--background-second)] py-12 px-[2vw] flex items-center justify-between border-b border-[rgba(255,255,255,0.1)]">
       <div className="flex items-center gap-4">
         {/* 프로필 이미지 */}
         <img
@@ -30,9 +41,15 @@ export default function UserHeader({ userData = {}, owner = false }) {
           className="w-16 h-16 rounded-full"
         />
         <div>
-          <h1 className="text-2xl font-bold text-gradient">{userData.name}</h1>
-          <p className="text-[var(--foreground-muted)]">
-            {userData.suiAddress}
+          <h1 className="text-2xl font-bold text-gradient w-[40vw] truncate">{userData.name}</h1>
+          <p 
+            className="flex text-[var(--foreground-muted)] items-center gap-2 cursor-pointer"
+            onClick={() => handleAddressCopy()}
+          >
+            <Copy size={16} strokeWidth={2} />
+            <div className="w-[40vw] truncate">
+              {userData.suiAddress}
+            </div>
           </p>
         </div>
       </div>
