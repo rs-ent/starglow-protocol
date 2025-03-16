@@ -7,6 +7,7 @@ import { generateZkProof } from './client-utils';
 import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
 import { getSessionUserData } from '../scripts/user';
 import { decoding } from '../scripts/encryption';
+import { jwtDecode } from "jwt-decode";
 
 export async function mintNFT(formData) {
     try {
@@ -66,19 +67,26 @@ export async function mintNFT(formData) {
             console.error("Failed to generate zk proof signature");
             return;
         }
-        console.log("ZK Proof:", zkProof);
 
-        const { bytes, signature: userSignature } = await tx.sign({
+
+        /*const { bytes, signature: userSignature } = await tx.sign({
             client: suiClient,
             signer: ephemeralKeypair,
-        });
-
+        });*/
+        
+        const bytes = await tx.build({ client: suiClient });
+        const signResult = await ephemeralKeypair.signTransaction(bytes);
+        const base64Signature = signResult.signature;
+        
+        
+        const decodedJwt = jwtDecode(userData.idToken);
         const addressSeed = genAddressSeed(
             BigInt(userData.salt),
             "sub",
-            userData.sub,
-            userData.aud
+            decodedJwt.sub,
+            decodedJwt.aud
         ).toString();
+        console.log("Address seed:", addressSeed);
 
         const zkLoginSignature = getZkLoginSignature({
             inputs: {
@@ -86,8 +94,9 @@ export async function mintNFT(formData) {
                 addressSeed,
             },
             maxEpoch,
-            userSignature,
+            userSignature: base64Signature,
         });
+        console.log("Zk login signature:", zkLoginSignature);
 
         const result = await suiClient.executeTransactionBlock({
             transactionBlock: bytes,
