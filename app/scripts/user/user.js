@@ -1,4 +1,4 @@
-import { encoding, decoding } from "./encryption";
+import { encoding, decoding } from "../encryption";
 
 export async function setSessionUserData(userData) {
     const res = await fetch("/api/session-storage/user", {

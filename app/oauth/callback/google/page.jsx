@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { generateRandomness, jwtToAddress } from "@mysten/sui/zklogin";
 import { getUserData, setUserData, updateUserData } from "../../../firebase/user-data";
-import { setSessionUserData, setEncryptedLocalUserData } from "../../../scripts/user";
+import { setSessionUserData, setEncryptedLocalUserData } from "../../../scripts/user/user";
 
 export default function GoogleOAuthCallback() {
 
@@ -64,7 +64,7 @@ export default function GoogleOAuthCallback() {
             }
 
             await setSessionUserData(userData);
-            setEncryptedLocalUserData(userData);
+            await setEncryptedLocalUserData(userData);
             window.close();
         })();
     }, []);

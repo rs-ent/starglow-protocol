@@ -5,7 +5,7 @@
 import { useState, useEffect, useRef } from "react";
 import { LogIn, LogOut, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { getSessionUserData, getEncryptedLocalUserData, logout } from "../scripts/user";
+import { getSessionUserData, getEncryptedLocalUserData, logout } from "../scripts/user/user";
 import ZkLoginModal from "./zkLoginModal";
 
 export default function ZkLogin() {

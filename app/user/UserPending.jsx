@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getEncryptedLocalUserData } from "../scripts/user";
+import { getEncryptedLocalUserData } from "../scripts/user/user";
 import ZkLoginModal from "../components/zkLoginModal";
 import Spinner from "../components/Spinner";
 

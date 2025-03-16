@@ -5,6 +5,7 @@
 import { useState } from "react";
 import ImageUploader from "../components/ImageUploader";
 import { mintNFT } from "../sui/nft-mint";
+import toaster from "../toaster/toast";
 
 export default function NFTMinting() {
     const [formData, setFormData] = useState({
@@ -33,6 +34,31 @@ export default function NFTMinting() {
         try {
             setIsMinting(true);
             const result = await mintNFT(formData);
+            if (result.success) {
+                const detail = result.result;
+                if (detail.digest) {
+                    const nftId = detail.digest;
+                    toaster({
+                        message: (
+                            <span>
+                                NFT Minted Successfully! Visit{" "}
+                                <a
+                                    href={`https://suiscan.xyz/devnet/tx/${nftId}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ textDecoration: "underline", fontWeight: "bold", color: "#fff" }}
+                                >
+                                    Transaction
+                                </a>
+                            </span>
+                        ),
+                        type: "success",
+                    });
+                }
+            } else {
+                console.log("Mint NFT error:", result.error);
+                toaster({ message: result.error.message || String(result.error), type: "error" });
+            }
             setMintResult(result);
             console.log("Mint NFT result:");
         } catch (error) {

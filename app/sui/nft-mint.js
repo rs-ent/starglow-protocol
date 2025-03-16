@@ -5,14 +5,16 @@ import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { generateZkProof } from './client-utils';
 import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
-import { getSessionUserData } from '../scripts/user';
+import { getSessionUserData } from '../scripts/user/user';
 import { decoding } from '../scripts/encryption';
 import { jwtDecode } from "jwt-decode";
 
 export async function mintNFT(formData) {
     try {
-
         const ephemeralSecret = decoding(sessionStorage.getItem("ephemeralSecret"));
+        if(!ephemeralSecret) {
+            return { success: false, error: "For security reasons, please log out and log back in." };
+        }
         const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
         const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
 
@@ -27,6 +29,12 @@ export async function mintNFT(formData) {
             console.error("User data is missing");
             return;
         }       
+
+        console.log(userData);
+
+        if (userData.allowMinting !== true) {
+            return { success: false, error: "User is not allowed to mint NFTs" };
+        }
 
         const randomness = sessionStorage.getItem("randomness");
         const maxEpoch = sessionStorage.getItem("maxEpoch");
@@ -104,9 +112,9 @@ export async function mintNFT(formData) {
         });
 
         console.log("Mint NFT result:", result);
-        return result;
+        return { success: true, result};
     } catch (error) {
         console.error("Failed to mint NFT:", error);
-        throw error;
+        return { success: false, error };
     }
 }

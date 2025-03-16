@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { logout } from "../../scripts/user";
+import { logout } from "../../scripts/user/user";
 import { LogOut, Blocks } from "lucide-react";
 
 export default function UserSidebar({ userData = {}, owner = false, onSectionClick }) {

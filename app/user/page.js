@@ -1,5 +1,4 @@
-import { cookies } from "next/headers";
-import { getIronSession } from "iron-session";
+import { getServerSessionUserData } from "../scripts/user/user-server";
 import { redirect } from "next/navigation";
 import UserPending from "./UserPending";
 
@@ -12,9 +11,7 @@ const sessionOptions = {
 };
 
 export default async function ProfilePage() {
-    const cookieStore = await cookies();
-    const session = await getIronSession(cookieStore, sessionOptions);
-    const user = session.user;
+    const user = await getServerSessionUserData();
 
     if (user && user.docId) {
         redirect(`/user/${user.docId}`);
