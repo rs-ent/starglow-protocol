@@ -48,7 +48,7 @@ export default function UserIntegration({ userData = {}, owner = false }) {
                     <h2 className="text-xl font-bold text-[var(--text-primary)]">Telegram</h2>
                 </div>
 
-                {!userData.telegram?.deprecated && !telegramDeprecated ? (
+                {userData && userData.telegram && !userData.telegram?.deprecated && !telegramDeprecated ? (
                     <div className="flex gap-4 items-center">
                     <div className="text-right">
                         <p className="text-[var(--text-primary)]">{userData.telegram.first_name} {userData.telegram.last_name}</p>
