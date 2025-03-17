@@ -1,7 +1,7 @@
 /// app\nft-store\NFTStore.jsx
 "use client";
 
-export default function NFTStore({ nftList }) {
+export default function NFTStore({ nftList = [] }) {
     return (
         <section className="section-base bg-[var(--background-second)]">
             <h2 className="section-title font-main-bold text-glow-strong">

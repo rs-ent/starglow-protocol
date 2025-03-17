@@ -8,6 +8,48 @@ import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
 import { getSessionUserData } from '../scripts/user/user';
 import { decoding } from '../scripts/encryption';
 import { jwtDecode } from "jwt-decode";
+import { setNFTs } from '../firebase/nfts';
+
+export function parseNFTForFirebase(nftData, digest) {
+    const { data } = nftData;
+
+    const {
+        objectId,
+        version,
+        digest: objectDigest,
+        type,
+        owner,
+        content,
+        display,
+    } = data;
+
+    const fields = content?.fields || {};
+    const ownerAddress = owner?.AddressOwner || owner?.ObjectOwner || owner?.Shared || null;
+
+    return {
+        objectId,
+        version,
+        objectDigest,
+        transactionDigest: digest,
+        type,
+        owner: ownerAddress,
+        name: fields.name || '',
+        description: fields.description || '',
+        collection: fields.collection || '',
+        creator: fields.creator || '',
+        created_at: Number(fields.created_at) || null,
+        external_link: fields.external_link || '',
+        image_url: fields.image_url || '',
+        report_url: fields.report_url || '',
+        share_percent: Number(fields.share_percent) || 0,
+        glow_start: Number(fields.glow_start) || null,
+        glow_end: Number(fields.glow_end) || null,
+        display_data: display?.data || null,
+        display_error: display?.error || null,
+        nested_id: fields.id?.id || null,
+        hasPublicTransfer: content?.hasPublicTransfer || false,
+    };
+}
 
 export async function mintNFT(formData, userData = {}) {
     try {
@@ -37,12 +79,11 @@ export async function mintNFT(formData, userData = {}) {
         }
 
         const ephemeralSecret = decoding(sessionStorage.getItem("ephemeralSecret"));
-        if(!ephemeralSecret) {
+        if (!ephemeralSecret) {
             return { success: false, error: "For security reasons, please log out and log back in." };
         }
         const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
         const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
-        console.log("Ephemeral keypair:", ephemeralKeypair);
 
         const randomness = sessionStorage.getItem("randomness");
         const maxEpoch = sessionStorage.getItem("maxEpoch");
@@ -89,10 +130,10 @@ export async function mintNFT(formData, userData = {}) {
             console.error("Failed to generate zk proof signature");
             return { success: false, error: "Failed to generate cryptographic proof. Please retry." };
         }
-        
+
         const signResult = await ephemeralKeypair.signTransaction(txBytes);
         const base64Signature = signResult.signature;
-        
+
         const decodedJwt = jwtDecode(userData.idToken);
         const addressSeed = genAddressSeed(
             BigInt(userData.salt),
@@ -115,7 +156,39 @@ export async function mintNFT(formData, userData = {}) {
             signature: zkLoginSignature,
         });
 
-        return { success: true, result};
+        const txDigest = result.digest;
+        const txDetails = await suiClient.getTransactionBlock({
+            digest: txDigest,
+            options: {
+                showEffects: true,
+                showObjectChanges: true,
+            },
+        });
+        console.log("txDetails:", txDetails);
+
+        const createdObjects = txDetails.objectChanges.filter((change) => change.type === "created");
+        console.log("Created objects:", createdObjects);
+        const nftDetails = await Promise.all(
+            createdObjects.map(async (obj) => {
+                const objDetail = await suiClient.getObject({
+                    id: obj.objectId,
+                    options: {
+                        showType: true,
+                        showContent: true,
+                        showDisplay: true,
+                        showOwner: true,
+                    },
+                });
+                console.log("Object detail:", objDetail);
+
+                return parseNFTForFirebase(objDetail, txDigest);
+            })
+        );
+        console.log("NFT details:", nftDetails);
+        const savedData = await setNFTs(nftDetails);
+        console.log("Saved NFTs to Firebase:", savedData);
+
+        return { success: true, result: { digest: txDigest, nftDetails } };
     } catch (error) {
         console.error("Failed to mint NFT:", error);
         return { success: false, error: error.message || "Unexpected error occurred" };

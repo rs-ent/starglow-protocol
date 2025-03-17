@@ -39,6 +39,7 @@ export default function NFTMinting({ userData }) {
         try {
             setIsMinting(true);
             const result = await mintNFT(formData, updatedUserData);
+            console.log("Mint NFT result:", result);
             if (result.success) {
                 const detail = result.result;
                 if (detail.digest) {
