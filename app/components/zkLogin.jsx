@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { getSessionUserData, getEncryptedLocalUserData, logout } from "../scripts/user/user";
 import ZkLoginModal from "./zkLoginModal";
 
-export default function ZkLogin() {
+export default function ZkLogin({ forceToLogin = false, onLoginUserData}) {
     const router = useRouter();
     const [suiAddress, setSuiAddress] = useState(null);
     const [userData, setUserData] = useState({});
@@ -34,9 +34,12 @@ export default function ZkLogin() {
             if (user) {
                 setSuiAddress(user.suiAddress);
                 setUserData(user);
+                onLoginUserData?.(user);
             }
         }
-        checkInitialUserData();
+        if (!forceToLogin) {
+            checkInitialUserData();
+        }
 
         const handleStorageChange = async (event) => {
             if (event.key === "userData") {
@@ -46,6 +49,7 @@ export default function ZkLogin() {
                     setSuiAddress(suiAddress);
                     setUserData(user);
                     setShowPopup(false);
+                    onLoginUserData?.(user);
                 }
             }
         };
@@ -54,7 +58,7 @@ export default function ZkLogin() {
         return () => {
             window.removeEventListener("storage", handleStorageChange);
         };
-    }, []);
+    }, [forceToLogin, onLoginUserData]);
 
     return (
         <div>

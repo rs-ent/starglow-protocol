@@ -40,6 +40,16 @@ export default function UserSidebar({ userData = {}, owner = false, onSectionCli
     },
   ];
 
+  if(userData.allowMinting && owner) {
+    sectionList.unshift({
+      name: "Mint NFT",
+      key: "mintNFT",
+      onClick: () => handleSelect('nft-mint'),
+      className: "text-[rgba(255,255,150,0.9)]",
+      icon: <Blocks size={20} strokeWidth={2} />
+    })
+  }
+
   return (
     <aside className="flex flex-col w-[20%] border border-[rgba(255,255,255,0.1)] bg-[rgba(200,200,255,0.05)] h-screen">
       {sectionList.map((section, index) => (

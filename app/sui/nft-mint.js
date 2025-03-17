@@ -9,35 +9,47 @@ import { getSessionUserData } from '../scripts/user/user';
 import { decoding } from '../scripts/encryption';
 import { jwtDecode } from "jwt-decode";
 
-export async function mintNFT(formData) {
+export async function mintNFT(formData, userData = {}) {
     try {
+        if (!formData.amount || !formData.name || !formData.description) {
+            return { success: false, error: "Missing required NFT details" };
+        }
+
+        if (!userData || !userData.allowMinting) {
+            console.log("User data not provided, fetching from session");
+            userData = await getSessionUserData();
+            if (!userData) {
+                console.error("User data is missing");
+                return { success: false, error: "User data is missing" };
+            }
+        } else {
+            console.log("User data provided");
+        }
+
+        const loginAddress = userData.suiAddress;
+        if (!loginAddress) {
+            console.error("Could not get Sui address");
+            return { success: false, error: "Could not retrieve Sui address" };
+        }
+
+        if (userData.allowMinting !== true) {
+            return { success: false, error: "User is not allowed to mint NFTs" };
+        }
+
         const ephemeralSecret = decoding(sessionStorage.getItem("ephemeralSecret"));
         if(!ephemeralSecret) {
             return { success: false, error: "For security reasons, please log out and log back in." };
         }
         const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
         const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
-
-        const userData = await getSessionUserData();
-        const loginAddress = userData.suiAddress;
-        if (!loginAddress) {
-            console.error("Could not get sui address");
-            return;
-        }
-
-        if (!userData) {
-            console.error("User data is missing");
-            return;
-        }       
-
-        console.log(userData);
-
-        if (userData.allowMinting !== true) {
-            return { success: false, error: "User is not allowed to mint NFTs" };
-        }
+        console.log("Ephemeral keypair:", ephemeralKeypair);
 
         const randomness = sessionStorage.getItem("randomness");
         const maxEpoch = sessionStorage.getItem("maxEpoch");
+        if (!randomness || !maxEpoch) {
+            console.error("Session data missing");
+            return { success: false, error: "Session expired or invalid, please log in again." };
+        }
 
         const tx = new TransactionBlock();
         const contractAddress = process.env.NEXT_PUBLIC_SMART_CONTRACT_ADDRESS;
@@ -71,21 +83,15 @@ export async function mintNFT(formData) {
             randomness,
             maxEpoch,
         });
+
+
         if (!zkProof) {
             console.error("Failed to generate zk proof signature");
-            return;
+            return { success: false, error: "Failed to generate cryptographic proof. Please retry." };
         }
-
-
-        /*const { bytes, signature: userSignature } = await tx.sign({
-            client: suiClient,
-            signer: ephemeralKeypair,
-        });*/
         
-        const bytes = await tx.build({ client: suiClient });
-        const signResult = await ephemeralKeypair.signTransaction(bytes);
+        const signResult = await ephemeralKeypair.signTransaction(txBytes);
         const base64Signature = signResult.signature;
-        
         
         const decodedJwt = jwtDecode(userData.idToken);
         const addressSeed = genAddressSeed(
@@ -94,7 +100,6 @@ export async function mintNFT(formData) {
             decodedJwt.sub,
             decodedJwt.aud
         ).toString();
-        console.log("Address seed:", addressSeed);
 
         const zkLoginSignature = getZkLoginSignature({
             inputs: {
@@ -104,17 +109,15 @@ export async function mintNFT(formData) {
             maxEpoch,
             userSignature: base64Signature,
         });
-        console.log("Zk login signature:", zkLoginSignature);
 
         const result = await suiClient.executeTransactionBlock({
-            transactionBlock: bytes,
+            transactionBlock: txBytes,
             signature: zkLoginSignature,
         });
 
-        console.log("Mint NFT result:", result);
         return { success: true, result};
     } catch (error) {
         console.error("Failed to mint NFT:", error);
-        return { success: false, error };
+        return { success: false, error: error.message || "Unexpected error occurred" };
     }
 }
