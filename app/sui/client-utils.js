@@ -3,7 +3,6 @@
 "use client";
 
 import suiClient from './suiClient';
-import { decoding } from '../scripts/encryption';
 import { getExtendedEphemeralPublicKey } from "@mysten/sui/zklogin";
 import axios from 'axios';
 
