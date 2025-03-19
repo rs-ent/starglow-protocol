@@ -8,7 +8,6 @@ import { Toaster } from "sonner";
 export const metadata = {
   title: "Starglow Protocol",
   description: `✨ Glow and Grow Together with Your Star! 🌟 Artist Management + RWA DeFi 🚀  
-It's Not Just About Investing; It's About Contributing To The Artist's Growth! 🎤🌱  
 Starglow Protocol is a DAO for KPOP NFTs, DeFi, and Real-World Assets (RWA). 🌐🎶`,
   keywords: [
       "starglow", "crypto", "NFT", "blockchain", "investment", "web3",
@@ -39,7 +38,6 @@ Starglow Protocol is a DAO for KPOP NFTs, DeFi, and Real-World Assets (RWA). �
   openGraph: {
       title: "Starglow Protocol",
       description: `✨ Glow and Grow Together with Your Star! 🌟 Artist Management + RWA DeFi 🚀  
-It's Not Just About Investing; It's About Contributing To The Artist's Growth! 🎤🌱  
 Starglow Protocol is a DAO for KPOP NFTs, DeFi, and Real-World Assets (RWA). 🌐🎶`,
       images: [
           {
@@ -54,7 +52,6 @@ Starglow Protocol is a DAO for KPOP NFTs, DeFi, and Real-World Assets (RWA). �
       card: "summary_large_image",
       title: "Starglow Protocol",
       description: `✨ Glow and Grow Together with Your Star! 🌟 Artist Management + RWA DeFi 🚀  
-It's Not Just About Investing; It's About Contributing To The Artist's Growth! 🎤🌱  
 Starglow Protocol is a DAO for KPOP NFTs, DeFi, and Real-World Assets (RWA). 🌐🎶`,
       images: ["/images/link_image.webp"],
   },
