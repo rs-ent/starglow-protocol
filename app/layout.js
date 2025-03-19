@@ -9,6 +9,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        {/* Naver Search Console Verification */}
+        <meta name="naver-site-verification" content="3e549105be83fb6b6c1ef82fbe9338d1965c5b6e" />
+
         {/* Google Tag Manager Script */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
