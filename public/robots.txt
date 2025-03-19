@@ -3,5 +3,3 @@ Allow: /
 
 User-agent: Yeti
 Allow: /
-
-Sitemap: https://starglow.io/sitemap.xml

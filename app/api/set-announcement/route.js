@@ -5,16 +5,24 @@ import { createTodaySongImg } from "../../scripts/create-today-song-image";
 import { createTodayPollImg } from "../../scripts/create-today-poll-image";
 import { updateToday } from "../../scripts/update-today-songs";
 import { CreateAnnouncementText } from "../../scripts/create-announcemnet-text";
-import { tweetScheduledRegister } from "../../scripts/result-schedule-registration";
 
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(
-    process.env.FIREBASE_SERVER_SERVICE_ACCOUNT_KEY || "{}"
-  );
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: "gs://starglow-voting.firebasestorage.app",
-  });
+  let serviceAccount = {};
+
+  try {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVER_SERVICE_ACCOUNT_KEY || "{}");
+  } catch (e) {
+    console.warn("Failed parsing Firebase Service Account Key. Skipping admin initialization.", e.message);
+  }
+
+  if (serviceAccount && serviceAccount.project_id) {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      storageBucket: "gs://starglow-voting.firebasestorage.app",
+    });
+  } else {
+    console.warn("Firebase Admin initialization skipped due to missing or invalid credentials.");
+  }
 }
 
 const bucket = admin.storage().bucket();
@@ -41,9 +49,8 @@ export async function GET(request) {
           cacheControl: "public, max-age=31536000",
         },
       });
-      const url = `https://storage.googleapis.com/${
-        bucket.name
-      }/${encodeURIComponent(filename)}`;
+      const url = `https://storage.googleapis.com/${bucket.name
+        }/${encodeURIComponent(filename)}`;
       urls.push(url);
     }
 
@@ -58,9 +65,8 @@ export async function GET(request) {
         cacheControl: "public, max-age=31536000",
       },
     });
-    const pollUrl = `https://storage.googleapis.com/${
-      bucket.name
-    }/${encodeURIComponent(pollFileName)}`;
+    const pollUrl = `https://storage.googleapis.com/${bucket.name
+      }/${encodeURIComponent(pollFileName)}`;
 
     const message = CreateAnnouncementText(poll);
 
