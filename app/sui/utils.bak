@@ -1,0 +1,43 @@
+export async function generateZkProof(txBlock, { ephemeralPublicKey, userData, randomness, maxEpoch }) {
+    if (!userData || !userData.idToken || !userData.salt) {
+        console.error("User data is missing");
+        return;
+    }
+
+    const { idToken, salt } = userData;
+
+    const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralPublicKey);
+
+    const proverUrl = process.env.NEXT_PUBLIC_PROVER_URL || 'https://prover-dev.mystenlabs.com/v1';
+
+    const postData = {
+        jwt: idToken,
+        extendedEphemeralPublicKey,
+        maxEpoch,
+        jwtRandomness: randomness,
+        salt,
+        keyClaimName: "sub",
+    }
+
+    let zkProofData;
+    try {
+        const { data } = await axios.post(
+            proverUrl,
+            postData,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        zkProofData = data;
+        console.log("ZK Proof response:", zkProofData);
+    } catch (error) {
+        console.error("Error fetching ZK Proof:", error);
+        if (error.response) {
+            console.error("Error details:", error.response.data);
+        }
+        return null;
+    }
+
+    return zkProofData;
+}

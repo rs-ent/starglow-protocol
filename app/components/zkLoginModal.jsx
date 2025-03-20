@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { generateNonce, generateRandomness } from '@mysten/sui/zklogin';
 import { encoding } from "../scripts/encryption";
-import { getMaxEpoch } from "../sui/client-utils";
+import { getMaxEpoch } from "../sui/utils";
 import Image from "next/image";
 import GoogleOAuth from "../oauth/GoogleOAuth";
 

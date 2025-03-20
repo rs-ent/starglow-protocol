@@ -3,7 +3,7 @@
 import suiClient from './suiClient';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { generateZkProof, generateZkProofWithShinami } from './client-utils';
+import { generateZkProof, generateZkProofWithShinami } from './utils';
 import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
 import { getSessionUserData } from '../scripts/user/user';
 import { decoding } from '../scripts/encryption';
@@ -118,14 +118,24 @@ export async function mintNFT(formData, userData = {}) {
         const txBytes = await tx.build({ client: suiClient });
         const txBlock = { bytes: txBytes };
 
-        const zkProof = await generateZkProofWithShinami(txBlock, {
-            ephemeralPublicKey,
-            userData,
-            randomness,
-            maxEpoch,
+        const proofResponse = await fetch('/api/sui/shinami/zkProof', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ephemeralPublicKey: ephemeralPublicKey.toBase64(),
+                userData,
+                randomness,
+                maxEpoch,
+            }),
         });
-
-
+        
+        const proofJson = await proofResponse.json();
+        if (!proofResponse.ok || !proofJson.success) {
+            console.error("zkProof generation failed:", proofJson.error);
+            return { success: false, error: proofJson.error || "zkProof generation failed" };
+        }
+        
+        const zkProof = proofJson.zkProof;
         if (!zkProof) {
             console.error("Failed to generate zk proof signature");
             return { success: false, error: "Failed to generate cryptographic proof. Please retry." };

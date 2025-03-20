@@ -32,7 +32,7 @@ export default function UserSidebar({ userData = {}, owner = false, onSectionCli
       icon: <Blocks size={20} strokeWidth={2} />
     },
     {
-      name: "Logout",
+      name: "Sign Out",
       key: "logout",
       onClick: handleLogout,
       className: "text-[rgba(255,50,50,1)]",
