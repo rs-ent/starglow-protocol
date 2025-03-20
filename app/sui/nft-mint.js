@@ -140,6 +140,7 @@ export async function mintNFT(formData, userData = {}) {
             return { success: false, error: "Failed to generate cryptographic proof. Please retry." };
         }
 
+        const zkProofData = proofJson.zkProof.zkProof;
         const signResult = await ephemeralKeypair.signTransaction(txBytes);
         const base64Signature = signResult.signature;
 
@@ -153,7 +154,7 @@ export async function mintNFT(formData, userData = {}) {
 
         const zkLoginSignature = getZkLoginSignature({
             inputs: {
-                ...zkProof,
+                ...zkProofData,
                 addressSeed,
             },
             maxEpoch,
@@ -166,6 +167,11 @@ export async function mintNFT(formData, userData = {}) {
         });
 
         const txDigest = result.digest;
+        await suiClient.waitForTransaction({
+            digest: txDigest,
+            timeout: 30000,
+        });
+
         const txDetails = await suiClient.getTransactionBlock({
             digest: txDigest,
             options: {
