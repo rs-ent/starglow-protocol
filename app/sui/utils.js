@@ -20,35 +20,28 @@ export async function generateZkProofWithShinami(ephemeralPublicKeyBase64, userD
     }
 
     const { idToken, salt } = userData;
-    console.log("Ephemeral Public Key Base64:", ephemeralPublicKeyBase64);
-    const ephemeralPubKeyInstance = new Ed25519PublicKey(
-        Uint8Array.from(Buffer.from(ephemeralPublicKeyBase64, 'base64'))
-    );
+
+    const ephemeralPubKeyInstance = new Ed25519PublicKey(Buffer.from(ephemeralPublicKeyBase64, 'base64'));
     const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralPubKeyInstance);
-    console.log("Extended Ephemeral Public Key:", extendedEphemeralPublicKey);
 
     try {
-        const { data } = await axios.post(
-            shinamiProverUrl,
-            {
-                jsonrpc: "2.0",
-                method: "shinami_zkp_createZkLoginProof",
-                params: [
-                    idToken,
-                    maxEpoch,
-                    extendedEphemeralPublicKey,
-                    randomness,
-                    salt
-                ],
-                id: 1,
+        const { data } = await axios.post(shinamiProverUrl, {
+            jsonrpc: "2.0",
+            method: "shinami_zkp_createZkLoginProof",
+            params: {
+                jwt: idToken,
+                maxEpoch,
+                extendedEphemeralPublicKey,
+                randomness,
+                salt
             },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-API-Key": shinamiApiKey,
-                },
-            }
-        );
+            id: 1,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                "X-API-Key": shinamiApiKey,
+            },
+        });
 
         console.log("Shinami ZK Proof response:", data);
         return data.result;
