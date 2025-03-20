@@ -23,6 +23,8 @@ export async function generateZkProofWithShinami(ephemeralPublicKeyBase64, userD
 
     const ephemeralPubKeyInstance = new Ed25519PublicKey(Buffer.from(ephemeralPublicKeyBase64, 'base64'));
     const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralPubKeyInstance);
+    console.log("Extended ephemeral public key:", extendedEphemeralPublicKey);
+    console.log("Shinam Prover URL:", shinamiProverUrl);
 
     try {
         const { data } = await axios.post(shinamiProverUrl, {
