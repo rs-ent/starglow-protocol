@@ -122,7 +122,7 @@ export async function mintNFT(formData, userData = {}) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ephemeralPublicKey: ephemeralPublicKey.toBase64(),
+                ephemeralPublicKey: ephemeralPublicKey.toSuiPublicKey(),
                 userData,
                 randomness,
                 maxEpoch,
