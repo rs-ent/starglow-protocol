@@ -2,64 +2,38 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ZkLogin from "../components/zkLogin"
+import Payments from "../components/Payments/Payments";
 
 export default function NFTStore({ nfts = [] }) {
+    const [userData, setUserData] = useState(null);
+    const [formData, setFormData] = useState(null);
+    const [showPaymentModule, setShowPaymentModule] = useState(false);
 
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://stgstdpay.inicis.com/stdjs/INIStdPay.js";
-        script.charset = "UTF-8";
-        document.body.appendChild(script);
+    const handleLoginUserData = (data) => {
+        setUserData(data);
+    };
 
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-
-    async function handleBuyNFT(collection) {
-        try {
-            const response = await fetch("/api/payment/kg-inicis", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    productName: collection.name,
-                    productPrice: collection.price || "1000",
-                    buyerName: "buyer name",
-                    buyerTel: "01012345678",
-                    buyerEmail: "buyer@example.com",
-                }),
-            });
-
-            const data = await response.json();
-
-            const form = document.createElement("form");
-            form.id = "ini_payment";
-            form.method = "POST";
-
-            Object.entries(data).forEach(([key, value]) => {
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            });
-
-            document.body.appendChild(form);
-
-            window.INIStdPay.pay('ini_payment');
-        } catch (error) {
-            console.error("Error buying NFT", error);
-        }
-    }
+    const handleFormData = (data) => {
+        setFormData(data);
+        setShowPaymentModule(true);
+    };
 
     return (
         <section className="bg-[var(--background-second)] p-4 min-h-screen">
+            {showPaymentModule && (
+                <div 
+                    className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.2)] flex items-center justify-center z-50 backdrop-blur-sm"
+                    onClick={() => setShowPaymentModule(false)}
+                >
+                    <div className="bg-[rgba(3,0,10,1)] p-4 rounded-md items-center justify-center">
+                        <Payments userData={userData} formData={formData} />
+                    </div>
+                </div>
+            )}
             <div className="flex flex-col items-end justify-end">
-                <ZkLogin />
+                <ZkLogin forceToLogin={false} onLoginUserData={handleLoginUserData} />
             </div>
             <h2 className="section-title font-main-bold text-glow-strong">
                 NFT
@@ -90,7 +64,7 @@ export default function NFTStore({ nfts = [] }) {
                             </div>
                             <button
                                 className="button-feather-purple w-full mb-2"
-                                onClick={() => handleBuyNFT(collection)}
+                                onClick={() => handleFormData(collection)}
                             >
                                 Buy NFT
                             </button>

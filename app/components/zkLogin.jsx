@@ -58,7 +58,7 @@ export default function ZkLogin({ forceToLogin = false, onLoginUserData}) {
         return () => {
             window.removeEventListener("storage", handleStorageChange);
         };
-    }, [forceToLogin, onLoginUserData]);
+    }, [forceToLogin]);
 
     return (
         <div>
