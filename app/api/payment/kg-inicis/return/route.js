@@ -11,9 +11,19 @@ export async function POST(req) {
 
     if (resultCode === "0000") {
         console.log(`Payment success: ${goodname} ${price} ${oid} ${tid}`);
-        return new Response("Payment is successful! Please close this window.", {status: 200});
+        return new Response("Payment is successful! Please close this window.",
+            {
+                status: 200,
+                headers: { Location: `${baseUrl}/payment/kg-inicis/success?oid=${oid}&tid=${tid}&price=${price}` },
+            }
+        );
     } else {
         console.error(`Payment failed: ${resultMsg}`);
-        return new Response("Payment failed! Please try again.", {status: 400});
+        return new Response("Payment failed! Please try again.",
+            {
+                status: 400,
+                headers: { Location: `${baseUrl}/payment/kg-inicis/failure?reason=${encodeURIComponent(resultMsg)}` }
+            }
+        );
     }
 }

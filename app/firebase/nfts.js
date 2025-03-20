@@ -47,6 +47,20 @@ export async function getNFT(collectionName, objectId) {
     }
 }
 
+export async function setCollection(collectionData) {
+    try {
+        const { nft, timestamp, ...formattedData } = collectionData;
+        formattedData.timestamp = serverTimestamp();
+        const nftCollection = collection(db, 'nfts');
+        const collectionDocRef = doc(nftCollection, formattedData.name);
+
+        await setDoc(collectionDocRef, formattedData, { merge: true });
+    } catch (error) {
+        console.error('Error setting NFT collection:', error);
+        throw error;
+    }
+}
+
 // NFT 데이터 저장하기 (민팅 후 호출)
 export async function setNFTs(createdObjects = []) {
     try {

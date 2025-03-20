@@ -1,10 +1,7 @@
-/// app\nft-store\page.jsx
+import NFTAdmin from "./NFTAdmin";
+import { getNFTCollections, getNFTsByCollection } from "../../firebase/nfts";
 
-import NFTStore from "./NFTStore";
-import { getNFTCollections, getNFTsByCollection } from "../firebase/nfts"
-
-export default async function NFTStorePage() {
-
+export default async function NFTAdminPage() {
     const collections = await getNFTCollections();
     const nfts = await Promise.all(
         collections.map(async (collection) => {
@@ -20,10 +17,7 @@ export default async function NFTStorePage() {
             return { ...serialzedCollection, nft: serializedNFT };
         })
     );
-
     return (
-        <div className="bg-black">
-            <NFTStore nfts={nfts} />
-        </div>
-    )
+        <NFTAdmin collections={nfts} />
+    );
 }

@@ -38,14 +38,15 @@ export async function POST(req) {
         verification,
         mKey,
         currency: "WON",
+        languageView: "en",
         goodname: productName,
         buyername: buyerName,
         buyertel: buyerTel,
         buyeremail: buyerEmail,
         returnUrl: `${baseUrl}/api/payment/kg-inicis/return`,
         closeUrl: `${baseUrl}/payment/kg-inicis/close`,
-        gopaymethod: "Card",
-        acceptmethod: "HPP(1):below1000"
+        gopaymethod: "Card:DirectBank:VBank:HPP:Kpay:SamsungPay:Payco",
+        acceptmethod: "HPP(1):below1000:centerCd(Y)"
     });
 
 }

@@ -10,20 +10,21 @@ export default function NFTStore({ nfts = [] }) {
     const [userData, setUserData] = useState(null);
     const [formData, setFormData] = useState(null);
     const [showPaymentModule, setShowPaymentModule] = useState(false);
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
 
     const handleLoginUserData = (data) => {
         setUserData(data);
     };
 
     const handleFormData = (data) => {
-        setFormData(data);
+        setFormData({ ...data, quantity: selectedQuantity });
         setShowPaymentModule(true);
     };
 
     return (
         <section className="bg-[var(--background-second)] p-4 min-h-screen">
             {showPaymentModule && (
-                <div 
+                <div
                     className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.2)] flex items-center justify-center z-50 backdrop-blur-sm"
                     onClick={() => setShowPaymentModule(false)}
                 >
@@ -57,11 +58,38 @@ export default function NFTStore({ nfts = [] }) {
                                         {collection.description}
                                     </p>
                                     <div className="w-full border-t border-t-[rgba(255,255,255,0.2)] my-3" />
-                                    <p>
-                                        Available Amount: {collection.nft.length}
-                                    </p>
+                                    <div className="flex justify-between gap-2">
+                                        <p>
+                                            Price: {(collection.price || 1000).toLocaleString()} ￦
+                                        </p>
+                                        <p> | </p>
+                                        <p>
+                                            Available Amount: {collection.availableAmount || collection.nft.length}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div className="flex gap-2 items-center justify-center mt-2">
+                                <label className="text-sm">Quantity:</label>
+                                <input
+                                    type="number"
+                                    className="rounded px-2 py-1 w-20 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
+                                    min={1}
+                                    max={collection.availableAmount || collection.nft.length}
+                                    value={selectedQuantity}
+                                    onChange={(e) => {
+                                        const qty = Math.min(
+                                            Math.max(1, parseInt(e.target.value, 10)),
+                                            collection.availableAmount || collection.nft.length
+                                        );
+                                        setSelectedQuantity(qty);
+                                    }}
+                                />
+                            </div>
+
+                            <h1 className="text-center mt-2">Total Price : {((collection.price || 1000) * selectedQuantity).toLocaleString()}</h1>
+
                             <button
                                 className="button-feather-purple w-full mb-2"
                                 onClick={() => handleFormData(collection)}
