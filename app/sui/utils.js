@@ -26,18 +26,20 @@ export async function generateZkProofWithShinami(ephemeralPublicKeyBase64, userD
     console.log("Extended ephemeral public key:", extendedEphemeralPublicKey);
     console.log("Shinam Prover URL:", shinamiProverUrl);
     console.log("Shinami API Key:", shinamiApiKey);
+    const params = [
+        idToken,
+        maxEpoch,
+        extendedEphemeralPublicKey,
+        randomness,
+        salt
+    ];
+    console.log("Shinami ZK Proof params:", params);
 
     try {
         const { data } = await axios.post(shinamiProverUrl, {
             jsonrpc: "2.0",
             method: "shinami_zkp_createZkLoginProof",
-            params: {
-                jwt: idToken,
-                maxEpoch,
-                extendedEphemeralPublicKey,
-                randomness,
-                salt
-            },
+            params: params,
             id: 1,
         }, {
             headers: {
