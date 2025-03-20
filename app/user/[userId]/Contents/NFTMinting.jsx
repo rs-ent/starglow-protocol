@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import ImageUploader from "../../../components/ImageUploader";
-import { mintNFT } from "../../../sui/nft-mint-enoki";
+import { mintNFT } from "../../../sui/nft-mint";
 import toaster from "../../../toaster/toast";
 import ZkLogin from "../../../components/zkLogin";
 

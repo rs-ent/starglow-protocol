@@ -3,7 +3,7 @@
 import suiClient from './suiClient';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { generateZkProof } from './client-utils';
+import { generateZkProof, generateZkProofWithShinami } from './client-utils';
 import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
 import { getSessionUserData } from '../scripts/user/user';
 import { decoding } from '../scripts/encryption';
@@ -118,7 +118,7 @@ export async function mintNFT(formData, userData = {}) {
         const txBytes = await tx.build({ client: suiClient });
         const txBlock = { bytes: txBytes };
 
-        const zkProof = await generateZkProof(txBlock, {
+        const zkProof = await generateZkProofWithShinami(txBlock, {
             ephemeralPublicKey,
             userData,
             randomness,
