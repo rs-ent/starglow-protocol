@@ -3,7 +3,6 @@
 import suiClient from './suiClient';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { generateZkProof, generateZkProofWithShinami } from './utils';
 import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
 import { getSessionUserData } from '../scripts/user/user';
 import { decoding } from '../scripts/encryption';
@@ -78,13 +77,6 @@ export async function mintNFT(formData, userData = {}) {
             return { success: false, error: "User is not allowed to mint NFTs" };
         }
 
-        const ephemeralSecret = decoding(sessionStorage.getItem("ephemeralSecret"));
-        if (!ephemeralSecret) {
-            return { success: false, error: "For security reasons, please log out and log back in." };
-        }
-        const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
-        const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
-
         const randomness = sessionStorage.getItem("randomness");
         const maxEpoch = sessionStorage.getItem("maxEpoch");
         if (!randomness || !maxEpoch) {
@@ -116,13 +108,20 @@ export async function mintNFT(formData, userData = {}) {
         tx.setSender(loginAddress);
 
         const txBytes = await tx.build({ client: suiClient });
-        const txBlock = { bytes: txBytes };
+        
+        const ephemeralSecret = decoding(sessionStorage.getItem("ephemeralSecret"));
+        if (!ephemeralSecret) {
+            return { success: false, error: "For security reasons, please log out and log back in." };
+        }
+        const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
+        const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
+        const ephemeralPublicKeyBase64 = ephemeralPublicKey.toBase64();
 
         const proofResponse = await fetch('/api/sui/shinami/zkProof', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ephemeralPublicKey: ephemeralPublicKey,
+                ephemeralPublicKeyBase64,
                 userData,
                 randomness,
                 maxEpoch,

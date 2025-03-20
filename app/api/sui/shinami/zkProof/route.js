@@ -5,13 +5,13 @@ import { generateZkProofWithShinami } from "../../../../sui/utils";
 export async function POST(req) {
     try {
         const {
-            ephemeralPublicKey,
+            ephemeralPublicKeyBase64,
             userData,
             randomness,
             maxEpoch,
         } = await req.json();
 
-        const zkProof = await generateZkProofWithShinami(ephemeralPublicKey, userData, randomness, maxEpoch);
+        const zkProof = await generateZkProofWithShinami(ephemeralPublicKeyBase64, userData, randomness, maxEpoch);
 
         if (!zkProof) {
             return new Response(JSON.stringify({ success: false, error: "Failed to generate zkProof" }), { status: 500 });

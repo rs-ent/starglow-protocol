@@ -1,6 +1,7 @@
 /// app\sui\utils.js
 
 import suiClient from './suiClient';
+import { Ed25519Keypair, Ed25519PublicKey } from '@mysten/sui/keypairs/ed25519';
 import { getExtendedEphemeralPublicKey } from "@mysten/sui/zklogin";
 import axios from 'axios';
 
@@ -9,7 +10,7 @@ export async function getMaxEpoch() {
     return Number(systemState.epoch) + 5;
 }
 
-export async function generateZkProofWithShinami(ephemeralPublicKey, userData, randomness, maxEpoch) {
+export async function generateZkProofWithShinami(ephemeralPublicKeyBase64, userData, randomness, maxEpoch) {
     const shinamiProverUrl = process.env.SHINAMI_PROVER_URL || 'https://api.shinami.com/sui/zkprover/v1';
     const shinamiApiKey = process.env.SHINAMI_API_KEY;
 
@@ -19,8 +20,12 @@ export async function generateZkProofWithShinami(ephemeralPublicKey, userData, r
     }
 
     const { idToken, salt } = userData;
-
-    const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralPublicKey);
+    console.log("Ephemeral Public Key Base64:", ephemeralPublicKeyBase64);
+    const ephemeralPubKeyInstance = new Ed25519PublicKey(
+        Uint8Array.from(Buffer.from(ephemeralPublicKeyBase64, 'base64'))
+    );
+    const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralPubKeyInstance);
+    console.log("Extended Ephemeral Public Key:", extendedEphemeralPublicKey);
 
     try {
         const { data } = await axios.post(
