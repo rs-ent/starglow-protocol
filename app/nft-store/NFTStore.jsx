@@ -1,10 +1,60 @@
 /// app\nft-store\NFTStore.jsx
+
 "use client";
 
 import { useEffect, useState } from "react";
 import ZkLogin from "../components/zkLogin"
 
 export default function NFTStore({ nfts = [] }) {
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://stgstdpay.inicis.com/stdjs/INIStdPay.js";
+        script.charset = "UTF-8";
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
+    async function handleBuyNFT(collection) {
+        try {
+            const response = await fetch("/api/payment/kg-inicis", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    productName: collection.name,
+                    productPrice: collection.price || "1000",
+                    buyerName: "buyer name",
+                    buyerTel: "01012345678",
+                    buyerEmail: "buyer@example.com",
+                }),
+            });
+
+            const data = await response.json();
+
+            const form = document.createElement("form");
+            form.id = "ini_payment";
+            form.method = "POST";
+
+            Object.entries(data).forEach(([key, value]) => {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+
+            window.INIStdPay.pay('ini_payment');
+        } catch (error) {
+            console.error("Error buying NFT", error);
+        }
+    }
 
     return (
         <section className="bg-[var(--background-second)] p-4 min-h-screen">
@@ -40,6 +90,7 @@ export default function NFTStore({ nfts = [] }) {
                             </div>
                             <button
                                 className="button-feather-purple w-full mb-2"
+                                onClick={() => handleBuyNFT(collection)}
                             >
                                 Buy NFT
                             </button>
