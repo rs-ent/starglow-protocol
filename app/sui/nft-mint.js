@@ -3,10 +3,7 @@
 import suiClient from './suiClient';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
-import { getSessionUserData } from '../scripts/user/user';
-import { decoding } from '../scripts/encryption';
-import { jwtDecode } from "jwt-decode";
+import { decodeSuiPrivateKey } from '@mysten/sui/cryptography';
 import { setNFTs } from '../firebase/nfts';
 
 export function parseNFTForFirebase(nftData, digest) {
@@ -50,39 +47,25 @@ export function parseNFTForFirebase(nftData, digest) {
     };
 }
 
-export async function mintNFT(formData, userData = {}) {
+export async function mintNFT(formData) {
     try {
         if (!formData.amount || !formData.name || !formData.description) {
-            return { success: false, error: "Missing required NFT details" };
+            return { success: false, message: "Please fill all the required fields" };
         }
 
-        if (!userData || !userData.allowMinting) {
-            console.log("User data not provided, fetching from session");
-            userData = await getSessionUserData();
-            if (!userData) {
-                console.error("User data is missing");
-                return { success: false, error: "User data is missing" };
-            }
-        } else {
-            console.log("User data provided");
+        const creatorAddress = process.env.NFT_CREATOR_ADDRESS;
+        const creatorPrivateKey = process.env.NFT_CREATOR_PRIVATE_KEY;
+
+        if (!creatorPrivateKey) {
+            return { success: false, message: "Creator private key not found" };
         }
 
-        const loginAddress = userData.suiAddress;
-        if (!loginAddress) {
-            console.error("Could not get Sui address");
-            return { success: false, error: "Could not retrieve Sui address" };
+        if (!creatorAddress) {
+            return { success: false, message: "Creator address not found" };
         }
 
-        if (userData.allowMinting !== true) {
-            return { success: false, error: "User is not allowed to mint NFTs" };
-        }
-
-        const randomness = sessionStorage.getItem("randomness");
-        const maxEpoch = sessionStorage.getItem("maxEpoch");
-        if (!randomness || !maxEpoch) {
-            console.error("Session data missing");
-            return { success: false, error: "Session expired or invalid, please log in again." };
-        }
+        const decodedKey = decodeSuiPrivateKey(creatorPrivateKey);
+        const creatorKeypair = Ed25519Keypair.fromSecretKey(decodedKey.secretKey);
 
         const tx = new TransactionBlock();
         const contractAddress = process.env.NEXT_PUBLIC_SMART_CONTRACT_ADDRESS;
@@ -102,74 +85,23 @@ export async function mintNFT(formData, userData = {}) {
                 tx.pure(Number(formData.share_percent)),
                 tx.pure(Date.parse(formData.glow_start)),
                 tx.pure(Date.parse(formData.glow_end)),
-                tx.pure(loginAddress),
+                tx.pure(creatorAddress),
             ],
         });
-        tx.setSender(loginAddress);
+
+        tx.setSender(creatorAddress);
 
         const txBytes = await tx.build({ client: suiClient });
-        
-        const ephemeralSecret = decoding(sessionStorage.getItem("ephemeralSecret"));
-        if (!ephemeralSecret) {
-            return { success: false, error: "For security reasons, please log out and log back in." };
-        }
-        const ephemeralKeypair = Ed25519Keypair.fromSecretKey(ephemeralSecret);
-        const ephemeralPublicKey = ephemeralKeypair.getPublicKey();
-        const ephemeralPublicKeyBase64 = ephemeralPublicKey.toBase64();
-
-        const proofResponse = await fetch('/api/sui/shinami/zkProof', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                ephemeralPublicKeyBase64,
-                userData,
-                randomness,
-                maxEpoch,
-            }),
-        });
-        
-        const proofJson = await proofResponse.json();
-        if (!proofResponse.ok || !proofJson.success) {
-            console.error("zkProof generation failed:", proofJson.error);
-            return { success: false, error: proofJson.error || "zkProof generation failed" };
-        }
-        
-        const zkProof = proofJson.zkProof;
-        if (!zkProof) {
-            console.error("Failed to generate zk proof signature");
-            return { success: false, error: "Failed to generate cryptographic proof. Please retry." };
-        }
-
-        const zkProofData = proofJson.zkProof.zkProof;
-        const signResult = await ephemeralKeypair.signTransaction(txBytes);
-        const base64Signature = signResult.signature;
-
-        const decodedJwt = jwtDecode(userData.idToken);
-        const addressSeed = genAddressSeed(
-            BigInt(userData.salt),
-            "sub",
-            decodedJwt.sub,
-            decodedJwt.aud
-        ).toString();
-
-        const zkLoginSignature = getZkLoginSignature({
-            inputs: {
-                ...zkProofData,
-                addressSeed,
-            },
-            maxEpoch,
-            userSignature: base64Signature,
-        });
-
+        const signedTx = await creatorKeypair.signTransaction(txBytes);
         const result = await suiClient.executeTransactionBlock({
             transactionBlock: txBytes,
-            signature: zkLoginSignature,
+            signature: signedTx.signature,
         });
 
         const txDigest = result.digest;
         await suiClient.waitForTransaction({
             digest: txDigest,
-            timeout: 30000,
+            timeout: 60000,
         });
 
         const txDetails = await suiClient.getTransactionBlock({
@@ -179,10 +111,8 @@ export async function mintNFT(formData, userData = {}) {
                 showObjectChanges: true,
             },
         });
-        console.log("txDetails:", txDetails);
 
         const createdObjects = txDetails.objectChanges.filter((change) => change.type === "created");
-        console.log("Created objects:", createdObjects);
         const nftDetails = await Promise.all(
             createdObjects.map(async (obj) => {
                 const objDetail = await suiClient.getObject({
@@ -194,18 +124,16 @@ export async function mintNFT(formData, userData = {}) {
                         showOwner: true,
                     },
                 });
-                console.log("Object detail:", objDetail);
 
                 return parseNFTForFirebase(objDetail, txDigest);
             })
         );
-        console.log("NFT details:", nftDetails);
-        const savedData = await setNFTs(nftDetails);
-        console.log("Saved NFTs to Firebase:", savedData);
+
+        await setNFTs(nftDetails);
 
         return { success: true, result: { digest: txDigest, nftDetails } };
     } catch (error) {
-        console.error("Failed to mint NFT:", error);
-        return { success: false, error: error.message || "Unexpected error occurred" };
+        console.error("Error in mintNFT:", error);
+        return { success: false, error };
     }
 }

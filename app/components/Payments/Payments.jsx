@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Spinner from "../Spinner";
 import KGInicis from "./KGInicis";
 

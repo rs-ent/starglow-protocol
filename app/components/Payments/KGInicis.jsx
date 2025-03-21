@@ -2,11 +2,14 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import toaster from "../../toaster/toast";
 import Image from "next/image";
 
 export default function KGInicis({ userData, formData }) {
+    
     const scriptUrl = process.env.NEXT_PUBLIC_KG_SCRIPT_URL;
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = scriptUrl;
@@ -15,24 +18,31 @@ export default function KGInicis({ userData, formData }) {
         return () => {
             document.body.removeChild(script);
         };
+    }, [scriptUrl]);
+
+    const handleCloseMessage = useCallback((event) => {
+        if (event.data === "kg-close") {
+            toaster({
+                message: "Payment has been canceled.",
+                type: "warning",
+                duration: 3000,
+                position: "top-center",
+            });
+            window.removeEventListener("message", handleCloseMessage);
+            //window.location.reload();
+        }
     }, []);
 
-    const handleKG = async () => {
+    const handleKGPayment = async () => {
         try {
-            const quantity = formData.quantity || 1;
-            const totalPrice = (formData.price || 1000) * quantity;
-            
             const response = await fetch("/api/payment/kg-inicis", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    productName: `${formData.name} x${quantity}`,
-                    productPrice: totalPrice.toString(),
-                    buyerName: userData.name || "",
-                    buyerTel: userData.tel || "",
-                    buyerEmail: userData.email || "",
+                    productId: formData.id,
+                    userId: userData.docId,
+                    quantity: formData.quantity || 1,
+                    currency: formData.currency,
                 }),
             });
 
@@ -52,22 +62,29 @@ export default function KGInicis({ userData, formData }) {
 
             document.body.appendChild(form);
 
-            window.INIStdPay.pay('ini_payment');
+            window.INIStdPay.pay("ini_payment");
+
+            window.addEventListener("message", handleCloseMessage);
         } catch (error) {
             console.error("Error buying NFT", error);
+            toaster({
+                message: "An unexpected error occurred. Please try again.",
+                type: "error",
+                duration: 4000,
+                position: "top-center",
+            });
         }
     };
 
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <button
-                className="flex flex-col items-center justify-center p-4 bg-white rounded-md"
-                onClick={handleKG}
+                className="flex flex-col items-center justify-center p-4 bg-white rounded-md shadow-md"
+                onClick={handleKGPayment}
             >
                 <Image src="/ui/kg-inicis.png" alt="Credit Card" width={50} height={50} />
-
             </button>
-            <p>Credit Card</p>
+            <p className="mt-2">Credit Card</p>
         </div>
-    )
-};
+    );
+}

@@ -4,7 +4,6 @@
 
 import { useState } from "react";
 import ImageUploader from "../../../components/ImageUploader";
-import { mintNFT } from "../../../sui/nft-mint";
 import toaster from "../../../toaster/toast";
 import ZkLogin from "../../../components/zkLogin";
 
@@ -38,8 +37,15 @@ export default function NFTMinting({ userData }) {
     const handleMint = async () => {
         try {
             setIsMinting(true);
-            const result = await mintNFT(formData, updatedUserData);
+            const response = await fetch('/api/sui/nft/mint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
             console.log("Mint NFT result:", result);
+
             if (result.success) {
                 const detail = result.result;
                 if (detail.digest) {
@@ -49,7 +55,7 @@ export default function NFTMinting({ userData }) {
                             <span>
                                 NFT Minted Successfully! Visit{" "}
                                 <a
-                                    href={`https://suiscan.xyz/devnet/tx/${nftId}`}
+                                    href={`https://suiscan.xyz/testnet/tx/${nftId}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     style={{ textDecoration: "underline", fontWeight: "bold", color: "#fff" }}
@@ -63,10 +69,11 @@ export default function NFTMinting({ userData }) {
                 }
             } else {
                 console.log("Mint NFT error:", result.error);
-                toaster({ message: result.error.message || String(result.error), type: "error" });
+                toaster({ message: result.error || "Failed to mint NFT", type: "error" });
             }
         } catch (error) {
             console.error("Mint NFT error:", error);
+            toaster({ message: "An unexpected error occurred", type: "error" });
         } finally {
             setIsMinting(false);
         }

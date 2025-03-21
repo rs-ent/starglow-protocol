@@ -1,6 +1,6 @@
 /// app\firebase\nfts.js
 
-import { collection, doc, getDoc, getDocs, setDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, updateDoc, setDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from './firestore-voting';
 
 // 모든 NFT 목록 가져오기
@@ -13,6 +13,24 @@ export async function getNFTCollections() {
         return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error('Error fetching NFTs:', error);
+        throw error;
+    }
+}
+
+export async function getNFTCollection(collectionId) {
+    try {
+        const nftCollection = collection(db, 'nfts');
+        const nftDocRef = doc(nftCollection, collectionId);
+        const nftDocSnap = await getDoc(nftDocRef);
+
+        if (!nftDocSnap.exists()) {
+            throw new Error('NFT collection not found');
+        }
+
+        const nft = await getNFTsByCollection(collectionId);
+        return { id: nftDocSnap.id, ...nftDocSnap.data(), nft };
+    } catch (error) {
+        console.error('Error fetching NFT collection:', error);
         throw error;
     }
 }
@@ -92,6 +110,17 @@ export async function setNFTs(createdObjects = []) {
         await Promise.all(savePromises);
     } catch (error) {
         console.error('Error setting NFTs:', error);
+        throw error;
+    }
+}
+
+// NFT 데이터 업데이트하기 (소유자 변경)
+export async function updateNFT(collectionName, objectId, updateData) {
+    try {
+        const nftRef = doc(db, 'nfts', collectionName, 'minted_objects', objectId);
+        await updateDoc(nftRef, updateData);
+    } catch (error) {
+        console.error('Error updating NFT:', error);
         throw error;
     }
 }
