@@ -51,26 +51,31 @@ export async function TransferNFT(oid = "") {
                     tx.pure(userData.suiAddress),
                 ],
             });
-
-            nft.owner = userData.suiAddress;
-            await updateNFT(collection.id, nft.id, { owner: userData.suiAddress });
         }
 
         tx.setSender(creatorAddress);
         const txBytes = await tx.build({ client: suiClient });
 
-        const creatorPrivateKey = process.env.CREATOR_PRIVATE_KEY;
+        const creatorPrivateKey = process.env.NFT_CREATOR_PRIVATE_KEY;
         const decodedKey = decodeSuiPrivateKey(creatorPrivateKey);
         const creatorKeypair = Ed25519Keypair.fromSecretKey(decodedKey.secretKey);
         const signedTx = await creatorKeypair.signTransaction(txBytes);
 
         const result = await suiClient.executeTransactionBlock({
             transactionBlock: txBytes,
-            signature: signedTx.signature, // creator의 서명 사용
+            signature: signedTx.signature,
         });
 
-        console.log("Transaction success:", result);
-        return { success: true, transactionDigest: result.digest };
+        if (result && result.digest) {
+            for (const nft of nftsToTransfer) {
+                nft.owner = userData.suiAddress;
+                await updateNFT(collection.id, nft.id, { owner: userData.suiAddress });
+            }
+            console.log("Transaction success:", result);
+            return { success: true, transactionDigest: result.digest };
+        } else {
+            return { success: false, error: "Transaction failed" };
+        }
     } catch (error) {
         console.error("Error in TransactionNFT:", error);
         return { success: false, error: error.message };

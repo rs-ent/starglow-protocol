@@ -123,7 +123,7 @@ export default function NFTStore({ nfts = [] }) {
                                         </p>
                                         <p> | </p>
                                         <p>
-                                            Available Amount: {collection.availableAmount || collection.nft.length}
+                                            Available Amount: {(collection.availableAmount || collection.nft.length) - collection.nft.filter(nft => nft.owner !== nft.creator).length}
                                         </p>
                                     </div>
                                 </div>
