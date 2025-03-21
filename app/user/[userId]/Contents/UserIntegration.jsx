@@ -44,7 +44,7 @@ export default function UserIntegration({ userData = {}, owner = false }) {
 
             <div className="flex gap-4 rounded-lg border border-[var(--border-mid)] p-4 items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <Image src="/ui/telegram-icon.png" width={30} height={30} />
+                    <Image src="/ui/telegram-icon.png" alt="Telegram Icon" width={30} height={30} />
                     <h2 className="text-xl font-bold text-[var(--text-primary)]">Telegram</h2>
                 </div>
 

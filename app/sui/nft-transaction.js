@@ -69,7 +69,7 @@ export async function TransferNFT(oid = "") {
         if (result && result.digest) {
             for (const nft of nftsToTransfer) {
                 nft.owner = userData.suiAddress;
-                await updateNFT(collection.id, nft.id, { owner: userData.suiAddress });
+                await updateNFT(collection.id, nft.id, { owner: userData.suiAddress, ownedIn: Date.now(), oid });
             }
             console.log("Transaction success:", result);
             return { success: true, transactionDigest: result.digest };

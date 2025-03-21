@@ -4,17 +4,20 @@
 
 import { useEffect, useState } from "react";
 import UserIntegration from "./Contents/UserIntegration";
+import MyNFTs from "./Contents/MyNFTs";
 import NFTMinting from "./Contents/NFTMinting";
 
-export default function UserContent({ contentType = "", userData = {}, owner = false }) {
+export default function UserContent({ contentType = "", userData = {}, owner = false, nfts = [] }) {
 
-  const [loading, setLoading] = useState(false);
   const [content, setContent] = useState(<div></div>);
 
   useEffect(() => {
     switch (contentType) {
       case "integration":
         setContent(<UserIntegration userData={userData} owner={owner} />);
+        break;
+      case "mynfts":
+        setContent(<MyNFTs userData={userData} nfts={nfts} />);
         break;
       case "nft-mint":
         setContent(<NFTMinting userData={userData} />);

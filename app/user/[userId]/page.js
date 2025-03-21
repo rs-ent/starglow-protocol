@@ -1,4 +1,5 @@
 import { getUserDataByDocId } from "../../firebase/user-data";
+import { getMyNFTs } from "../../firebase/nfts";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import UserPageClient from "./UserPageClient";
@@ -17,8 +18,9 @@ export default async function UserPage({ params }) {
   const cookieStore = await cookies();
   const session = await getIronSession(cookieStore, sessionOptions);
   const activeUser = session.user;
+  const nfts = await getMyNFTs(userData.suiAddress);
 
   return (
-    <UserPageClient userData={userData} owner={userId === activeUser?.docId} />
+    <UserPageClient userData={userData} owner={userId === activeUser?.docId} nfts={nfts} />
   );
 }

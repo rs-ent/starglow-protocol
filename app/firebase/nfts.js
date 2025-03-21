@@ -1,7 +1,16 @@
 /// app\firebase\nfts.js
 
-import { collection, doc, getDoc, getDocs, updateDoc, setDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, updateDoc, setDoc, query, orderBy, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from './firestore-voting';
+
+const timestampToString = (timestamp) => {
+    if (timestamp instanceof Timestamp) {
+        return timestamp.toDate().toISOString();
+    } else if (timestamp?.seconds) {
+        return new Date(timestamp.seconds * 1000).toISOString();
+    }
+    return null;
+};
 
 // 모든 NFT 목록 가져오기
 export async function getNFTCollections() {
@@ -121,6 +130,44 @@ export async function updateNFT(collectionName, objectId, updateData) {
         await updateDoc(nftRef, updateData);
     } catch (error) {
         console.error('Error updating NFT:', error);
+        throw error;
+    }
+}
+
+export async function getMyNFTs(suiAddress) {
+    try {
+        const nftCollectionRef = collection(db, 'nfts');
+        const collectionsSnapshot = await getDocs(nftCollectionRef);
+
+        const myCollections = await Promise.all(collectionsSnapshot.docs.map(async (collectionDoc) => {
+            const collectionData = collectionDoc.data();
+
+            const mintedObjectsRef = collection(db, 'nfts', collectionDoc.id, 'minted_objects');
+            const ownedQuery = query(mintedObjectsRef, orderBy('timestamp', 'desc'));
+            const mintedSnapshot = await getDocs(ownedQuery);
+
+            const ownedNFTs = mintedSnapshot.docs
+                .filter(doc => doc.data().owner === suiAddress)
+                .map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        ...data,
+                        timestamp: timestampToString(data.timestamp),
+                    };
+                });
+
+            return {
+                id: collectionDoc.id,
+                ...collectionData,
+                timestamp: timestampToString(collectionData.timestamp),
+                nft: ownedNFTs
+            };
+        }));
+
+        return myCollections.filter(collection => collection.nft.length > 0);
+    } catch (error) {
+        console.error('Error fetching my NFTs:', error);
         throw error;
     }
 }

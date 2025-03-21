@@ -5,7 +5,7 @@ import UserHeader from "./UserHeader";
 import UserSidebar from "./UserSidebar";
 import UserContent from "./UserContent";
 
-export default function UserPageClient({ userData = {}, owner = false }) {
+export default function UserPageClient({ userData = {}, owner = false, nfts = [] }) {
   const [content, setContent] = useState('profile');
 
   return (
@@ -23,6 +23,7 @@ export default function UserPageClient({ userData = {}, owner = false }) {
               contentType={content}
               userData={userData}
               owner={owner}
+              nfts={nfts}
             />
           </div>
         </div>

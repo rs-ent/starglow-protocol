@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { logout } from "../../scripts/user/user";
-import { LogOut, Blocks } from "lucide-react";
+import { LogOut, Blocks, BookType } from "lucide-react";
 
 export default function UserSidebar({ userData = {}, owner = false, onSectionClick }) {
   const router = useRouter();
@@ -24,6 +24,13 @@ export default function UserSidebar({ userData = {}, owner = false, onSectionCli
   }
 
   const sectionList = [
+    {
+      name: "My NFTs",
+      key: "mynfts",
+      onClick: () => handleSelect('mynfts'),
+      className: "text-[rgba(255,255,255,0.9)]",
+      icon: <BookType size={20} strokeWidth={2} />
+    },
     {
       name: "Integration",
       key: "integration",
