@@ -28,7 +28,6 @@ export default function NFTStore({ nfts = [] }) {
     }, []);
 
     useEffect(() => {
-        console.log("Search Params:", searchParams);
         const failReason = searchParams.get("reason");
         const success = searchParams.get("success");
     

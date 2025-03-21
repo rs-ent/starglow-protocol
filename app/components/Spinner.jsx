@@ -1,3 +1,5 @@
+/// app\components\Spinner.jsx
+
 "use client";
 
 export default function Spinner() {

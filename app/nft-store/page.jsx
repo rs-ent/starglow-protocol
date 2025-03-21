@@ -1,7 +1,9 @@
 /// app\nft-store\page.jsx
 
-import NFTStore from "./NFTStore";
+import { Suspense } from "react";
 import { getNFTCollections, getNFTsByCollection } from "../firebase/nfts"
+import NFTStore from "./NFTStore";
+import Spinner from "../components/Spinner";
 
 export default async function NFTStorePage() {
 
@@ -22,8 +24,16 @@ export default async function NFTStorePage() {
     );
 
     return (
-        <div className="bg-black">
-            <NFTStore nfts={nfts} />
-        </div>
+        <Suspense
+            fallback={
+                <div className="bg-[rgba(0,0,0,0.5)] backdrop-blur-sm">
+                    <Spinner />
+                </div>
+            }
+        >
+            <div className="bg-black">
+                <NFTStore nfts={nfts} />
+            </div>
+        </Suspense>
     )
 }
