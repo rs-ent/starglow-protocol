@@ -1,4 +1,5 @@
-// app/scripts/create-result-image.js
+/// app\scripts\create-today-song-image.js
+
 import puppeteerLocal from "puppeteer"; 
 import chromium from "@sparticuz/chromium";
 import puppeteerCore from "puppeteer-core";
@@ -8,7 +9,7 @@ import path from "path";
 
 export async function createTodaySongImg(pollId, songIdx) {
     let browser;
-    if (process.env.NEXT_PUBLIC_BASE_URL === "https://starglow-protocol.vercel.app") {
+    if (process.env.NEXT_PUBLIC_BASE_URL === "https://starglow.io") {
         const path = await chromium.executablePath();
         console.log("Chromium path:", path);
 

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
         openGraph: {
             title: title,
             description: description,
-            url: `https://starglow-protocol.vercel.app/polls/${poll_id}`,
+            url: `https://starglow.io/polls/${poll_id}`,
             images: [
                 {
                     url: image,

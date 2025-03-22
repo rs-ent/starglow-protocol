@@ -61,7 +61,7 @@ export default function Submitted({
     `${options.map((opt, index) => `⚪ ${opt}`).join("\n")}\n\n` +
     `What do you Think? 🤔` +
     `Tap the link and vote ryt now!`;
-  const shareUrl = `https://starglow-protocol.vercel.app/polls/${poll_id}`;
+  const shareUrl = `https://starglow.io/polls/${poll_id}`;
 
   const today = new Date(
     new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })

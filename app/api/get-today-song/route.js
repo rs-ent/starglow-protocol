@@ -1,3 +1,5 @@
+/// app\api\get-today-song\route.js
+
 import { NextResponse } from "next/server";
 import { createTodaySongImg } from "../../scripts/create-today-song-image";
 

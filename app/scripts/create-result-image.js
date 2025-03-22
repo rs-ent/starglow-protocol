@@ -8,7 +8,7 @@ import path from "path";
 
 export async function createResultImage(pollId) {
     let browser;
-    if (process.env.NEXT_PUBLIC_BASE_URL === "https://starglow-protocol.vercel.app") {
+    if (process.env.NEXT_PUBLIC_BASE_URL === "https://starglow.io") {
         const path = await chromium.executablePath();
         console.log("Chromium path:", path);
 

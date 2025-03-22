@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
         ? `#${poll.options.split(';').join(' #')}`
         : "Participate in our K-POP Poll!";
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://starglow-protocol.vercel.app';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://starglow.io';
     let image = poll?.img || poll?.poll_announce_img;
 
     if (image.startsWith('/')) {
