@@ -9,7 +9,6 @@ import ZkLogin from "../../components/zkLogin";
 
 export default function NFTAdmin({ collections = [] }) {
     const [nftData, setNftData] = useState(collections);
-    const [userData, setUserData] = useState(null);
     const [allowEdit, setAllowEdit] = useState(false);
     const [exchangeRate, setExchangeRate] = useState(1);
 
@@ -22,8 +21,7 @@ export default function NFTAdmin({ collections = [] }) {
     }, []);
 
     const handleLogin = (data) => {
-        setUserData(data);
-        setAllowEdit(data.allowMinting);
+        setAllowEdit(data.allowMinting || false);
     }
 
     const handleUpdate = (index, field, value) => {
@@ -65,39 +63,76 @@ export default function NFTAdmin({ collections = [] }) {
                 <div>
                     {nftData.map((collection, index) => (
                         <div key={index} className="p-3 my-3 bg-[rgba(3,0,10,1)] rounded-md">
-                            <h3 className="text-xl text-glow-strong mb-2">{collection.name}</h3>
-
-                            <div className="flex gap-4 items-center">
+                            <div className="flex gap-4 mb-4">
+                                <img src={collection.image_url} className="w-auto h-auto max-w-28 rounded-md" />
                                 <div>
-                                    <label className="text-sm block">Price (USD $)</label>
-                                    <input
-                                        type="number"
-                                        className="rounded px-2 py-1 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
-                                        value={collection.price || 0}
-                                        onChange={(e) => handleUpdate(index, "price", parseFloat(e.target.value))}
-                                    />
-                                </div>
+                                    <h3 className="text-4xl text-glow-strong">{collection.name}</h3>
+                                    <p className="text-[rgba(255,255,255,0.5)]">{collection.description}</p>
+                                    <p className="text-[rgba(255,255,255,0.5)]">
+                                        Glow Period: {new Date(collection.glow_start).toLocaleString().split(',')[0]} ~ {new Date(collection.glow_end).toLocaleString().split(',')[0]}
+                                    </p>
+                                    <div>
+                                        <a
+                                            href={collection.report_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[rgba(255,255,255,0.5)] hover:underline cursor-pointer"
+                                        >
+                                            {collection.report_url}
+                                        </a>
+                                    </div>
 
-                                <div>
-                                    <label className="text-sm block">Available Amount</label>
-                                    <input
-                                        type="number"
-                                        className="rounded px-2 py-1 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
-                                        value={collection.availableAmount || collection.nft.length}
-                                        onChange={(e) => handleUpdate(index, "availableAmount", parseInt(e.target.value, 10))}
-                                        max={collection.nft.length}
-                                    />
-                                    <span className="text-xs ml-2">/ {collection.nft.length}</span>
-                                </div>
+                                    <div>
+                                        <a
+                                            href={collection.external_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[rgba(255,255,255,0.5)] hover:underline cursor-pointer"
+                                        >
+                                            {collection.external_link}
+                                        </a>
+                                    </div>
 
+                                </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-4 justify-between my-3">
-                                <p className="border border-[rgba(255,255,255,0.2)] p-2 rounded-md">
-                                    {collection.price / exchangeRate || 0} ￦
-                                </p>
-                                <p className="border border-[rgba(255,255,255,0.2)] p-2 rounded-md">
-                                    {collection.price || 0} ＄
-                                </p>
+                            <div className="grid grid-cols-2 gap-4 justify-start items-start">
+                                <div className="flex gap-4 items-start">
+                                    <div>
+                                        <label className="text-sm block">Price (USD $)</label>
+                                        <input
+                                            type="number"
+                                            className="rounded px-2 py-1 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
+                                            value={collection.price || 0}
+                                            onChange={(e) => handleUpdate(index, "price", parseFloat(e.target.value))}
+                                        />
+                                        <div className="grid grid-cols-2 gap-4 justify-between my-3 text-xs text-center">
+                                            <p className="border border-[rgba(255,255,255,0.2)] p-1 rounded-md">
+                                                {parseInt(collection.price / exchangeRate, 10).toLocaleString() || 0} ￦
+                                            </p>
+                                            <p className="border border-[rgba(255,255,255,0.2)] p-1 rounded-md">
+                                                {parseInt(collection.price, 10).toLocaleString() || 0} ＄
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm block">Available Amount</label>
+                                        <input
+                                            type="number"
+                                            className="rounded px-2 py-1 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
+                                            value={collection.availableAmount || collection.nft.length}
+                                            onChange={(e) => handleUpdate(index, "availableAmount", parseInt(e.target.value, 10))}
+                                            max={collection.nft.length}
+                                        />
+                                        <span className="text-lg ml-2">/ {collection.nft.length}</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button className="border border-[rgba(255,255,255,0.2)] p-2 rounded-md">
+                                        MAKE PROMO CODE
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}

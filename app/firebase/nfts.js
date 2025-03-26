@@ -103,6 +103,11 @@ export async function setNFTs(createdObjects = []) {
                 creator: nft.creator,
                 image_url: nft.image_url,
                 description: nft.description,
+                glow_start: nft.glow_start,
+                glow_end: nft.glow_end,
+                share_percent: nft.share_percent,
+                external_link: nft.external_link,
+                report_url: nft.report_url,
                 timestamp: serverTimestamp(),
             }, { merge: true });
 

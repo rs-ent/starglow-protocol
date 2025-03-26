@@ -94,7 +94,14 @@ export default function NFTStore({ nfts = [] }) {
                 NFT
             </h2>
 
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-between mb-4">
+                <div>
+                    <h3 className="text-sm">Input PROMO CODE:</h3>
+                    <input
+                        type="text"
+                        className="rounded px-2 py-1 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
+                    />
+                </div>
                 <select
                     value={currency}
                     onChange={(e) => handleChangeCurrency(e.target.value)}
