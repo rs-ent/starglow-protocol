@@ -2,14 +2,24 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setCollection } from "../../firebase/nfts";
+import { krw_usd } from "../../scripts/exchange";
 import ZkLogin from "../../components/zkLogin";
 
 export default function NFTAdmin({ collections = [] }) {
     const [nftData, setNftData] = useState(collections);
     const [userData, setUserData] = useState(null);
     const [allowEdit, setAllowEdit] = useState(false);
+    const [exchangeRate, setExchangeRate] = useState(1);
+
+    useEffect(() => {
+        krw_usd().then((rate) => {
+            if (rate) {
+                setExchangeRate(rate);
+            }
+        });
+    }, []);
 
     const handleLogin = (data) => {
         setUserData(data);
@@ -59,7 +69,7 @@ export default function NFTAdmin({ collections = [] }) {
 
                             <div className="flex gap-4 items-center">
                                 <div>
-                                    <label className="text-sm block">Price (Won)</label>
+                                    <label className="text-sm block">Price (USD $)</label>
                                     <input
                                         type="number"
                                         className="rounded px-2 py-1 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]"
@@ -79,6 +89,15 @@ export default function NFTAdmin({ collections = [] }) {
                                     />
                                     <span className="text-xs ml-2">/ {collection.nft.length}</span>
                                 </div>
+
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 justify-between my-3">
+                                <p className="border border-[rgba(255,255,255,0.2)] p-2 rounded-md">
+                                    {collection.price / exchangeRate || 0} ￦
+                                </p>
+                                <p className="border border-[rgba(255,255,255,0.2)] p-2 rounded-md">
+                                    {collection.price || 0} ＄
+                                </p>
                             </div>
                         </div>
                     ))}

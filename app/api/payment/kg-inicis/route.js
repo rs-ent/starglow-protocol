@@ -33,18 +33,18 @@ export async function POST(req) {
 
     let currencyPayload = "WON";
     let languageView = "ko";
-    let productPrice = nft.price;
+    const exchangeRate = await krw_usd();
+    let productPrice = parseInt(nft.price / exchangeRate, 10);
     if (currency === "USD") {
         currencyPayload = "USD";
         languageView = "en";
-        const exchangeRate = await krw_usd();
         if (!exchangeRate) {
             return NextResponse.json({ error: "Failed to get exchange rate." }, { status: 500 });
         }
-        productPrice = nft.price * exchangeRate;
+        productPrice = nft.price * 100;
     }
-
     const totalPrice = productPrice * requestedQuantity;
+    console.log("Total price", totalPrice);
     const user = await getUserDataByDocId(userId);
     if (!user) {
         return NextResponse.json({ error: "User not found." }, { status: 404 });

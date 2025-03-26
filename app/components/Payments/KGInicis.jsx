@@ -29,7 +29,7 @@ export default function KGInicis({ userData, formData }) {
                 position: "top-center",
             });
             window.removeEventListener("message", handleCloseMessage);
-            //window.location.reload();
+            window.location.reload();
         }
     }, []);
 

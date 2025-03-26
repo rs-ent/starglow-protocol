@@ -30,7 +30,7 @@ export default function NFTStore({ nfts = [] }) {
     useEffect(() => {
         const failReason = searchParams.get("reason");
         const success = searchParams.get("success");
-    
+
         if (failReason) {
             toaster({
                 message: `Payment failed: ${failReason}`,
@@ -58,12 +58,21 @@ export default function NFTStore({ nfts = [] }) {
     };
 
     const handleFormData = (data) => {
-        setFormData({
-            ...data,
-            quantity: selectedQuantity,
-            currency,
-        });
-        setShowPaymentModule(true);
+        if (!userData) {
+            toaster({
+                message: "Please login first",
+                type: "error",
+                duration: 4000,
+                position: "top-center",
+            });
+        } else {
+            setFormData({
+                ...data,
+                quantity: selectedQuantity,
+                currency,
+            });
+            setShowPaymentModule(true);
+        }
     };
 
     return (
@@ -117,8 +126,8 @@ export default function NFTStore({ nfts = [] }) {
                                     <div className="flex justify-between gap-2">
                                         <p>
                                             Price: {currency === "USD"
-                                                ? `${((collection.price || 1000) * exchangeRate).toLocaleString()} $`
-                                                : `${(collection.price || 1000).toLocaleString()} ₩`}
+                                                ? `${(collection.price || 1000).toLocaleString()} $`
+                                                : `${parseInt(((collection.price || 1000) / exchangeRate), 10).toLocaleString()} ₩`}
                                         </p>
                                         <p> | </p>
                                         <p>
@@ -149,8 +158,8 @@ export default function NFTStore({ nfts = [] }) {
                             <h1 className="text-center mt-2">
                                 Total Price :
                                 {currency === "USD"
-                                    ? `${((collection.price || 1000) * exchangeRate * selectedQuantity).toLocaleString()} $`
-                                    : `${((collection.price || 1000) * selectedQuantity).toLocaleString()} ₩`}
+                                    ? `${((collection.price || 1000) * selectedQuantity).toLocaleString()} $`
+                                    : `${parseInt(((collection.price || 1000) / exchangeRate * selectedQuantity), 10).toLocaleString()} ₩`}
                             </h1>
 
                             <button
